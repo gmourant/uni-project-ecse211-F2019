@@ -36,8 +36,14 @@ public class Main {
     } else {
       showErrorAndExit("Error - invalid button!");
     }
-    //Start light localization when ultrasonic localizationi is over
+    //Start light localization when ultrasonic localization is over
     lightLocalize.localize();
+    
+    //position yourself before shooting
+    navigate.travelTo(TARGET_POSITION[0], TARGET_POSITION[1], RADIUS);
+    
+    //shoot the ping pong balls
+    // launcher.launch
   }
 
   /**

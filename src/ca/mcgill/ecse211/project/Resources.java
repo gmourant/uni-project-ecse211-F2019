@@ -17,6 +17,21 @@ import lejos.hardware.sensor.EV3UltrasonicSensor;
  */
 public class Resources {
   /**
+   * The tile size in centimeters.
+   */
+  public static final double TILE_SIZE = 30.48;
+  
+  /**
+   * The target position for the tile to be shot at
+   */
+  public static final double[] TARGET_POSITION = {7.5, 7.5};
+  
+  /**
+   * the radius of the circle around target
+   */
+  public static final double RADIUS = 120;
+  
+  /**
    * Offset from the wall (cm).
    */
   public static final int BAND_CENTER = 25;
@@ -77,11 +92,6 @@ public class Resources {
    * Timeout period in milliseconds.
    */
   public static final int TIMEOUT_PERIOD = 3000;
-
-  /**
-   * The tile size in centimeters.
-   */
-  public static final double TILE_SIZE = 30.48;
 
   public static final int FILTER_OUT = 3;
   /**

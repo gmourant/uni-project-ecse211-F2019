@@ -49,7 +49,7 @@ public class LightLocalizer {
     // initial light data that will be used to detect black lines
     light.fetchSample(lightData, 0);
     INITIAL_LIGHT = (int) (lightData[0] * 100);
-    navigate.turnTo(45 * Math.PI / 180);
+    Navigation.turnTo(45 * Math.PI / 180);
     // make sure we are not already on a cross section
     while (count != 4) {
       spinSearch();
@@ -87,9 +87,9 @@ public class LightLocalizer {
     //x and y are around (0,0) add TILE_SIZE
     odometer.setX(TILE_SIZE + x);
     odometer.setY(TILE_SIZE + y);
-    navigate.travelTo(1, 1);
+    navigate.travelTo(1, 1, 0);
     //face NORTH
-    navigate.turnTo(0);
+    Navigation.turnTo(0);
     leftMotor.stop();
     rightMotor.stop();
   }

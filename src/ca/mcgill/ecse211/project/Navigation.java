@@ -24,14 +24,16 @@ public class Navigation{
 
 
   /**
-   * Orients robot towards desired destination rotates forward to the coordinate avoids obstacle and resumes when
-   * avoided
+   * Orients robot towards desired destination rotates forward to the coordinate
+   * until it reaches the circle of radius r from the given point avoids obstacle
+   * and resumes when avoided.
    * 
    * @param x x coordinate
    * @param y y coordinate
+   * @param r radius
    */
 
-  public void travelTo(double x, double y) {
+  public void travelTo(double x, double y, double r) {
     // reset and initiliaze motors
     currentX = x;
     currentY = y;
@@ -51,27 +53,12 @@ public class Navigation{
 
     turnTo(angle);
     // Calculate absolute trajectory
-    double vector = Math.hypot(dx, dy);
+    double vector = Math.hypot(dx, dy)-r;
 
     leftMotor.setSpeed(FORWARD_SPEED);
     rightMotor.setSpeed(FORWARD_SPEED);
     leftMotor.rotate(convertDistance(vector), true);
     rightMotor.rotate(convertDistance(vector), true);
-  }
-  
-  /**
-   * orients robot to the desired destination and moves to towards the destination until its a distance r away
-   * 
-   * @param x x-coordinate
-   * @param y y-coordinate
-   * @param r radius
-   */
-  public void travelTo(double x, double y, double r) {
-    //actually calculate the values here
-    double newX=0;
-    double newY=0;
-    
-    travelTo(newX, newY);
   }
 
   /**
