@@ -22,20 +22,20 @@ public class Main {
   public static void main(String[] args) {
     LightLocalizer lightLocalize = new LightLocalizer();
     UltrasonicLocalizer localize;
-    int option;
-    option = chooseEdge();
     new Thread(new Display()).start();
     new Thread(odometer).start();
-    //choose between Falling Edge and Rising Edge
-    if (option == Button.ID_LEFT) {
-      localize = new UltrasonicLocalizer(0, US_SENSOR);
-      localize.localize();
-    } else if (option == Button.ID_RIGHT) {
-      localize = new UltrasonicLocalizer(1, US_SENSOR);
-      localize.localize();
-    } else {
-      showErrorAndExit("Error - invalid button!");
-    }
+    
+    // display the launch and final positions
+    double[] launchPos = Navigation.getLaunchPosition(TARGET_POSITION[0], TARGET_POSITION[1], RADIUS);
+    
+    // wait for center button press
+    int buttonChoice;
+    do {
+      buttonChoice = Button.waitForAnyPress();
+    } while (buttonChoice != Button.ID_ENTER);
+    
+    localize = new UltrasonicLocalizer(1, US_SENSOR);
+    localize.localize();
     //Start light localization when ultrasonic localization is over
     lightLocalize.localize();
     
@@ -76,26 +76,4 @@ public class Main {
 
     System.exit(-1);
   }
-
-  /**
-   * Asks the user to choose in-between falling edge and rising edge
-   * 
-   * @return the user choice
-   */
-  private static int chooseEdge() {
-    int buttonChoice;
-    Display.showText("< Left | Right >", "falling| rising ", " edge  |  edge  ", "       |        ",
-        "       |        ");
-
-    do {
-      buttonChoice = Button.waitForAnyPress();
-    } while (buttonChoice != Button.ID_LEFT && buttonChoice != Button.ID_RIGHT);
-    return buttonChoice;
-  }
 }
-
-
-/*
-Localization?
-UV Poller
-*/

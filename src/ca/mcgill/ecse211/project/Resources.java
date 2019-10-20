@@ -24,7 +24,7 @@ public class Resources {
   /**
    * The target position for the tile to be shot at
    */
-  public static final double[] TARGET_POSITION = {7.5, 7.5};
+  public static final double[] TARGET_POSITION = {2, 2};
   
   /**
    * the radius of the circle around target
@@ -107,7 +107,7 @@ public class Resources {
   /**
    * The launcher motor.
    */
-  public static final EV3LargeRegulatedMotor launcherMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("C"));
+  public static final EV3LargeRegulatedMotor launchMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("C"));
   
   /**
    * The ultrasonic sensor.
