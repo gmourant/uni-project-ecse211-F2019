@@ -43,7 +43,7 @@ public class Main {
     navigate.travelTo(TARGET_POSITION[0], TARGET_POSITION[1], RADIUS);
     
     //shoot the ping pong balls
-    // launcher.launch
+    Launcher.launch();
   }
 
   /**
