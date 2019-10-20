@@ -4,6 +4,7 @@ import static ca.mcgill.ecse211.project.Resources.*;
 import ca.mcgill.ecse211.project.UltrasonicPoller;
 import ca.mcgill.ecse211.project.Display;
 import lejos.hardware.Button;
+import lejos.hardware.Sound;
 import lejos.robotics.SampleProvider;
 
 /**
@@ -27,6 +28,8 @@ public class Main {
     
     // display the launch and final positions
     double[] launchPos = Navigation.getLaunchPosition(TARGET_POSITION[0], TARGET_POSITION[1], RADIUS);
+    System.out.println("Target Position: (" + TARGET_POSITION[0] + ", " + TARGET_POSITION[1] + ")" );
+    System.out.println("Launch Position: (" + launchPos[0] + ", " + launchPos[1] + ")" );
     
     // wait for center button press
     int buttonChoice;
@@ -40,7 +43,9 @@ public class Main {
     lightLocalize.localize();
     
     //position yourself before shooting
-    navigate.travelTo(TARGET_POSITION[0], TARGET_POSITION[1], RADIUS);
+    navigate.travelTo(launchPos[0], launchPos[1]);
+    
+    Sound.beepSequence();
     
     //shoot the ping pong balls
     Launcher.launch();
