@@ -24,12 +24,12 @@ public class Resources {
   /**
    * The target position for the tile to be shot at
    */
-  public static final double[] TARGET_POSITION = {2, 2};
+  public static final double[] TARGET_POSITION = {1, 6.5};
   
   /**
    * the radius of the circle around target
    */
-  public static final double RADIUS = 150;
+  public static final double RADIUS = 170;
   
   /**
    * Offset from the wall (cm).

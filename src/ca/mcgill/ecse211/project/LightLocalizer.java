@@ -16,7 +16,7 @@ import lejos.robotics.SampleProvider;
 
 public class LightLocalizer {
   private static final long CORRECTION_PERIOD = 10;
-  private static final double LIGHTSENSOR_DELTA = 30;
+  private static final double LIGHTSENSOR_DELTA = 33;
   long correctionStart, correctionEnd;
   private SampleProvider light = colorSensor.getRedMode();
   private float[] lightData = new float[colorSensor.sampleSize()];
