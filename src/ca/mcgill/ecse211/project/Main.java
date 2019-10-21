@@ -15,13 +15,13 @@ import lejos.robotics.SampleProvider;
  */
 
 public class Main {
-  //initilalizes Ultrasonic Sensor
+  // initilalizes Ultrasonic Sensor
   static SampleProvider distance = US_SENSOR.getMode("Distance");
   static float[] sampleUS = new float[distance.sampleSize()];
   final static UltrasonicPoller UP = new UltrasonicPoller(distance, sampleUS);
 
   public static void main(String[] args) {
-    
+
     int buttonChoice;
 
     do {
@@ -38,41 +38,42 @@ public class Main {
     } while (buttonChoice != Button.ID_LEFT && buttonChoice != Button.ID_RIGHT);
 
     LCD.clear();
-    
-    if(buttonChoice == Button.ID_LEFT) {
+
+    if (buttonChoice == Button.ID_LEFT) {
       Launcher.launch();
-    }
-    else if(buttonChoice == Button.ID_RIGHT) {
+    } else if (buttonChoice == Button.ID_RIGHT) {
       LightLocalizer lightLocalize = new LightLocalizer();
       UltrasonicLocalizer localize = new UltrasonicLocalizer(0, US_SENSOR);
       new Thread(new Display()).start();
       new Thread(odometer).start();
-      
+
       // display the launch and final positions
-      double[] launchPos = Navigation.getLaunchPosition(TARGET_POSITION[0], TARGET_POSITION[1], RADIUS);
-      System.out.println("Target Position: (" + TARGET_POSITION[0] + ", " + TARGET_POSITION[1] + ")" );
-      System.out.println("Launch Position: (" + launchPos[0] + ", " + launchPos[1] + ")" );
-      
+      // System.out.println("Target Position: (" + TARGET_POSITION[0] + ", " + TARGET_POSITION[1] + ")" );
+      // System.out.println("Launch Position: (" + launchPos[0] + ", " + launchPos[1] + ")" );
+
       // wait for center button press
       do {
         buttonChoice = Button.waitForAnyPress();
       } while (buttonChoice != Button.ID_ENTER);
-      
+
       localize.localize();
-      //Start light localization when ultrasonic localization is over
+      // Start light localization when ultrasonic localization is over
       lightLocalize.localize();
-      
+     
+
       Sound.twoBeeps();
       
-      //position yourself before shooting
+      // position yourself before shooting
+      // get launch poistion
+      double[] launchPos = Navigation.getLaunchPosition(TARGET_POSITION[0], TARGET_POSITION[1]);
       navigate.travelTo(launchPos[0], launchPos[1]);
-      
+
       Sound.twoBeeps();
-      
-      //shoot the ping pong balls
+
+      // shoot the ping pong balls
       Launcher.launch();
     }
-    
+
     while (Button.waitForAnyPress() != Button.ID_ESCAPE); // do nothing
 
     System.exit(0);

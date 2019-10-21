@@ -19,9 +19,9 @@ public class Navigation{
   public static boolean obstacleDetected = true;
   public static double currentX;
   public static double currentY; 
-  
+
   private static Navigation nav; // Returned as singleton
-  
+
   /**
    * Orientates robot towards desired destination rotates forward to the coordinate avoids obstacle and resumes when
    * avoided
@@ -69,7 +69,7 @@ public class Navigation{
    * @param r radius
    */
   public void travelTo(double x, double y, double r) {
-    double[] launchPosition = getLaunchPosition(x, y, r);
+    double[] launchPosition = getLaunchPosition(x, y);
     travelTo(launchPosition[0], launchPosition[1]);
   }
 
@@ -106,28 +106,49 @@ public class Navigation{
    * @param r radius
    * @return target x and y coordinates
    */
-  public static double[] getLaunchPosition(double x, double y, double r) {
-    x = x * TILE_SIZE;
-    y = y * TILE_SIZE;
-    
-    // Calculate x & y trajectory
-    double dx = x - odometer.getXYT()[0];
-    double dy = y - odometer.getXYT()[1];
-    
-    // Calculate desired angle to turn to in relation to current angle
-    double angle = Math.atan2(dx, dy);
-    
-    //calculate desired launch position
-    double distance = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
-    double travelDistance = distance - r;
-    
-    double launchX = travelDistance * Math.sin(angle);
-    double launchY = travelDistance * Math.cos(angle);
-    
-    double[] launchPosition = {launchX/TILE_SIZE, launchY/TILE_SIZE, angle}; 
-    return launchPosition;
+  //  public static double[] getLaunchPosition(double x, double y, double r) {
+  //    x = x * TILE_SIZE;
+  //    y = y * TILE_SIZE;
+  //    
+  //    // Calculate x & y trajectory
+  //    double dx = x - odometer.getXYT()[0];
+  //    double dy = y - odometer.getXYT()[1];
+  //    
+  //    // Calculate desired angle to turn to in relation to current angle
+  //    double angle = Math.atan2(dx, dy);
+  //    
+  //    //calculate desired launch position
+  //    double distance = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
+  //    double travelDistance = distance - r;
+  //    
+  //    double launchX = travelDistance * Math.sin(angle);
+  //    double launchY = travelDistance * Math.cos(angle);
+  //    
+  //    double[] launchPosition = {launchX/TILE_SIZE, launchY/TILE_SIZE, angle}; 
+  //    return launchPosition;
+  //  }
+  public static double[] getLaunchPosition(double targetX, double targetY) {
+
+    // direction vector in cm
+    double currentX= odometer.getXYT()[0];
+    double currentY= odometer.getXYT()[1];
+
+    double dirX = targetX - currentX;
+    double dirY = targetY - currentY;
+
+    double distance = Math.sqrt(Math.pow(dirX, 2) + Math.pow(dirY, 2));
+
+    double travelDistance = distance - RADIUS;
+
+    // unit vector
+    dirX /= distance;
+    dirY /= distance;
+
+    double[] launchPos= {(dirX * travelDistance + currentX)/ TILE_SIZE, (dirY * travelDistance + currentY)/ TILE_SIZE};
+
+    return launchPos;
   }
-  
+
   /**
    * true when no obstacle detected and motors are moving
    * 
@@ -160,7 +181,7 @@ public class Navigation{
   public static int convertAngle(double angle) {
     return convertDistance(Math.PI * TRACK * angle / 360.0);
   }
-  
+
   /**
    * Returns the Navigation Object. Use this method to obtain an instance of Navigation.
    * 
