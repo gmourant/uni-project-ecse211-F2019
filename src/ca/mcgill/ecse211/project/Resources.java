@@ -17,6 +17,28 @@ import lejos.hardware.sensor.EV3UltrasonicSensor;
  */
 public class Resources {
   /**
+   * The tile size in centimeters.
+   */
+  public static final double TILE_SIZE = 30.48;
+  /**
+   * range error
+   */
+  public static final double OFFSET = 0.5;
+  /**
+   * offset range
+   */
+  public static final double RANGE = 6.2;
+  /**
+   * The target position for the tile to be shot at
+   */
+  public static final double[] TARGET_POSITION = {4, 8};
+
+  /**
+   * the radius of the circle around target
+   */
+  public static final double RADIUS = 186;
+
+  /**
    * Offset from the wall (cm).
    */
   public static final int BAND_CENTER = 25;
@@ -78,11 +100,6 @@ public class Resources {
    */
   public static final int TIMEOUT_PERIOD = 3000;
 
-  /**
-   * The tile size in centimeters.
-   */
-  public static final double TILE_SIZE = 30.48;
-
   public static final int FILTER_OUT = 3;
   /**
    * The left motor.
@@ -93,6 +110,11 @@ public class Resources {
    * The right motor.
    */
   public static final EV3LargeRegulatedMotor rightMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("A"));
+
+  /**
+   * The launcher motor.
+   */
+  public static final EV3LargeRegulatedMotor launchMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("C"));
 
   /**
    * The ultrasonic sensor.
@@ -112,7 +134,7 @@ public class Resources {
    * The odometer.
    */
   public static Odometer odometer = Odometer.getOdometer();
-  
+
   /**
    * The Navigation.
    */

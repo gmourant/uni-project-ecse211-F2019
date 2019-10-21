@@ -14,17 +14,16 @@ import static ca.mcgill.ecse211.project.Resources.*;;
  *
  */
 
-public class Navigation{
+public class Navigation {
 
   public static boolean obstacleDetected = true;
   public static double currentX;
-  public static double currentY; 
-  
+  public static double currentY;
+
   private static Navigation nav; // Returned as singleton
 
-
   /**
-   * Orients robot towards desired destination rotates forward to the coordinate avoids obstacle and resumes when
+   * Orientates robot towards desired destination rotates forward to the coordinate avoids obstacle and resumes when
    * avoided
    * 
    * @param x x coordinate
@@ -37,6 +36,7 @@ public class Navigation{
     currentY = y;
     leftMotor.stop();
     rightMotor.stop();
+    launchMotor.stop();
     leftMotor.setAcceleration(ACCELERATION);
     rightMotor.setAcceleration(ACCELERATION);
 
@@ -58,20 +58,19 @@ public class Navigation{
     leftMotor.rotate(convertDistance(vector), true);
     rightMotor.rotate(convertDistance(vector), true);
   }
-  
+
   /**
-   * orients robot to the desired destination and moves to towards the destination until its a distance r away
+   * Orients robot towards desired destination rotates forward to the coordinate until it reaches the circle of radius r
+   * from the given point avoids obstacle and resumes when avoided.
    * 
-   * @param x x-coordinate
-   * @param y y-coordinate
+   * @param x x coordinate
+   * @param y y coordinate
    * @param r radius
    */
   public void travelTo(double x, double y, double r) {
-    //actually calculate the values here
-    double newX=0;
-    double newY=0;
+    //double[] launchPosition = getLaunchPosition(x, y, r);
     
-    travelTo(newX, newY);
+    travelTo(x, y);
   }
 
   /**
@@ -96,7 +95,36 @@ public class Navigation{
       leftMotor.rotate(convertAngle(angle), true);
       rightMotor.rotate(-convertAngle(angle), false);
     }
+  }
 
+  /**
+   * gets the final position we get when traveling to point x, y and stop at circle of radius r away from the point
+   * 
+   * @param x x-coordinate
+   * @param y y-coordinate
+   * @param r radius
+   * @return target x and y coordinates
+   */
+  public static double[] getLaunchPosition(double x, double y, double r) {
+    x = x * TILE_SIZE;
+    y = y * TILE_SIZE;
+
+    // Calculate x & y trajectory
+    double dx = x - odometer.getXYT()[0];
+    double dy = y - odometer.getXYT()[1];
+
+    // Calculate desired angle to turn to in relation to current angle
+    double angle = Math.atan2(dx, dy);
+
+    // calculate desired launch position
+    double distance = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
+    double travelDistance = distance - r;
+
+    double launchX = travelDistance * Math.sin(angle) + odometer.getXYT()[0];
+    double launchY = travelDistance * Math.cos(angle) + odometer.getXYT()[1];
+
+    double[] launchPosition = {launchX, launchY, angle};
+    return launchPosition;
   }
 
   /**
@@ -131,7 +159,7 @@ public class Navigation{
   public static int convertAngle(double angle) {
     return convertDistance(Math.PI * TRACK * angle / 360.0);
   }
-  
+
   /**
    * Returns the Navigation Object. Use this method to obtain an instance of Navigation.
    * 
