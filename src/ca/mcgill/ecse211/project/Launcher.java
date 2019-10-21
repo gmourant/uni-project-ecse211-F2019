@@ -9,7 +9,7 @@ public class Launcher {
       Main.sleepFor(5000);
       
       //launch
-      launchMotor.setAcceleration(10000);
+      launchMotor.setAcceleration(100);
       launchMotor.rotate(360);
       
       //stop for reloading

@@ -29,7 +29,7 @@ public class Resources {
   /**
    * the radius of the circle around target
    */
-  public static final double RADIUS = 120;
+  public static final double RADIUS = 150;
   
   /**
    * Offset from the wall (cm).

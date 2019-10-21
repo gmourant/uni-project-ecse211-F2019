@@ -37,7 +37,7 @@ public class Main {
       buttonChoice = Button.waitForAnyPress();
     } while (buttonChoice != Button.ID_ENTER);
     
-    localize = new UltrasonicLocalizer(1, US_SENSOR);
+    localize = new UltrasonicLocalizer(0, US_SENSOR);
     localize.localize();
     //Start light localization when ultrasonic localization is over
     lightLocalize.localize();
