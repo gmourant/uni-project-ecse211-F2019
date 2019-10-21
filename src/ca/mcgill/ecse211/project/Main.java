@@ -62,10 +62,12 @@ public class Main {
       //Start light localization when ultrasonic localization is over
       lightLocalize.localize();
       
+      Sound.twoBeeps();
+      
       //position yourself before shooting
       navigate.travelTo(launchPos[0], launchPos[1]);
       
-      Sound.beepSequence();
+      Sound.twoBeeps();
       
       //shoot the ping pong balls
       Launcher.launch();

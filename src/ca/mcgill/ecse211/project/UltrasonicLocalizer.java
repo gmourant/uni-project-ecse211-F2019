@@ -1,7 +1,6 @@
 package ca.mcgill.ecse211.project;
 
 import static ca.mcgill.ecse211.project.Resources.*;
-import lejos.hardware.Sound;
 import lejos.hardware.sensor.EV3UltrasonicSensor;
 import lejos.robotics.SampleProvider;
 
@@ -53,10 +52,8 @@ public class UltrasonicLocalizer {
     //wrap around 359 degree to 0 degree
     if (angle1 > angle2) {
       dAngle = 45 - (angle1 + angle2) / 2;
-      Sound.beep();
     } else if (angle1 < angle2) {
       dAngle = 225 - (angle1 + angle2) / 2;
-      Sound.buzz();
     } else
       dAngle = angle1 + angle2 / 2;
     //update current odometer angle

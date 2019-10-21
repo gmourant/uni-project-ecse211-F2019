@@ -24,7 +24,7 @@ public class Resources {
   /**
    * The target position for the tile to be shot at
    */
-  public static final double[] TARGET_POSITION = {1, 6.5};
+  public static final double[] TARGET_POSITION = {1, 7.5};
   
   /**
    * the radius of the circle around target

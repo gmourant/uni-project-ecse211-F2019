@@ -16,7 +16,7 @@ import lejos.robotics.SampleProvider;
 
 public class LightLocalizer {
   private static final long CORRECTION_PERIOD = 10;
-  private static final double LIGHTSENSOR_DELTA = 33;
+  private static final double LIGHTSENSOR_DELTA = 35;
   long correctionStart, correctionEnd;
   private SampleProvider light = colorSensor.getRedMode();
   private float[] lightData = new float[colorSensor.sampleSize()];
@@ -35,7 +35,7 @@ public class LightLocalizer {
     light.fetchSample(lightData, 0);
     lightValue = (int) (lightData[0] * 100);
     if (Math.abs(lightValue - INITIAL_LIGHT) > LIGHTSENSOR_DELTA) {
-      Sound.twoBeeps();
+      Sound.beep();
       return true;
     }
     return false;
@@ -129,7 +129,6 @@ public class LightLocalizer {
         }
       }
     }
-    Sound.beepSequenceUp();
   }
 
   /**
