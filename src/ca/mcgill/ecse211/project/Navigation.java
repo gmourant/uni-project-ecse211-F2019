@@ -95,6 +95,28 @@ public class Navigation {
     leftMotor.rotate(convertDistance(distance - r), true);
     rightMotor.rotate(convertDistance(distance - r), true);
   }
+  
+   /**
+   * 
+   * @param x coordinates of x
+   * @param y coordinates of y
+   * @param r radius of position
+   */
+  public void launchPosition(double x, double y, double r) {
+    x = x * TILE_SIZE;
+    y = y * TILE_SIZE;
+    double dx = x - odometer.getXYT()[0];
+    double dy = y - odometer.getXYT()[1];
+    // Calculate desired angle to turn to in relation to current angle
+    double angle = Math.atan2(dx, dy);
+
+    turnTo(angle);
+    // Calculate absolute trajectory
+    leftMotor.setSpeed(FORWARD_SPEED);
+    rightMotor.setSpeed(FORWARD_SPEED);
+    LCD.drawString("PX: " + (odometer.getXYT()[0] - Math.sin(angle)) , 0, 5);
+    LCD.drawString("PY: " + (odometer.getXYT()[1] - Math.cos(angle)), 0, 6);
+  }
 
   /**
    * turns toward desired angle
