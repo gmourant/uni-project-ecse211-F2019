@@ -114,8 +114,6 @@ public class Navigation {
     // Calculate absolute trajectory
     leftMotor.setSpeed(FORWARD_SPEED);
     rightMotor.setSpeed(FORWARD_SPEED);
-    LCD.drawString("PX: " + (odometer.getXYT()[0] - Math.sin(angle)) , 0, 5);
-    LCD.drawString("PY: " + (odometer.getXYT()[1] - Math.cos(angle)), 0, 6);
   }
 
   /**
