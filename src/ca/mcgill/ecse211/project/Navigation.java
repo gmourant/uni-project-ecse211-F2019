@@ -107,8 +107,6 @@ public class Navigation {
     double dy = y - odometer.getXYT()[1];
     // Calculate desired angle to turn to in relation to current angle
     double angle = Math.atan2(dx, dy);
-
-    turnTo(angle);
     // Calculate absolute trajectory
     leftMotor.setSpeed(FORWARD_SPEED);
     rightMotor.setSpeed(FORWARD_SPEED);
