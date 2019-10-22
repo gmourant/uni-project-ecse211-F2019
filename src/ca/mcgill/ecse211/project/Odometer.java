@@ -36,11 +36,6 @@ public class Odometer implements Runnable {
    */
   private volatile double theta; // Head angle
 
-  /**
-   * The (x, y, theta) position as an array
-   */
-  private double[] position;
-
   // Thread control tools
   /**
    * Fair lock for concurrent writing
