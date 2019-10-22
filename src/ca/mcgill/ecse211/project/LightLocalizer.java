@@ -1,8 +1,6 @@
 package ca.mcgill.ecse211.project;
 
 import static ca.mcgill.ecse211.project.Resources.*;
-import ca.mcgill.ecse211.project.Main;
-import ca.mcgill.ecse211.project.Odometer;
 import lejos.hardware.Sound;
 import lejos.robotics.SampleProvider;
 
@@ -15,17 +13,14 @@ import lejos.robotics.SampleProvider;
  */
 
 public class LightLocalizer {
-  private static final long CORRECTION_PERIOD = 10;
   private static final double LIGHTSENSOR_DELTA = 30;
   long correctionStart, correctionEnd;
   private SampleProvider light = colorSensor.getRedMode();
   private float[] lightData = new float[colorSensor.sampleSize()];
   private int lightValue;
-  private int count;
   // Our device has a 6.4 cm distance between it's center and the light sensor
   // The light sensor is placed at the front
   private double offSet = 6.4;
-  private double thetaXa, thetaXb, thetaYa, thetaYb, thetaX, thetaY, x, y;
   private int INITIAL_LIGHT;
 
   /**

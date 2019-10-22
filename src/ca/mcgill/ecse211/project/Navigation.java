@@ -1,7 +1,5 @@
 package ca.mcgill.ecse211.project;
 
-import lejos.hardware.Sound;
-import lejos.hardware.motor.EV3LargeRegulatedMotor;
 import static ca.mcgill.ecse211.project.Resources.*;;
 
 /**
