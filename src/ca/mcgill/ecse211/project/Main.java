@@ -64,7 +64,7 @@ public class Main {
       Sound.twoBeeps();
 
       // position yourself before shooting
-      navigate.travelTo(launchPos[0], launchPos[1]);
+      navigate.travelTo(TARGET_POSITION[0],TARGET_POSITION[1],RADIUS);
       Sound.twoBeeps();
 
       // shoot the ping pong balls

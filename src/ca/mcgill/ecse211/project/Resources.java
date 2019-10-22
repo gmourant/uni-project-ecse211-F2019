@@ -24,19 +24,16 @@ public class Resources {
    * range error
    */
   public static final double OFFSET = 0.5;
-  /**
-   * offset range
-   */
-  public static final double RANGE = 6.2;
+  
   /**
    * The target position for the tile to be shot at
    */
-  public static final double[] TARGET_POSITION = {4, 8};
+  public static final double[] TARGET_POSITION = {6, 3};
 
   /**
    * the radius of the circle around target
    */
-  public static final double RADIUS = 186;
+  public static final double RADIUS = 158 ;
 
   /**
    * Offset from the wall (cm).

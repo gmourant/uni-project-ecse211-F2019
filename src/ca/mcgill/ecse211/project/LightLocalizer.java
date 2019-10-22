@@ -70,8 +70,7 @@ public class LightLocalizer {
     odometer.setX(TILE_SIZE - offSet);
     leftMotor.rotate(convertDistance(offSet), true);
     rightMotor.rotate(convertDistance(offSet), false);
-    leftMotor.stop();
-    rightMotor.stop();
+ 
     // face NORTH
     Navigation.turnTo(0);
     leftMotor.stop();

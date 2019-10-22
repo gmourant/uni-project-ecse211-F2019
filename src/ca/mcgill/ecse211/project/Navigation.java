@@ -51,12 +51,12 @@ public class Navigation {
 
     turnTo(angle);
     // Calculate absolute trajectory
-    double vector = Math.hypot(dx, dy);
+    double distance = Math.hypot(dx, dy);
 
     leftMotor.setSpeed(FORWARD_SPEED);
     rightMotor.setSpeed(FORWARD_SPEED);
-    leftMotor.rotate(convertDistance(vector), true);
-    rightMotor.rotate(convertDistance(vector), true);
+    leftMotor.rotate(convertDistance(distance), true);
+    rightMotor.rotate(convertDistance(distance), true);
   }
 
   /**
@@ -68,9 +68,32 @@ public class Navigation {
    * @param r radius
    */
   public void travelTo(double x, double y, double r) {
-    //double[] launchPosition = getLaunchPosition(x, y, r);
-    
-    travelTo(x, y);
+    // reset and initiliaze motors
+    currentX = x;
+    currentY = y;
+    leftMotor.stop();
+    rightMotor.stop();
+    launchMotor.stop();
+    leftMotor.setAcceleration(ACCELERATION);
+    rightMotor.setAcceleration(ACCELERATION);
+
+    obstacleDetected = false;
+    x = x * TILE_SIZE;
+    y = y * TILE_SIZE;
+    // Calculate x & y trajectory
+    double dx = x - odometer.getXYT()[0];
+    double dy = y - odometer.getXYT()[1];
+    // Calculate desired angle to turn to in relation to current angle
+    double angle = Math.atan2(dx, dy);
+
+    turnTo(angle);
+    // Calculate absolute trajectory
+    double distance = Math.hypot(dx, dy);
+
+    leftMotor.setSpeed(FORWARD_SPEED);
+    rightMotor.setSpeed(FORWARD_SPEED);
+    leftMotor.rotate(convertDistance(distance - r), true);
+    rightMotor.rotate(convertDistance(distance - r), true);
   }
 
   /**
@@ -97,35 +120,6 @@ public class Navigation {
     }
   }
 
-  /**
-   * gets the final position we get when traveling to point x, y and stop at circle of radius r away from the point
-   * 
-   * @param x x-coordinate
-   * @param y y-coordinate
-   * @param r radius
-   * @return target x and y coordinates
-   */
-  public static double[] getLaunchPosition(double x, double y, double r) {
-    x = x * TILE_SIZE;
-    y = y * TILE_SIZE;
-
-    // Calculate x & y trajectory
-    double dx = x - odometer.getXYT()[0];
-    double dy = y - odometer.getXYT()[1];
-
-    // Calculate desired angle to turn to in relation to current angle
-    double angle = Math.atan2(dx, dy);
-
-    // calculate desired launch position
-    double distance = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
-    double travelDistance = distance - r;
-
-    double launchX = travelDistance * Math.sin(angle) + odometer.getXYT()[0];
-    double launchY = travelDistance * Math.cos(angle) + odometer.getXYT()[1];
-
-    double[] launchPosition = {launchX, launchY, angle};
-    return launchPosition;
-  }
 
   /**
    * true when no obstacle detected and motors are moving
