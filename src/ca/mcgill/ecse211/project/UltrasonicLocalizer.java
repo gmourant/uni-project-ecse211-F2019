@@ -34,7 +34,7 @@ public class UltrasonicLocalizer {
 
 
 /**
- * 
+ * Localizes the robot to (0,0)
  */
   public void localize() {
     //initialize motors
@@ -97,6 +97,7 @@ public class UltrasonicLocalizer {
 /**
  * Record angle and switch direction when the sensor detects the
  * transition between wall and nothing
+ * 
  * Initializes robot to start facing the wall
  */
   public void risingEdge() {

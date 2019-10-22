@@ -5,7 +5,8 @@ import lejos.hardware.Sound;
 import lejos.robotics.SampleProvider;
 
 /**
- * Light localization that assumes that the device is facing NORTH and is on a 45 degree line in between (0,0) and (1,1)
+ * Light localization that assumes that the device is facing NORTH and is
+ * on a 45 degree line in between (0,0) and (1,1)
  * 
  * @author Aakarsh
  * @author Steven
@@ -37,7 +38,8 @@ public class LightLocalizer {
   }
 
   /**
-   * main method assuming that the device is facing north turn 45 degree and make sure that we are not already on (1,1)
+   * main method assuming that the device is facing north turn 45 degree and make
+   * sure that we are not already on (1,1)
    * by starting off with a spin
    */
   public void localize() {
@@ -75,7 +77,8 @@ public class LightLocalizer {
 
 
   /**
-   * Converts input distance to the total rotation of each wheel needed to cover that distance.
+   * Converts input distance to the total rotation of each wheel needed to
+   * cover that distance.
    * 
    * @param distance
    * @return the wheel rotations necessary to cover the distance
@@ -85,7 +88,8 @@ public class LightLocalizer {
   }
 
   /**
-   * Converts input angle to the total rotation of each wheel needed to rotate the robot by that angle.
+   * Converts input angle to the total rotation of each wheel needed to rotate
+   * the robot by that angle.
    * 
    * @param angle
    * @return the wheel rotations necessary to rotate the robot by the angle

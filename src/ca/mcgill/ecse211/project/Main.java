@@ -41,7 +41,8 @@ public class Main {
 
     if (buttonChoice == Button.ID_LEFT) {
       Launcher.launch();
-    } else if (buttonChoice == Button.ID_RIGHT) {
+    }
+    else if (buttonChoice == Button.ID_RIGHT) {
       LightLocalizer lightLocalize = new LightLocalizer();
       UltrasonicLocalizer localize = new UltrasonicLocalizer(0, US_SENSOR);
       new Thread(new Display()).start();
@@ -51,11 +52,6 @@ public class Main {
       lightLocalize.localize();
       // Get Launching position
       navigate.launchPosition(TARGET_POSITION[0], TARGET_POSITION[1], RADIUS);
-      do {
-        buttonChoice = Button.waitForAnyPress();
-      } while (buttonChoice != Button.ID_ENTER);
-		
-      
       do {
         buttonChoice = Button.waitForAnyPress();
       } while (buttonChoice != Button.ID_ENTER);
