@@ -7,7 +7,7 @@ import lejos.robotics.SampleProvider;
  * and method returns true
  * when obstacle is detected
  * 
- * @author Aakarsh 
+ * @author Steven 
  * @author Hassan
  * 
  */

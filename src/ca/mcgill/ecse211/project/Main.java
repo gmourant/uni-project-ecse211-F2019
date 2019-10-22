@@ -46,17 +46,6 @@ public class Main {
       UltrasonicLocalizer localize = new UltrasonicLocalizer(0, US_SENSOR);
       new Thread(new Display()).start();
       new Thread(odometer).start();
-
-      // display the launch and final positions
-      // System.out.println("Target Position: (" + TARGET_POSITION[0] + ", " + TARGET_POSITION[1] + ")" );
-      // System.out.println("Launch Position: (" + launchPos[0] + ", " + launchPos[1] + ")" );
-
-      // wait for center button press
-      localize.localize();
-      // Start light localization when ultrasonic localization is over
-      lightLocalize.localize();
-      double[] launchPos =
-          Navigation.getLaunchPosition(TARGET_POSITION[0] - OFFSET, TARGET_POSITION[1] - OFFSET, RADIUS);
       do {
         buttonChoice = Button.waitForAnyPress();
       } while (buttonChoice != Button.ID_ENTER);

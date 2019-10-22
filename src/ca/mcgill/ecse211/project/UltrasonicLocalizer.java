@@ -10,7 +10,7 @@ import lejos.robotics.SampleProvider;
  * reorient the system facing NORTH
  * 
  * @author Hassan
- * @author Aakarsh
+ * @author Steven
  *
  */
 
