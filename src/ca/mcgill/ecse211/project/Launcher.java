@@ -5,16 +5,20 @@ import java.io.File;
 import lejos.hardware.Sound;;
 
 /**
+ * This controls the launching mechanism.
  * 
  * @author Steven
- *@author Aakarsh
+ * @author Aakarsh
  */
 public class Launcher {
-  // setup launching mechanism
+  /**
+   * Runs the launching sequence. It waits 5 seconds for manual reloading and then launches the projectile
+   */
   public static void launch() {
     while (true) {
+      // wait for reloading
       Main.sleepFor(5000);
-      // Sound.playSample(new File("Kobe (1).wav"), Sound.VOL_MAX);
+      
       // launch
       launchMotor.setAcceleration(100);
       launchMotor.rotate(360);
