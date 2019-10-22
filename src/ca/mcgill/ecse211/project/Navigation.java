@@ -90,8 +90,6 @@ public class Navigation {
 
     leftMotor.setSpeed(FORWARD_SPEED);
     rightMotor.setSpeed(FORWARD_SPEED);
-	LCD.drawString("PX: " + (dx - RADIUS * Math.sin(angle)) , 0, 5);
-    LCD.drawString("PY: " + (dy - RADIUS * Math.cos(angle)), 0, 6);
     leftMotor.rotate(convertDistance(distance - r), true);
     rightMotor.rotate(convertDistance(distance - r), true);
   }
