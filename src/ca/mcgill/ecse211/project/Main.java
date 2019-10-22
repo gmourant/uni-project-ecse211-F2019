@@ -46,7 +46,6 @@ public class Main {
       UltrasonicLocalizer localize = new UltrasonicLocalizer(0, US_SENSOR);
       new Thread(new Display()).start();
       new Thread(odometer).start();
-<<<<<<< HEAD
 	  localize.localize();
       // Start light localization when ultrasonic localization is over
       lightLocalize.localize();
@@ -56,7 +55,6 @@ public class Main {
         buttonChoice = Button.waitForAnyPress();
       } while (buttonChoice != Button.ID_ENTER);
 		
-=======
       
       do {
         buttonChoice = Button.waitForAnyPress();
@@ -67,7 +65,6 @@ public class Main {
       // Start light localization when ultrasonic localization is over
       lightLocalize.localize();
 
->>>>>>> a7150652ebfcef90c5047b18f1bf77242a0332a9
       Sound.twoBeeps();
 
       // position yourself before shooting
