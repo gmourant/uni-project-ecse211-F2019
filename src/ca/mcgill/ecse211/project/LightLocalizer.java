@@ -4,6 +4,8 @@ import static ca.mcgill.ecse211.project.Resources.*;
 import ca.mcgill.ecse211.project.Main;
 import ca.mcgill.ecse211.project.Odometer;
 import lejos.hardware.Sound;
+import lejos.hardware.port.SensorPort;
+import lejos.hardware.sensor.EV3ColorSensor;
 import lejos.robotics.SampleProvider;
 
 /**
@@ -18,6 +20,11 @@ public class LightLocalizer {
   private static final long CORRECTION_PERIOD = 10;
   private static final double LIGHTSENSOR_DELTA = 32;
   long correctionStart, correctionEnd;
+  
+  // added temporarily
+  public static final EV3ColorSensor colorSensor = new EV3ColorSensor(SensorPort.S1);
+  
+  
   private SampleProvider light = colorSensor.getRedMode();
   private float[] lightData = new float[colorSensor.sampleSize()];
   private int lightValue;

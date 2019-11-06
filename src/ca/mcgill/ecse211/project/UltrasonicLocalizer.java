@@ -2,7 +2,7 @@ package ca.mcgill.ecse211.project;
 
 import static ca.mcgill.ecse211.project.Resources.*;
 import lejos.hardware.sensor.EV3UltrasonicSensor;
-import lejos.robotics.SampleProvider;
+//import lejos.robotics.SampleProvider;
 
 /**
  * Given that the system is placed along an
@@ -11,15 +11,16 @@ import lejos.robotics.SampleProvider;
  * 
  * @author Hassan
  * @author Aakarsh
+ * @author Steve
  *
  */
 
 public class UltrasonicLocalizer {
 
   private final int type;
-  private float[] usData;
-  SampleProvider distance;
-  private final EV3UltrasonicSensor us;
+//  private float[] usData;                 // not needed
+//  SampleProvider distance;                        
+//  private final EV3UltrasonicSensor us;
   private static int wallDistance = 30;
   private static int noiseMargin = 1;
   int filterControl;
@@ -28,8 +29,7 @@ public class UltrasonicLocalizer {
 
   public UltrasonicLocalizer(int type, EV3UltrasonicSensor us) {
     this.type = type;
-    this.us = us;
-    this.distance = distance;
+//    this.us = us;
   }
 
 
@@ -58,7 +58,8 @@ public class UltrasonicLocalizer {
       dAngle = angle1 + angle2 / 2;
     //update current odometer angle
     odometer.update(0, 0, dAngle);
-    navigate.turnTo(0);
+    navigate.turnTo(Math.PI/2.0);       // why is this needed
+//    Navigation.turnTo(0);
   }
   
   /**

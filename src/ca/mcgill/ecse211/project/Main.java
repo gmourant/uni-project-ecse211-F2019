@@ -16,13 +16,45 @@ import lejos.robotics.SampleProvider;
 
 public class Main {
   // initilalizes Ultrasonic Sensor
-  static SampleProvider distance = US_SENSOR.getMode("Distance");
-  static float[] sampleUS = new float[distance.sampleSize()];
-  final static UltrasonicPoller UP = new UltrasonicPoller(distance, sampleUS);
+  static SampleProvider distance = US_SENSOR.getMode("Distance");               
+  static float[] sampleUS = new float[distance.sampleSize()];                   
+  final static UltrasonicPoller UP = new UltrasonicPoller(distance, sampleUS);  
 
   public static void main(String[] args) {
 
     int buttonChoice;
+
+    // wait until user presses any button
+    do {
+      LCD.clear();
+      LCD.drawString("Press Any Button", 0, 0);
+      LCD.drawString("To Start", 0, 1);
+      buttonChoice = Button.waitForAnyPress();
+    } while (buttonChoice == 0);// buttonChoice != Button.ID_LEFT && buttonChoice != Button.ID_RIGHT);
+
+    LCD.clear();
+
+    new Thread(odometer).start();
+
+    // print x, y, and orientation of robot
+    new Thread(new Display()).start();
+
+
+    UltrasonicLocalizer usLocalizer = new UltrasonicLocalizer(0, US_SENSOR);
+    //    LightLocalizer lightLocalizer = new LightLocalizer();
+    //    ThetaCorrector thetaCorrector = new ThetaCorrector();
+
+    usLocalizer.localize();
+
+    //    lightLocalizer.localize();
+
+    //    thetaCorrector.correctTheta();
+
+
+
+  }
+
+  /*  int buttonChoice;
 
     do {
       LCD.clear();
@@ -59,10 +91,10 @@ public class Main {
       localize.localize();
       // Start light localization when ultrasonic localization is over
       lightLocalize.localize();
-     
+
 
       Sound.twoBeeps();
-      
+
       // position yourself before shooting
       // get launch poistion
       double[] launchPos = Navigation.getLaunchPosition(TARGET_POSITION[0], TARGET_POSITION[1]);
@@ -77,7 +109,7 @@ public class Main {
     while (Button.waitForAnyPress() != Button.ID_ESCAPE); // do nothing
 
     System.exit(0);
-  }
+  }*/
 
   /**
    * Sleeps current thread for the specified duration.

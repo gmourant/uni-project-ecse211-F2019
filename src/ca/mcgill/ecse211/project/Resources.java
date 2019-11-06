@@ -55,7 +55,16 @@ public class Resources {
    * The robot width in centimeters.
    */
   // public static final double TRACK = 11.45;
-  public static final double TRACK = 9.85;
+//  public static final double TRACK = 9.85;
+  
+
+  // wheel end to wheel end
+  public static final double TRACK = 15.7;
+
+  // wheel center to wheel center
+  public static final double TRACK2 = 13.6;
+
+
 
 
   /**
@@ -110,13 +119,19 @@ public class Resources {
   public static final EV3LargeRegulatedMotor launchMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("C"));
   
   /**
+   * Motor for ultrasonic sensor sweeping.
+   */
+  public static final EV3LargeRegulatedMotor usMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("B"));
+  
+  
+  /**
    * The ultrasonic sensor.
    */
-  public static final EV3UltrasonicSensor US_SENSOR = new EV3UltrasonicSensor(LocalEV3.get().getPort("S4"));
+  public static final EV3UltrasonicSensor US_SENSOR = new EV3UltrasonicSensor(LocalEV3.get().getPort("S2"));
   /**
    * The color sensor.
    */
-  public static final EV3ColorSensor colorSensor = new EV3ColorSensor(SensorPort.S1);
+//  public static final EV3ColorSensor colorSensor = new EV3ColorSensor(SensorPort.S1);
 
   /**
    * The LCD.
