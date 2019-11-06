@@ -45,11 +45,13 @@ public class Main {
     //    ThetaCorrector thetaCorrector = new ThetaCorrector();
 
     usLocalizer.localize();
-
+  
     //    lightLocalizer.localize();
 
     //    thetaCorrector.correctTheta();
 
+    
+    floatMotors();
 
 
   }
@@ -111,6 +113,16 @@ public class Main {
     System.exit(0);
   }*/
 
+  
+  public static void floatMotors() {
+    leftMotor.forward();
+    leftMotor.flt();
+    rightMotor.forward();
+    rightMotor.flt();
+    
+  }
+
+  
   /**
    * Sleeps current thread for the specified duration.
    * 

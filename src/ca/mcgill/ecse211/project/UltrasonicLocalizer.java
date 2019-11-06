@@ -58,7 +58,7 @@ public class UltrasonicLocalizer {
       dAngle = angle1 + angle2 / 2;
     //update current odometer angle
     odometer.update(0, 0, dAngle);
-    navigate.turnTo(Math.PI/2.0);       // why is this needed
+    navigate.turnTo(0);       // why is this needed
 //    Navigation.turnTo(0);
   }
   
