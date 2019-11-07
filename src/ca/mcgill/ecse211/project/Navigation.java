@@ -4,7 +4,7 @@ import static ca.mcgill.ecse211.project.Resources.*;;
 
 /**
  * Navigates the robot depending on given coordinates avoids obstacles and resumes navigation
- * 
+ *
  * @author Steven
  * @author Hassan
  * @author Aakarsh
@@ -23,12 +23,12 @@ public class Navigation {
   /**
    * Orientates robot towards desired destination rotates forward to the coordinate avoids obstacle and resumes when
    * avoided
-   * 
+   *
    * @param x x coordinate
    * @param y y coordinate
    */
 
-  public void travelTo(double x, double y) {
+  public static void travelTo(double x, double y) {
     // reset and initiliaze motors
     currentX = x;
     currentY = y;
@@ -60,12 +60,12 @@ public class Navigation {
   /**
    * Orients robot towards desired destination rotates forward to the coordinate until it reaches the circle of radius r
    * from the given point avoids obstacle and resumes when avoided.
-   * 
+   *
    * @param x x coordinate
    * @param y y coordinate
    * @param r radius
    */
-  public void travelTo(double x, double y, double r) {
+  public static void travelTo(double x, double y, double r) {
     // reset and initiliaze motors
     currentX = x;
     currentY = y;
@@ -93,14 +93,14 @@ public class Navigation {
     leftMotor.rotate(convertDistance(distance - r), true);
     rightMotor.rotate(convertDistance(distance - r), true);
   }
-  
+
    /**
-   * 
+   *
    * @param x coordinates of x
    * @param y coordinates of y
    * @param r radius of position
    */
-  public void launchPosition(double x, double y, double r) {
+  public static void launchPosition(double x, double y, double r) {
     x = x * TILE_SIZE;
     y = y * TILE_SIZE;
     double dx = x - odometer.getXYT()[0];
@@ -116,7 +116,7 @@ public class Navigation {
 
   /**
    * turns toward desired angle
-   * 
+   *
    * @param theta theta in radians
    */
   public static void turnTo(double theta) {
@@ -141,7 +141,7 @@ public class Navigation {
 
   /**
    * true when no obstacle detected and motors are moving
-   * 
+   *
    * @return boolean
    */
 
@@ -153,7 +153,7 @@ public class Navigation {
   /**
    * Converts input distance to the total rotation of each wheel needed to cover that distance. From Lab 2
    * SquareDriver.java
-   * 
+   *
    * @param distance
    * @return the wheel rotations necessary to cover the distance
    */
@@ -164,7 +164,7 @@ public class Navigation {
   /**
    * Converts input angle to the total rotation of each wheel needed to rotate the robot by that angle. From Lab 2
    * SquareDriver.java
-   * 
+   *
    * @param angle
    * @return the wheel rotations necessary to rotate the robot by the angle
    */
@@ -174,7 +174,7 @@ public class Navigation {
 
   /**
    * Returns the Navigation Object. Use this method to obtain an instance of Navigation.
-   * 
+   *
    * @return the Navigation Object
    */
   public synchronized static Navigation getNavigation() {
