@@ -1,15 +1,12 @@
 package ca.mcgill.ecse211.project;
 
 import static ca.mcgill.ecse211.project.Resources.*;
-import ca.mcgill.ecse211.project.Main;
-import ca.mcgill.ecse211.project.Odometer;
 import lejos.hardware.Sound;
-import lejos.hardware.port.SensorPort;
-import lejos.hardware.sensor.EV3ColorSensor;
 import lejos.robotics.SampleProvider;
 
 /**
- * Light localization that assumes that the device is facing NORTH and is on a 45 degree line in between (0,0) and (1,1)
+ * Light localization that assumes that the device is facing NORTH and is
+ * on a 45 degree line in between (0,0) and (1,1)
  * 
  * @author Aakarsh
  * @author Steven
@@ -17,129 +14,154 @@ import lejos.robotics.SampleProvider;
  */
 
 public class LightLocalizer {
-  private static final long CORRECTION_PERIOD = 10;
-  private static final double LIGHTSENSOR_DELTA = 32;
+  private static final double LIGHTSENSOR_DELTA = 30;
   long correctionStart, correctionEnd;
-  
-  // added temporarily
-  public static final EV3ColorSensor colorSensor = new EV3ColorSensor(SensorPort.S1);
-  
-  
-  private SampleProvider light = colorSensor.getRedMode();
-  private float[] lightData = new float[colorSensor.sampleSize()];
-  private int lightValue;
-  private int count;
+
+  private SampleProvider leftLight = leftColorSensor.getRedMode();
+  private float[] leftLightData = new float[leftColorSensor.sampleSize()];
+  private int leftLightValue;
+  private boolean leftDetects = false; 
+
+
+  private SampleProvider rightLight = rightColorSensor.getRedMode();
+  private float[] rightLightData = new float[rightColorSensor.sampleSize()];
+  private int rightLightValue;
+  private boolean rightDetects = false;
+
   // Our device has a 6.4 cm distance between it's center and the light sensor
   // The light sensor is placed at the front
-  private double offSet = 6.4;
-  private double thetaXa, thetaXb, thetaYa, thetaYb, thetaX, thetaY, x, y;
-  private int INITIAL_LIGHT;
+  //  private double offSet = 6.4;
+  private double offSet = 11.4;
+  private int RIGHT_INITIAL_LIGHT;
+  private int LEFT_INITIAL_LIGHT;
 
   /**
-   * @return returns true if black line detected, else false
+   * @return returns true if left sensor detects black line, else false
    */
-  public boolean correctionTrigger() {
-    light.fetchSample(lightData, 0);
-    lightValue = (int) (lightData[0] * 100);
-    if (Math.abs(lightValue - INITIAL_LIGHT) > LIGHTSENSOR_DELTA) {
+  public boolean leftCorrectionTrigger() {
+    leftLight.fetchSample(leftLightData, 0);
+    leftLightValue = (int) (leftLightData[0] * 100);
+
+    if (Math.abs(leftLightValue - LEFT_INITIAL_LIGHT) > LIGHTSENSOR_DELTA){
       Sound.beep();
+
+      leftDetects = true;
+
       return true;
     }
+
+    leftDetects = false;
     return false;
   }
 
   /**
-   * main method assuming that the device is facing north turn 45 degree and make sure that we are not already on (1,1)
+   * @return returns true if right sensor detects black line, else false
+   */
+  public boolean rightCorrectionTrigger() {
+    rightLight.fetchSample(rightLightData, 0);
+    rightLightValue = (int)(rightLightData[0] * 100);
+
+    if (Math.abs(rightLightValue - RIGHT_INITIAL_LIGHT) > LIGHTSENSOR_DELTA) {
+      Sound.beep();
+
+      rightDetects = true;
+      return true;
+    }
+    rightDetects = false;
+    return false;
+  }
+
+
+
+  /**
+   * main method assuming that the device is facing north turn 45 degree and make
+   * sure that we are not already on (1,1)
    * by starting off with a spin
    */
   public void localize() {
     // initial light data that will be used to detect black lines
-    light.fetchSample(lightData, 0);
-    INITIAL_LIGHT = (int) (lightData[0] * 100);
-    Navigation.turnTo(45 * Math.PI / 180);
-    // make sure we are not already on a cross section
-    while (count != 4) {
-      spinSearch();
-      // if we are on a cross section, 4 lines should be detected
-      if (count == 4) {
-        // calculate device's current X and Y position
-        //with 0,0 as it's origin
-        thetaX = (thetaXb - thetaXa);
-        thetaY = (thetaYb - thetaYa);
-        x = -offSet * Math.cos(thetaY / 2 * Math.PI / 180);
-        y = -offSet * Math.cos(thetaX / 2 * Math.PI / 180);
-        break;
-      }
+    leftLight.fetchSample(leftLightData, 0);
+    LEFT_INITIAL_LIGHT = (int) (leftLightData[0] * 100);
+    
+    rightLight.fetchSample(rightLightData, 0);
+    RIGHT_INITIAL_LIGHT = (int) (rightLightData[0] * 100);
 
-      while (true) {
-        correctionStart = System.currentTimeMillis();
-        // while facing 45 degree, go forward until a black line is detected
-        leftMotor.forward();
-        rightMotor.forward();
-        // continue going, to take into account the offset
-        if (correctionTrigger()) {
-          leftMotor.stop(true);
-          rightMotor.stop(true);
-          leftMotor.rotate(convertDistance(offSet), true);
-          rightMotor.rotate(convertDistance(offSet), false);
-          break;
-        }
-        // this ensures the line detection occurs only once every period
-        correctionEnd = System.currentTimeMillis();
-        if (correctionEnd - correctionStart < CORRECTION_PERIOD) {
-          Main.sleepFor(CORRECTION_PERIOD - (correctionEnd - correctionStart));
-        }
-      }
+    // move robot forward until one sensor sees a line
+    while (!leftCorrectionTrigger() && !rightCorrectionTrigger()) {
+      leftMotor.forward();
+      rightMotor.forward();
     }
-    //x and y are around (0,0) add TILE_SIZE
-    odometer.setX(TILE_SIZE + x);
-    odometer.setY(TILE_SIZE + y);
-    navigate.travelTo(1, 1, 0);
-    //face NORTH
-    Navigation.turnTo(0);
-    leftMotor.stop();
+    leftMotor.stop(true);
     rightMotor.stop();
-  }
-
-  public void spinSearch() {
-    //initialize motors
-    leftMotor.setSpeed(ROTATE_SPEED);
-    rightMotor.setSpeed(ROTATE_SPEED);
-    //turn around itself clockwise
-    leftMotor.rotate(convertAngle(360), true);
-    rightMotor.rotate(-convertAngle(360), true);
-    count = 0;
-    //exits when self rotation is completed
-    while (leftMotor.isMoving() || rightMotor.isMoving()) {
-      correctionStart = System.currentTimeMillis();
-      //look for black lines
-      if (correctionTrigger()) {
-        count += 1;
-        //since device is 45 degree from line
-        //first line detected is small X
-        if (count == 1) {
-          thetaXa = odometer.getXYT()[2];
-          //second line detected is small Y
-        } else if (count == 2) {
-          thetaYa = odometer.getXYT()[2];
-          //third line detected is big X
-        } else if (count == 3) {
-          thetaXb = odometer.getXYT()[2];
-          //fourth line detected is big Y 
-        } else if (count == 4) {
-          thetaYb = odometer.getXYT()[2];
-        }
-        // this ensures the line detection occurs only once every period
-        correctionEnd = System.currentTimeMillis();
-        if (correctionEnd - correctionStart < CORRECTION_PERIOD) {
-          Main.sleepFor(CORRECTION_PERIOD - (correctionEnd - correctionStart));
-        }
-      }
+    
+    correctTheta(0);
+    
+    odometer.setY(TILE_SIZE + offSet);
+    
+    leftMotor.rotate(convertDistance(-offSet + TILE_SIZE / 2), true);
+    rightMotor.rotate(convertDistance(-offSet + TILE_SIZE / 2), false);
+    
+   
+    //Turn To X-axis and correct it
+    Navigation.turnTo(90 * Math.PI / 180);
+    
+    // move robot forward until one sensor sees a line
+    while (!leftCorrectionTrigger() && !rightCorrectionTrigger()) {
+      leftMotor.forward();
+      rightMotor.forward();
     }
+    
+    odometer.setX(TILE_SIZE + offSet);
+  
+    // face NORTH
+    Navigation.turnTo(0);
+     
+    leftMotor.stop(true);
+    rightMotor.stop();
+    navigate.travelTo(2, 2);
   }
 
   /**
-   * Converts input distance to the total rotation of each wheel needed to cover that distance.
+   * corrects the orientation of the robot during light localization
+   * if left sensor detects first, move right motor until it catches up
+   * if right sensor detects first, move left motor until it catches up
+   * set odometer angle
+   * 
+   * @param angle set in the odometer
+   */
+  private void correctTheta(double angle)
+  {
+    // if left sensor detects first, move right motor until it catches up
+    if (leftDetects && !rightDetects){
+      leftMotor.stop(true);
+      while(!rightCorrectionTrigger()){
+        rightMotor.forward();
+      }
+      rightMotor.stop();
+    }
+    // if right sensor detects first, move left motor until it catches up
+    else if (!leftDetects && rightDetects){
+      rightMotor.stop(true);
+      while(!leftCorrectionTrigger()){
+        leftMotor.forward();
+      }
+      leftMotor.stop();
+    }
+    // this condition is probably not needed
+    else if (leftDetects && rightDetects){
+      rightMotor.stop(true);
+      leftMotor.stop();
+    }
+    
+    //odometer.setTheta(angle);
+    odometer.update(0, 0, -odometer.getXYT()[2]);
+
+  }
+
+
+  /**
+   * Converts input distance to the total rotation of each wheel needed to
+   * cover that distance.
    * 
    * @param distance
    * @return the wheel rotations necessary to cover the distance
@@ -149,7 +171,8 @@ public class LightLocalizer {
   }
 
   /**
-   * Converts input angle to the total rotation of each wheel needed to rotate the robot by that angle.
+   * Converts input angle to the total rotation of each wheel needed to rotate
+   * the robot by that angle.
    * 
    * @param angle
    * @return the wheel rotations necessary to rotate the robot by the angle
