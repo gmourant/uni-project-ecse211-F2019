@@ -82,6 +82,7 @@ public class Main {
     // TODO: ensure robot stays within island
     // calculate and move to launch point
     Navigation.launchPosition(bin.x, bin.y, RADIUS);
+    Navigation.travelTo(bin.x, bin.y, RADIUS);
 
     // launch balls
     Launcher.launch();
