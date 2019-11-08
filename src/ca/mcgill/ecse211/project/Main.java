@@ -41,10 +41,13 @@ public class Main {
 
 
     UltrasonicLocalizer usLocalizer = new UltrasonicLocalizer(0, US_SENSOR);
-    //    LightLocalizer lightLocalizer = new LightLocalizer();
+    LightLocalizer lightLocalizer = new LightLocalizer();
     //    ThetaCorrector thetaCorrector = new ThetaCorrector();
 
     usLocalizer.localize();
+    
+    lightLocalizer.localize();
+    
   
     //    lightLocalizer.localize();
 
@@ -52,8 +55,8 @@ public class Main {
 
     
     floatMotors();
-
-
+//    while (Button.waitForAnyPress() != Button.ID_ESCAPE); // do nothing
+//    System.exit(0);
   }
 
   /*  int buttonChoice;
