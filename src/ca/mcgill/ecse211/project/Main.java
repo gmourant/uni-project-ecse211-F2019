@@ -20,6 +20,14 @@ public class Main {
   static SampleProvider distance = US_SENSOR.getMode("Distance");
   static float[] sampleUS = new float[distance.sampleSize()];
   final static UltrasonicPoller UP = new UltrasonicPoller(distance, sampleUS);
+  
+  static double tunnelStartX = 0;  // should be middle of tunnel entry
+  static double tunnelStartY = 0;
+
+  static double tunnelEndX = 0;
+  static double tunnelEndY = 0;
+
+  static double tunnelTheta = 0;
 
   public static void main(String[] args) {
 
@@ -40,37 +48,19 @@ public class Main {
     } while (buttonChoice != Button.ID_LEFT && buttonChoice != Button.ID_RIGHT);
 
     LCD.clear();
-
-    double tunnelStartX = 0;  // should be middle of tunnel entry
-    double tunnelStartY = 0;
-
-    double tunnelEndX = 0;
-    double tunnelEndY = 0;
-
-    double tunnelTheta = 0;
+    
+    Region tunnel = tnr;
 
     if (buttonChoice == Button.ID_LEFT) {
       // RED TEAM
-      tunnelStartX = tnr.ll.x - TILE_SIZE/2;     // so that we dont crash into tunnel walls
-      tunnelStartY = tnr.ur.y - TILE_SIZE/2;
-
-      tunnelEndX = tnr.ur.x;
-      tunnelEndY = tnr.ur.y - TILE_SIZE/2;
-
-      tunnelTheta = 90;     // pointing right
+      tunnel = tnr;
 
     }
     else if (buttonChoice == Button.ID_RIGHT) {
       // GREEN TEAM
-      tunnelStartX = tng.ll.x + TILE_SIZE/2;     // so that we dont crash into tunnel walls
-      tunnelStartY = tng.ur.y - TILE_SIZE/2;
-
-      tunnelEndX = tng.ur.x - TILE_SIZE/2;
-      tunnelEndY = tng.ur.y;
-
-      tunnelTheta = 0;     // pointing up
+      tunnel = tng;
     }
-
+    
     // start odometer thread
     // start display thread
     new Thread(odometer).start();
@@ -78,6 +68,9 @@ public class Main {
 
     // localize
     localize();
+    
+    // compute tunnel coordinates
+    computeTunnelCoordinates(tunnel);
 
     // navigate to tunnel entrance
     // turn to face tunnel
@@ -106,14 +99,74 @@ public class Main {
     LightLocalizer lightLocalize = new LightLocalizer();
     UltrasonicLocalizer localize;
 
-    new Thread(new Display()).start();
-    new Thread(odometer).start();
-
     localize = new UltrasonicLocalizer(1, US_SENSOR);
     localize.localize();
 
     //Start light localization when ultrasonic localizationi is over
     lightLocalize.localize();
+  }
+  
+  /**
+   * Method to compute the coordinates of the tunnel that the robot moves to
+   */
+  public static void computeTunnelCoordinates(Region tunnel) {
+    double x0;
+    double y0;
+    
+    double x1;
+    double y1;
+    
+    if(horizontalTunnel(tunnel)) {
+      x0 = tunnel.ll.x - TILE_SIZE/2;     // so that we dont crash into tunnel walls
+      y0 = tunnel.ll.y + TILE_SIZE/2;
+
+      x1 = tunnel.ur.x + TILE_SIZE/2;
+      y1 = tunnel.ur.y - TILE_SIZE/2;
+
+      tunnelTheta = 90;     // pointing right
+    }
+    else {      // vertical tunnel
+      x0 = tunnel.ll.x + TILE_SIZE/2;     // so that we dont crash into tunnel walls
+      y0 = tunnel.ll.y - TILE_SIZE/2;
+
+      x1 = tunnel.ur.x - TILE_SIZE/2;
+      y1 = tunnel.ur.y + TILE_SIZE/2;
+
+      tunnelTheta = 0;     // pointing up
+    }
+    
+    double pos[] = odometer.getXYT();
+    double robotX = pos[0];
+    double robotY = pos[1];
+    
+    // which of the computed points tunnel starts at (closest)
+    double dist1 = Math.sqrt(Math.pow(robotX-x0, 2) + Math.pow(robotY-y0, 2));
+    double dist2 = Math.sqrt(Math.pow(robotX-x1, 2) + Math.pow(robotY-y1, 2));
+    
+    if(dist1 <= dist2) {
+      tunnelStartX = x0;
+      tunnelStartY = y0;
+      tunnelEndX = x1;
+      tunnelEndY = y1;
+    }
+    else {
+      tunnelStartX = x1;
+      tunnelStartY = y1;
+      tunnelEndX = x0;
+      tunnelEndY = y0;
+      
+      tunnelTheta -= 180;
+    }
+  }
+  
+  /**
+   * computes the orientation of the tunnel
+   * 
+   * @param tunnel  region
+   * @return true if horizontal orientation of tunnel, false if vertical
+   */
+  public static boolean horizontalTunnel(Region tunnel) {
+    return (Math.abs(tunnel.ur.y - tunnel.ll.y)==1);
   }
 
   /**
