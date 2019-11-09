@@ -34,8 +34,8 @@ public class Navigation{
     // reset and initiliaze motors
     currentX = x;
     currentY = y;
-    leftMotor.stop();
-    rightMotor.stop();
+    leftMotor.stop(true);
+    rightMotor.stop(false);
     launchMotor.stop();
     leftMotor.setAcceleration(ACCELERATION);
     rightMotor.setAcceleration(ACCELERATION);
@@ -56,7 +56,7 @@ public class Navigation{
     leftMotor.setSpeed(FORWARD_SPEED);
     rightMotor.setSpeed(FORWARD_SPEED);
     leftMotor.rotate(convertDistance(vector), true);
-    rightMotor.rotate(convertDistance(vector), true);
+    rightMotor.rotate(convertDistance(vector), false);
   }
 
   /**

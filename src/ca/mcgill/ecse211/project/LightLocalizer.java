@@ -3,10 +3,10 @@ package ca.mcgill.ecse211.project;
 import static ca.mcgill.ecse211.project.Resources.*;
 import lejos.hardware.Sound;
 import lejos.robotics.SampleProvider;
+import lejos.utility.Delay;
 
 /**
- * Light localization that assumes that the device is facing NORTH and is
- * on a 45 degree line in between (0,0) and (1,1)
+ * Light localization that assumes that the device is facing NORTH and is on a 45 degree line in between (0,0) and (1,1)
  * 
  * @author Aakarsh
  * @author Steven
@@ -14,13 +14,13 @@ import lejos.robotics.SampleProvider;
  */
 
 public class LightLocalizer {
-  private static final double LIGHTSENSOR_DELTA = 30;
+  private static final double LIGHTSENSOR_DELTA = 25;
   long correctionStart, correctionEnd;
 
   private SampleProvider leftLight = leftColorSensor.getRedMode();
   private float[] leftLightData = new float[leftColorSensor.sampleSize()];
   private int leftLightValue;
-  private boolean leftDetects = false; 
+  private boolean leftDetects = false;
 
 
   private SampleProvider rightLight = rightColorSensor.getRedMode();
@@ -30,8 +30,8 @@ public class LightLocalizer {
 
   // Our device has a 6.4 cm distance between it's center and the light sensor
   // The light sensor is placed at the front
-  //  private double offSet = 6.4;
-  private double offSet = 11.4;
+  // private double offSet = 6.4;
+  private double offSet = 4;
   private int RIGHT_INITIAL_LIGHT;
   private int LEFT_INITIAL_LIGHT;
 
@@ -42,7 +42,7 @@ public class LightLocalizer {
     leftLight.fetchSample(leftLightData, 0);
     leftLightValue = (int) (leftLightData[0] * 100);
 
-    if (Math.abs(leftLightValue - LEFT_INITIAL_LIGHT) > LIGHTSENSOR_DELTA){
+    if (Math.abs(leftLightValue - LEFT_INITIAL_LIGHT) > LIGHTSENSOR_DELTA) {
       Sound.beep();
 
       leftDetects = true;
@@ -59,7 +59,7 @@ public class LightLocalizer {
    */
   public boolean rightCorrectionTrigger() {
     rightLight.fetchSample(rightLightData, 0);
-    rightLightValue = (int)(rightLightData[0] * 100);
+    rightLightValue = (int) (rightLightData[0] * 100);
 
     if (Math.abs(rightLightValue - RIGHT_INITIAL_LIGHT) > LIGHTSENSOR_DELTA) {
       Sound.beep();
@@ -74,15 +74,14 @@ public class LightLocalizer {
 
 
   /**
-   * main method assuming that the device is facing north turn 45 degree and make
-   * sure that we are not already on (1,1)
+   * main method assuming that the device is facing north turn 45 degree and make sure that we are not already on (1,1)
    * by starting off with a spin
    */
   public void localize() {
     // initial light data that will be used to detect black lines
     leftLight.fetchSample(leftLightData, 0);
     LEFT_INITIAL_LIGHT = (int) (leftLightData[0] * 100);
-    
+
     rightLight.fetchSample(rightLightData, 0);
     RIGHT_INITIAL_LIGHT = (int) (rightLightData[0] * 100);
 
@@ -93,75 +92,76 @@ public class LightLocalizer {
     }
     leftMotor.stop(true);
     rightMotor.stop();
-    
+
     correctTheta(0);
-    
+
     odometer.setY(TILE_SIZE + offSet);
-    
+
     leftMotor.rotate(convertDistance(-offSet + TILE_SIZE / 2), true);
     rightMotor.rotate(convertDistance(-offSet + TILE_SIZE / 2), false);
-    
-   
-    //Turn To X-axis and correct it
+
+
+    // Turn To X-axis and correct it
     Navigation.turnTo(90 * Math.PI / 180);
-    
+
     // move robot forward until one sensor sees a line
     while (!leftCorrectionTrigger() && !rightCorrectionTrigger()) {
       leftMotor.forward();
       rightMotor.forward();
     }
     
+    correctTheta(90);
     odometer.setX(TILE_SIZE + offSet);
-  
+    leftMotor.rotate(convertDistance(-offSet + TILE_SIZE / 2), true);
+    rightMotor.rotate(convertDistance(-offSet + TILE_SIZE / 2), false);
+
     // face NORTH
-    Navigation.turnTo(0);
+    //navigate.travelTo(1,1);
+    navigate.turnTo(Math.toRadians(45));
+    leftMotor.rotate(-convertDistance(Math.hypot(odometer.getXYT()[0] - TILE_SIZE,odometer.getXYT()[1] - TILE_SIZE)), true);
+    rightMotor.rotate(-convertDistance(Math.hypot(odometer.getXYT()[0] - TILE_SIZE,odometer.getXYT()[1] - TILE_SIZE)), false);
+    navigate.turnTo(0);
      
-    leftMotor.stop(true);
-    rightMotor.stop();
-    navigate.travelTo(2, 2);
+    
   }
 
   /**
-   * corrects the orientation of the robot during light localization
-   * if left sensor detects first, move right motor until it catches up
-   * if right sensor detects first, move left motor until it catches up
-   * set odometer angle
+   * corrects the orientation of the robot during light localization if left sensor detects first, move right motor
+   * until it catches up if right sensor detects first, move left motor until it catches up set odometer angle
    * 
    * @param angle set in the odometer
    */
-  private void correctTheta(double angle)
-  {
+  private void correctTheta(double angle) {
     // if left sensor detects first, move right motor until it catches up
-    if (leftDetects && !rightDetects){
-      leftMotor.stop(true);
-      while(!rightCorrectionTrigger()){
+    leftMotor.stop(true);
+    rightMotor.stop(false);
+    leftMotor.setSpeed(75);
+    rightMotor.setSpeed(75);
+    if (leftDetects && !rightDetects) {
+      Delay.msDelay(500);
+      while (!rightCorrectionTrigger()) {
         rightMotor.forward();
       }
       rightMotor.stop();
     }
     // if right sensor detects first, move left motor until it catches up
-    else if (!leftDetects && rightDetects){
-      rightMotor.stop(true);
-      while(!leftCorrectionTrigger()){
+    else if (!leftDetects && !rightDetects) {
+      Delay.msDelay(500);
+      while (!leftCorrectionTrigger()) {
         leftMotor.forward();
       }
       leftMotor.stop();
     }
-    // this condition is probably not needed
-    else if (leftDetects && rightDetects){
-      rightMotor.stop(true);
-      leftMotor.stop();
-    }
-    
-    //odometer.setTheta(angle);
-    odometer.update(0, 0, -odometer.getXYT()[2]);
+    // odometer.setTheta(angle);
+    leftMotor.stop(true);
+    rightMotor.stop(false);
+    odometer.setTheta(angle);
 
   }
 
 
   /**
-   * Converts input distance to the total rotation of each wheel needed to
-   * cover that distance.
+   * Converts input distance to the total rotation of each wheel needed to cover that distance.
    * 
    * @param distance
    * @return the wheel rotations necessary to cover the distance
@@ -171,8 +171,7 @@ public class LightLocalizer {
   }
 
   /**
-   * Converts input angle to the total rotation of each wheel needed to rotate
-   * the robot by that angle.
+   * Converts input angle to the total rotation of each wheel needed to rotate the robot by that angle.
    * 
    * @param angle
    * @return the wheel rotations necessary to rotate the robot by the angle

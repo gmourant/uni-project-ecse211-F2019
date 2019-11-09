@@ -39,16 +39,14 @@ public class UltrasonicLocalizer {
   public void localize() {
     //initialize motors
     leftMotor.stop(true);
-    rightMotor.stop(true);
+    rightMotor.stop(false);
     leftMotor.setAcceleration(ACCELERATION);
     rightMotor.setAcceleration(ACCELERATION);
-    leftMotor.setSpeed(ROTATE_SPEED);
-    rightMotor.setSpeed(ROTATE_SPEED);
+    leftMotor.setSpeed(US_ROTATE_SPEED);
+    rightMotor.setSpeed(US_ROTATE_SPEED);
     if (type == 0) {
       fallingEdge();
-    } else if (type == 1) {
-      risingEdge();
-    }
+    } 
     //wrap around 359 degree to 0 degree
     if (angle1 > angle2) {
       dAngle = 45 - (angle1 + angle2) / 2;
@@ -92,38 +90,7 @@ public class UltrasonicLocalizer {
     //angle at which the sensor sees the wall  
     angle2 = odometer.getXYT()[2];
     leftMotor.stop(true);
-    rightMotor.stop(true);
+    rightMotor.stop(false);
   }
 
-/**
- * Record angle and switch direction when the sensor detects the
- * transition between wall and nothing
- * Initializes robot to start facing the wall
- */
-  public void risingEdge() {
-    // turn the system until the sensor observes the left wall 
-    while (Main.UP.getDistance() > wallDistance - noiseMargin) {
-      leftMotor.backward();
-      rightMotor.forward();
-    }
-    //turn the system until it sees the nothing
-    while (Main.UP.getDistance() < wallDistance + noiseMargin) {
-      leftMotor.backward();
-      rightMotor.forward();
-    }
-    angle1 = odometer.getXYT()[2];
-    // turn the system until the sensor observes the back wall 
-    while (Main.UP.getDistance() > wallDistance - noiseMargin) {
-      leftMotor.forward();
-      rightMotor.backward();
-    }
-    //turn the system until it sees the nothing
-    while (Main.UP.getDistance() < wallDistance + noiseMargin) {
-      leftMotor.forward();
-      rightMotor.backward();
-    }
-    angle2 = odometer.getXYT()[2];
-    leftMotor.stop(true);
-    rightMotor.stop(true);
-  }
 }

@@ -59,10 +59,10 @@ public class Resources {
   
 
   // wheel end to wheel end
-  public static final double TRACK = 15.7;
+  public static final double TRACK = 13.6;
 
   // wheel center to wheel center
-  public static final double TRACK2 = 13.6;
+  //public static final double TRACK2 = 13.6;
 
 
 
@@ -90,7 +90,10 @@ public class Resources {
   /**
    * The speed at which the robot rotates in degrees per second.
    */
-  public static final int ROTATE_SPEED = 75;
+  public static final int ROTATE_SPEED = 100;
+  
+  public static final int US_ROTATE_SPEED = 200;
+
 
   /**
    * The motor acceleration in degrees per second squared.
@@ -131,7 +134,9 @@ public class Resources {
   /**
    * The color sensor.
    */
-//  public static final EV3ColorSensor colorSensor = new EV3ColorSensor(SensorPort.S1);
+  public static final EV3ColorSensor rightColorSensor = new EV3ColorSensor(SensorPort.S4);
+  public static final EV3ColorSensor leftColorSensor = new EV3ColorSensor(SensorPort.S1);
+
 
   /**
    * The LCD.
