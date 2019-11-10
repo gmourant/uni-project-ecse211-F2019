@@ -14,10 +14,24 @@ import static ca.mcgill.ecse211.project.Resources.*;;
 
 public class Navigation {
 
+   /**
+    * tells us whether an obstacle was detected
+    */
   public static boolean obstacleDetected = true;
+  
+  /**
+   * the current x position of the robot
+   */
   public static double currentX;
+  
+  /**
+   * the current y position of the robot
+   */
   public static double currentY;
 
+  /**
+   * an instance of the navigation
+   */
   private static Navigation nav; // Returned as singleton
 
   /**

@@ -11,10 +11,24 @@ import static ca.mcgill.ecse211.project.Resources.*;;
  */
 public class Display implements Runnable {
 
+  /**
+   * holds the current position of the robot
+   */
   private double[] position;
+  
+  /**
+   * time period for the display
+   */
   private final long DISPLAY_PERIOD = 25;
+  
+  /**
+   * length of timeout of the display
+   */
   private long timeout = Long.MAX_VALUE;
-
+  
+  /**
+   * Starts running the display. Constantly prints the current position of the robot, ie, the odometer reading
+   */
   public void run() {
     
     LCD.clear();
