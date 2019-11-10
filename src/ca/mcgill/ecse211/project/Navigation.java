@@ -1,12 +1,10 @@
 package ca.mcgill.ecse211.project;
 
-import lejos.hardware.Sound;
-import lejos.hardware.motor.EV3LargeRegulatedMotor;
 import static ca.mcgill.ecse211.project.Resources.*;;
 
 /**
  * Navigates the robot depending on given coordinates avoids obstacles and resumes navigation
- * 
+ *
  * @author Steven
  * @author Hassan
  * @author Aakarsh
@@ -14,28 +12,28 @@ import static ca.mcgill.ecse211.project.Resources.*;;
  *
  */
 
-public class Navigation{
+public class Navigation {
 
   public static boolean obstacleDetected = true;
   public static double currentX;
-  public static double currentY; 
+  public static double currentY;
 
   private static Navigation nav; // Returned as singleton
 
   /**
    * Orientates robot towards desired destination rotates forward to the coordinate avoids obstacle and resumes when
    * avoided
-   * 
+   *
    * @param x x coordinate
    * @param y y coordinate
    */
 
-  public void travelTo(double x, double y) {
+  public static void travelTo(double x, double y) {
     // reset and initiliaze motors
     currentX = x;
     currentY = y;
-    leftMotor.stop(true);
-    rightMotor.stop(false);
+    leftMotor.stop();
+    rightMotor.stop();
     launchMotor.stop();
     leftMotor.setAcceleration(ACCELERATION);
     rightMotor.setAcceleration(ACCELERATION);
@@ -51,31 +49,74 @@ public class Navigation{
 
     turnTo(angle);
     // Calculate absolute trajectory
-    double vector = Math.hypot(dx, dy);
+    double distance = Math.hypot(dx, dy);
 
     leftMotor.setSpeed(FORWARD_SPEED);
     rightMotor.setSpeed(FORWARD_SPEED);
-    leftMotor.rotate(convertDistance(vector), true);
-    rightMotor.rotate(convertDistance(vector), false);
+    leftMotor.rotate(convertDistance(distance), true);
+    rightMotor.rotate(convertDistance(distance), true);
   }
 
   /**
-   * Orients robot towards desired destination rotates forward to the coordinate
-   * until it reaches the circle of radius r from the given point avoids obstacle
-   * and resumes when avoided.
-   * 
+   * Orients robot towards desired destination rotates forward to the coordinate until it reaches the circle of radius r
+   * from the given point avoids obstacle and resumes when avoided.
+   *
    * @param x x coordinate
    * @param y y coordinate
    * @param r radius
    */
-  public void travelTo(double x, double y, double r) {
-    double[] launchPosition = getLaunchPosition(x, y);
-    travelTo(launchPosition[0], launchPosition[1]);
+  public static void travelTo(double x, double y, double r) {
+    // reset and initiliaze motors
+    currentX = x;
+    currentY = y;
+    leftMotor.stop();
+    rightMotor.stop();
+    launchMotor.stop();
+    leftMotor.setAcceleration(ACCELERATION);
+    rightMotor.setAcceleration(ACCELERATION);
+
+    obstacleDetected = false;
+    x = x * TILE_SIZE;
+    y = y * TILE_SIZE;
+    // Calculate x & y trajectory
+    double dx = x - odometer.getXYT()[0];
+    double dy = y - odometer.getXYT()[1];
+    // Calculate desired angle to turn to in relation to current angle
+    double angle = Math.atan2(dx, dy);
+
+    turnTo(angle);
+    // Calculate absolute trajectory
+    double distance = Math.hypot(dx, dy);
+
+    leftMotor.setSpeed(FORWARD_SPEED);
+    rightMotor.setSpeed(FORWARD_SPEED);
+    leftMotor.rotate(convertDistance(distance - r), true);
+    rightMotor.rotate(convertDistance(distance - r), true);
+  }
+
+   /**
+   *
+   * @param x coordinates of x
+   * @param y coordinates of y
+   * @param r radius of position
+   */
+  public static void launchPosition(double x, double y, double r) {
+    x = x * TILE_SIZE;
+    y = y * TILE_SIZE;
+    double dx = x - odometer.getXYT()[0];
+    double dy = y - odometer.getXYT()[1];
+    // Calculate desired angle to turn to in relation to current angle
+    double angle = Math.atan2(dx, dy);
+    // Calculate absolute trajectory
+    leftMotor.setSpeed(FORWARD_SPEED);
+    rightMotor.setSpeed(FORWARD_SPEED);
+    LCD.drawString("PX: " + (odometer.getXYT()[0] - RADIUS * Math.sin(angle)) , 0, 5);
+    LCD.drawString("PY: " + (odometer.getXYT()[1] - RADIUS * Math.cos(angle)), 0, 6);
   }
 
   /**
    * turns toward desired angle
-   * 
+   *
    * @param theta theta in radians
    */
   public static void turnTo(double theta) {
@@ -95,63 +136,12 @@ public class Navigation{
       leftMotor.rotate(convertAngle(angle), true);
       rightMotor.rotate(-convertAngle(angle), false);
     }
-
   }
 
-  /**
-   * gets the final position we get when traveling to point x, y and stop at circle of radius r away from the point
-   * 
-   * @param x x-coordinate
-   * @param y y-coordinate
-   * @param r radius
-   * @return target x and y coordinates
-   */
-  //  public static double[] getLaunchPosition(double x, double y, double r) {
-  //    x = x * TILE_SIZE;
-  //    y = y * TILE_SIZE;
-  //    
-  //    // Calculate x & y trajectory
-  //    double dx = x - odometer.getXYT()[0];
-  //    double dy = y - odometer.getXYT()[1];
-  //    
-  //    // Calculate desired angle to turn to in relation to current angle
-  //    double angle = Math.atan2(dx, dy);
-  //    
-  //    //calculate desired launch position
-  //    double distance = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
-  //    double travelDistance = distance - r;
-  //    
-  //    double launchX = travelDistance * Math.sin(angle);
-  //    double launchY = travelDistance * Math.cos(angle);
-  //    
-  //    double[] launchPosition = {launchX/TILE_SIZE, launchY/TILE_SIZE, angle}; 
-  //    return launchPosition;
-  //  }
-  public static double[] getLaunchPosition(double targetX, double targetY) {
-
-    // direction vector in cm
-    double currentX= odometer.getXYT()[0];
-    double currentY= odometer.getXYT()[1];
-
-    double dirX = targetX - currentX;
-    double dirY = targetY - currentY;
-
-    double distance = Math.sqrt(Math.pow(dirX, 2) + Math.pow(dirY, 2));
-
-    double travelDistance = distance - RADIUS;
-
-    // unit vector
-    dirX /= distance;
-    dirY /= distance;
-
-    double[] launchPos= {(dirX * travelDistance + currentX)/ TILE_SIZE, (dirY * travelDistance + currentY)/ TILE_SIZE};
-
-    return launchPos;
-  }
 
   /**
    * true when no obstacle detected and motors are moving
-   * 
+   *
    * @return boolean
    */
 
@@ -163,7 +153,7 @@ public class Navigation{
   /**
    * Converts input distance to the total rotation of each wheel needed to cover that distance. From Lab 2
    * SquareDriver.java
-   * 
+   *
    * @param distance
    * @return the wheel rotations necessary to cover the distance
    */
@@ -174,7 +164,7 @@ public class Navigation{
   /**
    * Converts input angle to the total rotation of each wheel needed to rotate the robot by that angle. From Lab 2
    * SquareDriver.java
-   * 
+   *
    * @param angle
    * @return the wheel rotations necessary to rotate the robot by the angle
    */
@@ -184,7 +174,7 @@ public class Navigation{
 
   /**
    * Returns the Navigation Object. Use this method to obtain an instance of Navigation.
-   * 
+   *
    * @return the Navigation Object
    */
   public synchronized static Navigation getNavigation() {

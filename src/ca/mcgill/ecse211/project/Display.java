@@ -81,5 +81,4 @@ public class Display implements Runnable {
     Button.waitForAnyPress();
     Main.sleepFor(100);
   }
-
 }
