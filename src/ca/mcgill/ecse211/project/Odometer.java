@@ -10,7 +10,12 @@ import static ca.mcgill.ecse211.project.Resources.*;;
 
 /**
  * The odometer class keeps track of the robot's (x, y, theta) position.
- * 
+ * The coordinates and orientation of the robot are calculated using
+ * the change in tachometer values of the left and right motors.
+ * Use getOdometer method to create an instance of Odometer.
+ * To hardset the values of x, y, or theta, use the setter
+ * methods provided, or use the update method. To get the values
+ * of the Odometer, use getXYT method.
  * @author Rodrigo Silva
  * @author Dirk Dubois
  * @author Derek Yu
@@ -18,7 +23,6 @@ import static ca.mcgill.ecse211.project.Resources.*;;
  * @author Michael Smith
  * @author Younes Boubekeur
  */
-
 public class Odometer implements Runnable {
 
   /**
@@ -92,7 +96,11 @@ public class Odometer implements Runnable {
 
   /**
    * This method is where the logic for the odometer will run.
-   * 
+   * At every iteration of the loop, find the change in tachometer
+   * values of the left and right motors. From these values, the 
+   * displacement and change in theta are calculated. Finally, the
+   * change in x and and change in y are computed, and (X,Y,Theta)
+   * values are updated.
    * @author Steven Luu
    */
   public void run() {
