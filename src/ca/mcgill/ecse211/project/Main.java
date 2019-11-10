@@ -9,11 +9,22 @@ import lejos.hardware.Sound;
 import lejos.robotics.SampleProvider;
 
 /**
+ * Starting point of the code. The Main class performs the
+ * necessary calls to complete the tasks required in the demo.
+ * The Main class sets which region the robot is in based on user 
+ * input. The Region defines which tunnel the robot will need to use
+ * to move to the next island. It then initializes the Odometer
+ * and Display threads, and calls the localize function, which consists
+ * Light Localization and Ultrasonic Localization. After that, Main performs
+ * the required navigation to and through the tunnel using methods in the 
+ * Navigation class. Finally, Main navigates to computed launch point and
+ * calls the launch method in Launcher class.
  * @author Aakarsh
  * @author Steven
  * @author Hassan
+ * @version 1.2.1
+ * @since 1.1.1
  */
-
 public class Main {
   //initilalizes Ultrasonic Sensor
   static SampleProvider distance = US_SENSOR.getMode("Distance");

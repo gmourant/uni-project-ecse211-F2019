@@ -5,16 +5,17 @@ import lejos.hardware.sensor.EV3UltrasonicSensor;
 //import lejos.robotics.SampleProvider;
 
 /**
- * Given that the system is placed along an
- * imaginary 45 degree line between (0,0) and (1,1)
- * reorient the system facing NORTH
- * 
+ * Containds the implementation of Ultrasonic Localization and 
+ * abstracts the logic to behind it to one method call, which is localize.
+ * It assumes that the robot placed along an imaginary 45 degree line 
+ * between (0,0) and (1,1) on a tiled course. It reorients the robot
+ * to face approximately NORTH, and sets the Theta of Odometetry to 0. 
+ * @author Steven
  * @author Hassan
- * @author Aakarsh
- * @author Steve
- *
+ * @author Aarkash
+ * @version 1.2.1
+ * @since 1.1.1
  */
-
 public class UltrasonicLocalizer {
 
   private final int type;
@@ -27,15 +28,21 @@ public class UltrasonicLocalizer {
   double angle1, angle2, dAngle;
 
 
+  /**
+   * Constructor of UltrasonicLocalizer
+   * @param 0 for falling edge wall detection, 1 for rising edge
+   * @param EV3Ultrasonic distance mode. Should be distance US_SENSOR 
+   */
   public UltrasonicLocalizer(int type, EV3UltrasonicSensor us) {
     this.type = type;
 //    this.us = us;
   }
 
 
-/**
- * 
- */
+  /**
+   * Orients the robot to face north and sets the Theta value of Odometer to
+   * approximately 0.
+   */
   public void localize() {
     //initialize motors
     leftMotor.stop(true);

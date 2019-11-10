@@ -6,13 +6,19 @@ import lejos.robotics.SampleProvider;
 import lejos.utility.Delay;
 
 /**
- * Light localization that assumes that the device is facing NORTH and is on a 45 degree line in between (0,0) and (1,1)
+ * Contains the implementation of Light Localization and 
+ * abstracts the logic behind it to one method call, which is localize.
+ * It assumes that the device is facing NORTH and is
+ * on a 45 degree line in between (0,0) and (1,1), i.e. it is being 
+ * called after Ultrasonic Localization. Use the localize method
+ * to perform localization.
  * 
  * @author Aakarsh
  * @author Steven
  * @author Hassan
+ * @version 1.2.1
+ * @since 1.1.1
  */
-
 public class LightLocalizer {
   private static final double LIGHTSENSOR_DELTA = 25;
   long correctionStart, correctionEnd;
@@ -36,7 +42,9 @@ public class LightLocalizer {
   private int LEFT_INITIAL_LIGHT;
 
   /**
-   * @return returns true if left sensor detects black line, else false
+   * fetches a light sample and compares it with the initial
+   * light sample value of the left light sensor
+   * @return returns true if black line detected, else false
    */
   public boolean leftCorrectionTrigger() {
     leftLight.fetchSample(leftLightData, 0);
@@ -55,7 +63,9 @@ public class LightLocalizer {
   }
 
   /**
-   * @return returns true if right sensor detects black line, else false
+   * fetches a light sample and compares it with the initial
+   * light sample value of the right light sensor
+   * @return returns true if black line detected, else false
    */
   public boolean rightCorrectionTrigger() {
     rightLight.fetchSample(rightLightData, 0);
@@ -71,11 +81,10 @@ public class LightLocalizer {
     return false;
   }
 
-
-
   /**
-   * main method assuming that the device is facing north turn 45 degree and make sure that we are not already on (1,1)
-   * by starting off with a spin
+   * Implements the logic of light localization.
+   * Sets the values of (X,Y) of the Odometer correctly, and 
+   * corrects the orientation of the robot.
    */
   public void localize() {
     // initial light data that will be used to detect black lines
