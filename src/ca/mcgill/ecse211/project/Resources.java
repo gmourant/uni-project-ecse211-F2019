@@ -11,11 +11,12 @@ import java.math.BigDecimal;
 import java.util.Map;
 
 /**
- * Integrate this carefully with your existing Resources class (See below for where to add your
- * code from your current Resources file). The order in which things are declared matters!
- *
+ * 
  * This class is used to define static resources in one place for easy access and to avoid cluttering
  * the rest of the codebase.
+ * 
+ * Integrate this carefully with your existing Resources class (See below for where to add your
+ * code from your current Resources file). The order in which things are declared matters!
  *
  * @author Younes Boubekeur
  */

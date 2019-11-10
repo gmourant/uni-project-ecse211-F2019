@@ -95,7 +95,7 @@ public class Navigation {
   }
 
    /**
-   *
+   * finds the ideal launch position to launch a projectile r distance away from given point
    * @param x coordinates of x
    * @param y coordinates of y
    * @param r radius of position

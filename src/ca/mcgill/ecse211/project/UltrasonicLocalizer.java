@@ -5,7 +5,7 @@ import lejos.hardware.sensor.EV3UltrasonicSensor;
 //import lejos.robotics.SampleProvider;
 
 /**
- * Containds the implementation of Ultrasonic Localization and 
+ * Contains the implementation of Ultrasonic Localization and 
  * abstracts the logic to behind it to one method call, which is localize.
  * It assumes that the robot placed along an imaginary 45 degree line 
  * between (0,0) and (1,1) on a tiled course. It reorients the robot

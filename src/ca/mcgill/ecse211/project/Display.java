@@ -1,6 +1,5 @@
 package ca.mcgill.ecse211.project;
 
-
 import java.text.DecimalFormat;
 
 import lejos.hardware.Button;
