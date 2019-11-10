@@ -97,12 +97,12 @@ public class LightLocalizer {
 
     odometer.setY(TILE_SIZE + offSet);
 
-    leftMotor.rotate(convertDistance(-offSet + TILE_SIZE / 2), true);
-    rightMotor.rotate(convertDistance(-offSet + TILE_SIZE / 2), false);
+    leftMotor.rotate(convertDistance(-offSet), true);
+    rightMotor.rotate(convertDistance(-offSet), false);
 
 
     // Turn To X-axis and correct it
-    Navigation.turnTo(90 * Math.PI / 180);
+    Navigation.turnTo(Math.toRadians(90));
 
     // move robot forward until one sensor sees a line
     while (!leftCorrectionTrigger() && !rightCorrectionTrigger()) {
@@ -112,14 +112,11 @@ public class LightLocalizer {
     
     correctTheta(90);
     odometer.setX(TILE_SIZE + offSet);
-    leftMotor.rotate(convertDistance(-offSet + TILE_SIZE / 2), true);
-    rightMotor.rotate(convertDistance(-offSet + TILE_SIZE / 2), false);
+    leftMotor.rotate(convertDistance(-offSet), true);
+    rightMotor.rotate(convertDistance(-offSet), false);
 
     // face NORTH
     //navigate.travelTo(1,1);
-    navigate.turnTo(Math.toRadians(45));
-    leftMotor.rotate(-convertDistance(Math.hypot(odometer.getXYT()[0] - TILE_SIZE,odometer.getXYT()[1] - TILE_SIZE)), true);
-    rightMotor.rotate(-convertDistance(Math.hypot(odometer.getXYT()[0] - TILE_SIZE,odometer.getXYT()[1] - TILE_SIZE)), false);
     navigate.turnTo(0);
      
     
