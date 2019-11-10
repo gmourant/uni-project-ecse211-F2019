@@ -9,7 +9,6 @@ import lejos.hardware.Sound;
 import lejos.robotics.SampleProvider;
 
 /**
- *
  * @author Aakarsh
  * @author Steven
  * @author Hassan
@@ -185,7 +184,6 @@ public class Main {
 
   /**
    * Shows error and exits program.
-   *
    * @param String
    */
   public static void showErrorAndExit(String errorMessage) {

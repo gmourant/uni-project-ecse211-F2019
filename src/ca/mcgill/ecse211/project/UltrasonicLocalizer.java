@@ -2,7 +2,7 @@ package ca.mcgill.ecse211.project;
 
 import static ca.mcgill.ecse211.project.Resources.*;
 import lejos.hardware.sensor.EV3UltrasonicSensor;
-import lejos.robotics.SampleProvider;
+//import lejos.robotics.SampleProvider;
 
 /**
  * Given that the system is placed along an
@@ -10,16 +10,17 @@ import lejos.robotics.SampleProvider;
  * reorient the system facing NORTH
  * 
  * @author Hassan
- * @author Steven
+ * @author Aakarsh
+ * @author Steve
  *
  */
 
 public class UltrasonicLocalizer {
 
   private final int type;
-  private float[] usData;
-  SampleProvider distance;
-  private final EV3UltrasonicSensor us;
+//  private float[] usData;                 // not needed
+//  SampleProvider distance;                        
+//  private final EV3UltrasonicSensor us;
   private static int wallDistance = 30;
   private static int noiseMargin = 1;
   int filterControl;
@@ -28,27 +29,24 @@ public class UltrasonicLocalizer {
 
   public UltrasonicLocalizer(int type, EV3UltrasonicSensor us) {
     this.type = type;
-    this.us = us;
-    this.distance = distance;
+//    this.us = us;
   }
 
 
 /**
- * Localizes the robot to (0,0)
+ * 
  */
   public void localize() {
     //initialize motors
     leftMotor.stop(true);
-    rightMotor.stop(true);
+    rightMotor.stop(false);
     leftMotor.setAcceleration(ACCELERATION);
     rightMotor.setAcceleration(ACCELERATION);
-    leftMotor.setSpeed(ROTATE_SPEED);
-    rightMotor.setSpeed(ROTATE_SPEED);
+    leftMotor.setSpeed(US_ROTATE_SPEED);
+    rightMotor.setSpeed(US_ROTATE_SPEED);
     if (type == 0) {
       fallingEdge();
-    } else if (type == 1) {
-      risingEdge();
-    }
+    } 
     //wrap around 359 degree to 0 degree
     if (angle1 > angle2) {
       dAngle = 45 - (angle1 + angle2) / 2;
@@ -91,39 +89,7 @@ public class UltrasonicLocalizer {
     //angle at which the sensor sees the wall  
     angle2 = odometer.getXYT()[2];
     leftMotor.stop(true);
-    rightMotor.stop(true);
+    rightMotor.stop(false);
   }
 
-/**
- * Record angle and switch direction when the sensor detects the
- * transition between wall and nothing
- * 
- * Initializes robot to start facing the wall
- */
-  public void risingEdge() {
-    // turn the system until the sensor observes the left wall 
-    while (Main.UP.getDistance() > wallDistance - noiseMargin) {
-      leftMotor.backward();
-      rightMotor.forward();
-    }
-    //turn the system until it sees the nothing
-    while (Main.UP.getDistance() < wallDistance + noiseMargin) {
-      leftMotor.backward();
-      rightMotor.forward();
-    }
-    angle1 = odometer.getXYT()[2];
-    // turn the system until the sensor observes the back wall 
-    while (Main.UP.getDistance() > wallDistance - noiseMargin) {
-      leftMotor.forward();
-      rightMotor.backward();
-    }
-    //turn the system until it sees the nothing
-    while (Main.UP.getDistance() < wallDistance + noiseMargin) {
-      leftMotor.forward();
-      rightMotor.backward();
-    }
-    angle2 = odometer.getXYT()[2];
-    leftMotor.stop(true);
-    rightMotor.stop(true);
-  }
 }

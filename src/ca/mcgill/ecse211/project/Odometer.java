@@ -36,6 +36,11 @@ public class Odometer implements Runnable {
    */
   private volatile double theta; // Head angle
 
+  /**
+   * The (x, y, theta) position as an array
+   */
+  private double[] position;
+
   // Thread control tools
   /**
    * Fair lock for concurrent writing
@@ -98,10 +103,10 @@ public class Odometer implements Runnable {
     lastTachoL = leftMotor.getTachoCount();
     lastTachoR = rightMotor.getTachoCount();
     
-    angle = odo.getXYT()[2] * Math.PI / 180;
     long updateStart, updateEnd;
     while (true) {
       updateStart = System.currentTimeMillis();
+      angle = odo.getXYT()[2] * Math.PI / 180;
        //Calculating instantaneous displacement from measurements
       leftMotorTachoCount = leftMotor.getTachoCount();
       rightMotorTachoCount = rightMotor.getTachoCount();
@@ -254,5 +259,3 @@ public class Odometer implements Runnable {
       lock.unlock();
     }
   }
-
-}
