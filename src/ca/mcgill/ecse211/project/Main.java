@@ -47,6 +47,9 @@ public class Main {
     usLocalizer.localize();
     
     lightLocalizer.localize();
+    Sound.beep();
+    Sound.beep();
+    Sound.beep();
     
   
     //    lightLocalizer.localize();

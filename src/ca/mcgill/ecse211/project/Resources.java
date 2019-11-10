@@ -74,7 +74,7 @@ public class Resources {
   /**
    * Speed of slower rotating wheel (deg/sec).
    */
-  public static final int MOTOR_LOW = 125;
+  public static final int MOTOR_LOW = 75;
 
 
   /**
@@ -105,7 +105,7 @@ public class Resources {
    */
   public static final int TIMEOUT_PERIOD = 3000;
 
-  public static final int FILTER_OUT = 3;
+  public static final int FILTER_OUT = 30;
   /**
    * The left motor.
    */
