@@ -51,6 +51,8 @@ public class LightLocalizer {
     leftLightValue = (int) (leftLightData[0] * 100);
 
     if (Math.abs(leftLightValue - LEFT_INITIAL_LIGHT) > LIGHTSENSOR_DELTA) {
+      leftMotor.stop(true);
+      rightMotor.stop(false);
       Sound.beep();
 
       leftDetects = true;
@@ -72,6 +74,8 @@ public class LightLocalizer {
     rightLightValue = (int) (rightLightData[0] * 100);
 
     if (Math.abs(rightLightValue - RIGHT_INITIAL_LIGHT) > LIGHTSENSOR_DELTA) {
+      leftMotor.stop(true);
+      rightMotor.stop(false);
       Sound.buzz();
 
       rightDetects = true;
@@ -131,6 +135,23 @@ public class LightLocalizer {
 
 
   }
+  public void localizeForward(double angle) {
+    leftLight.fetchSample(leftLightData, 0);
+    LEFT_INITIAL_LIGHT = (int) (leftLightData[0] * 100);
+
+    rightLight.fetchSample(rightLightData, 0);
+    RIGHT_INITIAL_LIGHT = (int) (rightLightData[0] * 100);
+    leftMotor.stop(true);
+    rightMotor.stop();
+    leftMotor.setSpeed(ROTATE_SPEED);
+    rightMotor.setSpeed(ROTATE_SPEED);
+    // move robot forward until one sensor sees a line
+    while (!leftCorrectionTrigger() && !rightCorrectionTrigger()) {
+      leftMotor.forward();
+      rightMotor.forward();
+    }
+    correctTheta(angle);
+  }
 
   /**
    * corrects the orientation of the robot during light localization if left sensor detects first, move right motor
@@ -168,6 +189,7 @@ public class LightLocalizer {
     odometer.setTheta(angle);
 
   }
+  
 
 
   /**
