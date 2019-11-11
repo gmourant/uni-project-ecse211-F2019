@@ -74,10 +74,11 @@ public class Main {
     // start odometer thread
     // start display thread
     new Thread(odometer).start();
-    new Thread(new Display()).start();
+    new Thread(new Display()).start();    //TODO Comment out when presenting
 
     // localize
     localize();
+    Sound.beep();
     
     // compute tunnel coordinates
     computeTunnelCoordinates(tunnel);
@@ -87,12 +88,16 @@ public class Main {
     // navigate through tunnel
     Navigation.travelTo(tunnelStartX, tunnelStartY);
     Navigation.turnTo(tunnelTheta);
+    localizeForward(tunnelTheta);
     Navigation.travelTo(tunnelEndX, tunnelEndY);
 
     // TODO: ensure robot stays within island
     // calculate and move to launch point
     Navigation.launchPosition(bin.x, bin.y, RADIUS);
     Navigation.travelTo(bin.x, bin.y, RADIUS);
+    Sound.beep();
+    Sound.beep();
+    Sound.beep();
 
     // launch balls
     Launcher.launch();
@@ -115,6 +120,16 @@ public class Main {
 
     //Start light localization when ultrasonic localizationi is over
     lightLocalize.localize();
+  }
+  /**
+   * Aligns device with line as it moves forward
+   * also corrects its angle
+   * 
+   * @param angle
+   */
+  public static void localizeForward(double angle) {
+   LightLocalizer lightLocalize = new LightLocalizer();
+   lightLocalize.localizeForward(angle);
   }
   
   /**
