@@ -9,16 +9,13 @@ import lejos.hardware.Sound;
 import lejos.robotics.SampleProvider;
 
 /**
- * Starting point of the code. The Main class performs the
- * necessary calls to complete the tasks required in the demo.
- * The Main class sets which region the robot is in based on user 
- * input. The Region defines which tunnel the robot will need to use
- * to move to the next island. It then initializes the Odometer
- * and Display threads, and calls the localize function, which consists
- * Light Localization and Ultrasonic Localization. After that, Main performs
- * the required navigation to and through the tunnel using methods in the 
- * Navigation class. Finally, Main navigates to computed launch point and
- * calls the launch method in Launcher class.
+ * Starting point of the code. The Main class performs the necessary calls to complete the tasks required in the demo.
+ * The Main class sets which region the robot is in based on user input. The Region defines which tunnel the robot will
+ * need to use to move to the next island. It then initializes the Odometer and Display threads, and calls the localize
+ * function, which consists Light Localization and Ultrasonic Localization. After that, Main performs the required
+ * navigation to and through the tunnel using methods in the Navigation class. Finally, Main navigates to computed
+ * launch point and calls the launch method in Launcher class.
+ * 
  * @author Aakarsh
  * @author Steven
  * @author Hassan
@@ -26,12 +23,12 @@ import lejos.robotics.SampleProvider;
  * @since 1.1.1
  */
 public class Main {
-  //initilalizes Ultrasonic Sensor
+  // initilalizes Ultrasonic Sensor
   static SampleProvider distance = US_SENSOR.getMode("Distance");
   static float[] sampleUS = new float[distance.sampleSize()];
   final static UltrasonicPoller UP = new UltrasonicPoller(distance, sampleUS);
-  
-  static double tunnelStartX = 0;  // should be middle of tunnel entry
+
+  static double tunnelStartX = 0; // should be middle of tunnel entry
   static double tunnelStartY = 0;
 
   static double tunnelEndX = 0;
@@ -42,46 +39,45 @@ public class Main {
   public static void main(String[] args) {
 
     System.out.println("Map:\n" + wifiParameters);
-
-    int buttonChoice;
-    do {
-      LCD.clear();
-
-      // notify user when to start
-      LCD.drawString("< Left    | Right >", 0, 0);
-      LCD.drawString("          |        ", 0, 1);
-      LCD.drawString(" Red      |  Green ", 0, 2);
-      LCD.drawString(" Team     |   Team ", 0, 3);
-      LCD.drawString("          |        ", 0, 4);
-
-      buttonChoice = Button.waitForAnyPress();
-    } while (buttonChoice != Button.ID_LEFT && buttonChoice != Button.ID_RIGHT);
-
     LCD.clear();
-    
+    // int buttonChoice;
+    // do {
+    // LCD.clear();
+    //
+    // // notify user when to start
+    // LCD.drawString("< Left | Right >", 0, 0);
+    // LCD.drawString(" | ", 0, 1);
+    // LCD.drawString(" Red | Green ", 0, 2);
+    // LCD.drawString(" Team | Team ", 0, 3);
+    // LCD.drawString(" | ", 0, 4);
+    //
+    // buttonChoice = Button.waitForAnyPress();
+    // } while (buttonChoice != Button.ID_LEFT && buttonChoice != Button.ID_RIGHT);
+    // LCD.clear();
+
     Region tunnel = tnr;
 
-    if (buttonChoice == Button.ID_LEFT) {
+    if (redTeam == 2) {
       // RED TEAM
       tunnel = tnr;
 
-    }
-    else if (buttonChoice == Button.ID_RIGHT) {
+    } else if (greenTeam == 2) {
       // GREEN TEAM
       tunnel = tng;
     }
-    
+
     // start odometer thread
     // start display thread
     new Thread(odometer).start();
-    new Thread(new Display()).start();    //TODO Comment out when presenting
+    new Thread(new Display()).start(); // TODO Comment out when presenting
 
     // localize
     localize();
     Sound.beep();
-    
+
     // compute tunnel coordinates
     computeTunnelCoordinates(tunnel);
+    // Navigation.travelTo(2, 2);
 
     // navigate to tunnel entrance
     // turn to face tunnel
@@ -90,11 +86,15 @@ public class Main {
     Navigation.turnTo(tunnelTheta);
     localizeForward(tunnelTheta);
     Navigation.travelTo(tunnelEndX, tunnelEndY);
+    //TODO ODOMETER CORRECT AFTER TUNNEL EXIT!
+    Navigation.travelTo(bin.x, bin.y);
 
     // TODO: ensure robot stays within island
     // calculate and move to launch point
-    Navigation.launchPosition(bin.x, bin.y, RADIUS);
-    Navigation.travelTo(bin.x, bin.y, RADIUS);
+    // Navigation.launchPosition(bin.x, bin.y, RADIUS);
+    // Navigation.travelTo(bin.x, bin.y, RADIUS);
+    // Navigation.travelTo(bin.x, bin.y);
+    // Navigation.turnTo(Math.toRadians(tnr.ur.x));
     Sound.beep();
     Sound.beep();
     Sound.beep();
@@ -108,91 +108,91 @@ public class Main {
   }
 
   /**
-   * Method to run the robot localization
-   * First, runs ultrasonic localization, then runs the light localization and corrects theta
+   * Method to run the robot localization First, runs ultrasonic localization, then runs the light localization and
+   * corrects theta
    */
   public static void localize() {
     LightLocalizer lightLocalize = new LightLocalizer();
     UltrasonicLocalizer localize;
 
-    localize = new UltrasonicLocalizer(1, US_SENSOR);
+    localize = new UltrasonicLocalizer(0, US_SENSOR);
     localize.localize();
 
-    //Start light localization when ultrasonic localizationi is over
+    // Start light localization when ultrasonic localizationi is over
     lightLocalize.localize();
   }
+
   /**
-   * Aligns device with line as it moves forward
-   * also corrects its angle
+   * Aligns device with line as it moves forward also corrects its angle
    * 
    * @param angle
    */
   public static void localizeForward(double angle) {
-   LightLocalizer lightLocalize = new LightLocalizer();
-   lightLocalize.localizeForward(angle);
+    LightLocalizer lightLocalize = new LightLocalizer();
+    lightLocalize.localizeForward(angle);
   }
-  
+
   /**
    * Method to compute the coordinates of the tunnel that the robot moves to
    */
   public static void computeTunnelCoordinates(Region tunnel) {
     double x0;
     double y0;
-    
+
     double x1;
     double y1;
-    
-    if(horizontalTunnel(tunnel)) {
-      x0 = tunnel.ll.x - TILE_SIZE/2;     // so that we dont crash into tunnel walls
-      y0 = tunnel.ll.y + TILE_SIZE/2;
 
-      x1 = tunnel.ur.x + TILE_SIZE/2;
-      y1 = tunnel.ur.y - TILE_SIZE/2;
+    if (horizontalTunnel(tunnel)) {
+      x0 = tunnel.ll.x - 0.5; // so that we dont crash into tunnel walls
+      y0 = tunnel.ll.y + 0.5;
 
-      tunnelTheta = 90;     // pointing right
+      x1 = tunnel.ur.x + 0.5;
+      y1 = tunnel.ur.y - 0.5;
+
+      tunnelTheta = 90; // pointing right
+    } else { // vertical tunnel
+      x0 = tunnel.ll.x + 0.5; // so that we dont crash into tunnel walls
+      y0 = tunnel.ll.y - 0.5;
+
+      x1 = tunnel.ur.x - 0.5;
+      y1 = tunnel.ur.y + 0.5;
+
+      tunnelTheta = 0; // pointing up
     }
-    else {      // vertical tunnel
-      x0 = tunnel.ll.x + TILE_SIZE/2;     // so that we dont crash into tunnel walls
-      y0 = tunnel.ll.y - TILE_SIZE/2;
 
-      x1 = tunnel.ur.x - TILE_SIZE/2;
-      y1 = tunnel.ur.y + TILE_SIZE/2;
-
-      tunnelTheta = 0;     // pointing up
-    }
-    
     double pos[] = odometer.getXYT();
-    double robotX = pos[0];
-    double robotY = pos[1];
-    
+    double robotX = pos[0] / TILE_SIZE;
+    double robotY = pos[1] / TILE_SIZE;
+
     // which of the computed points tunnel starts at (closest)
-    double dist1 = Math.sqrt(Math.pow(robotX-x0, 2) + Math.pow(robotY-y0, 2));
-    double dist2 = Math.sqrt(Math.pow(robotX-x1, 2) + Math.pow(robotY-y1, 2));
-    
-    if(dist1 <= dist2) {
+    double dist1 = Math.sqrt(Math.pow(robotX - x0, 2) + Math.pow(robotY - y0, 2));
+    double dist2 = Math.sqrt(Math.pow(robotX - x1, 2) + Math.pow(robotY - y1, 2));
+
+    if (dist1 <= dist2) {
       tunnelStartX = x0;
       tunnelStartY = y0;
       tunnelEndX = x1;
       tunnelEndY = y1;
-    }
-    else {
+    } else {
       tunnelStartX = x1;
       tunnelStartY = y1;
       tunnelEndX = x0;
       tunnelEndY = y0;
-      
+
       tunnelTheta -= 180;
     }
+    if (horizontalTunnel(tunnel)) tunnelStartX -= 0.5;
+    else tunnelStartY -= 0.5;
   }
-  
+
   /**
    * computes the orientation of the tunnel
    * 
-   * @param tunnel  region
+   * @param tunnel region
    * @return true if horizontal orientation of tunnel, false if vertical
    */
   public static boolean horizontalTunnel(Region tunnel) {
-    return (Math.abs(tunnel.ur.y - tunnel.ll.y)==1);
+    return (Math.abs(tunnel.ur.y - tunnel.ll.y) == 1);
   }
 
   /**
@@ -210,6 +210,7 @@ public class Main {
 
   /**
    * Shows error and exits program.
+   * 
    * @param String
    */
   public static void showErrorAndExit(String errorMessage) {

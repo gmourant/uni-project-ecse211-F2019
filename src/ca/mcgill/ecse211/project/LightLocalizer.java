@@ -53,7 +53,7 @@ public class LightLocalizer {
     if (Math.abs(leftLightValue - LEFT_INITIAL_LIGHT) > LIGHTSENSOR_DELTA) {
       leftMotor.stop(true);
       rightMotor.stop(false);
-      Sound.beep();
+      //Sound.beep();
 
       leftDetects = true;
 
@@ -76,7 +76,7 @@ public class LightLocalizer {
     if (Math.abs(rightLightValue - RIGHT_INITIAL_LIGHT) > LIGHTSENSOR_DELTA) {
       leftMotor.stop(true);
       rightMotor.stop(false);
-      Sound.buzz();
+      //Sound.buzz();
 
       rightDetects = true;
       return true;
@@ -97,8 +97,8 @@ public class LightLocalizer {
 
     rightLight.fetchSample(rightLightData, 0);
     RIGHT_INITIAL_LIGHT = (int) (rightLightData[0] * 100);
-    leftMotor.setSpeed(ROTATE_SPEED);
-    rightMotor.setSpeed(ROTATE_SPEED);
+    leftMotor.setSpeed(MOTOR_NORMAL);
+    rightMotor.setSpeed(MOTOR_NORMAL);
     // move robot forward until one sensor sees a line
     while (!leftCorrectionTrigger() && !rightCorrectionTrigger()) {
       leftMotor.forward();
@@ -136,13 +136,13 @@ public class LightLocalizer {
 
   }
   public void localizeForward(double angle) {
+    leftMotor.stop(true);
+    rightMotor.stop(false);
     leftLight.fetchSample(leftLightData, 0);
     LEFT_INITIAL_LIGHT = (int) (leftLightData[0] * 100);
 
     rightLight.fetchSample(rightLightData, 0);
     RIGHT_INITIAL_LIGHT = (int) (rightLightData[0] * 100);
-    leftMotor.stop(true);
-    rightMotor.stop();
     leftMotor.setSpeed(ROTATE_SPEED);
     rightMotor.setSpeed(ROTATE_SPEED);
     // move robot forward until one sensor sees a line
@@ -150,7 +150,11 @@ public class LightLocalizer {
       leftMotor.forward();
       rightMotor.forward();
     }
+    leftMotor.stop(true);
+    rightMotor.stop(false);
     correctTheta(angle);
+    leftMotor.setSpeed(MOTOR_NORMAL);
+    rightMotor.setSpeed(MOTOR_NORMAL);
   }
 
   /**
@@ -163,11 +167,11 @@ public class LightLocalizer {
     // if left sensor detects first, move right motor until it catches up
     leftMotor.stop(true);
     rightMotor.stop(false);
-    leftMotor.setSpeed(50);
-    rightMotor.setSpeed(50);
-    Delay.msDelay(500);
+    leftMotor.setSpeed(MOTOR_LOW);
+    rightMotor.setSpeed(MOTOR_LOW);
+    Delay.msDelay(300);
     if (leftDetects && !rightDetects) {
-      Delay.msDelay(500);
+      Delay.msDelay(300);
       while (!rightCorrectionTrigger()) {
         rightMotor.forward();
       }
@@ -175,7 +179,7 @@ public class LightLocalizer {
     }
     // if right sensor detects first, move left motor until it catches up
     else if (!leftDetects && !rightDetects) {
-      Delay.msDelay(500);
+      Delay.msDelay(300);
       while (!leftCorrectionTrigger()) {
         leftMotor.forward();
       }
@@ -184,8 +188,8 @@ public class LightLocalizer {
     // odometer.setTheta(angle);
     leftMotor.stop(true);
     rightMotor.stop(false);
-    leftMotor.setSpeed(ROTATE_SPEED);
-    rightMotor.setSpeed(ROTATE_SPEED);
+    leftMotor.setSpeed(MOTOR_NORMAL);
+    rightMotor.setSpeed(MOTOR_NORMAL);
     odometer.setTheta(angle);
 
   }

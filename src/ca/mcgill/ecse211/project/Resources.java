@@ -27,12 +27,13 @@ public class Resources {
    * The default server IP used by the profs and TA's.
    */
   public static final String DEFAULT_SERVER_IP = "192.168.2.3";
-
+//192.168.2.3"
   /**
    * The IP address of the server that transmits data to the robot. Set this to the default for the
    * beta demo and competition.
    */
-  public static final String SERVER_IP = "192.168.2.29";
+  public static final String SERVER_IP = "192.168.2.13";
+  //192.168.2.29
 
   /**
    * Your team number.
@@ -84,7 +85,7 @@ public class Resources {
   /**
    * The wheel radius in centimeters.
    */
-  public static final double WHEEL_RAD = 2.160;
+  public static final double WHEEL_RAD = 2.0768;
 
   /**
    * The robot width in centimeters.
@@ -94,7 +95,7 @@ public class Resources {
   
 
   // wheel end to wheel end
-  public static final double TRACK = 13.6;
+  public static final double TRACK = 13.3;
 
   // wheel center to wheel center
   //public static final double TRACK2 = 13.6;
@@ -115,17 +116,17 @@ public class Resources {
   /**
    * Speed of slower rotating wheel (deg/sec).
    */
-  public static final int MOTOR_NORMAL = 140;
+  public static final int MOTOR_NORMAL = 170;
 
   /**
    * Speed of the faster rotating wheel (deg/sec).
    */
-  public static final int MOTOR_HIGH = 205;
+  public static final int MOTOR_HIGH = 210;
 
   /**
    * The speed at which the robot rotates in degrees per second.
    */
-  public static final int ROTATE_SPEED = 100;
+  public static final int ROTATE_SPEED = 125;
   
   public static final int US_ROTATE_SPEED = 200;
 
@@ -277,6 +278,7 @@ public class Resources {
        */
       wifiParameters = conn.getData();
     } catch (Exception e) {
+      LCD.clear();
       System.err.println("Error: " + e.getMessage());
     }
   }

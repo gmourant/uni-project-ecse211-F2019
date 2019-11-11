@@ -46,9 +46,9 @@ public class Navigation {
     // reset and initiliaze motors
     currentX = x;
     currentY = y;
-    leftMotor.stop();
-    rightMotor.stop();
-    launchMotor.stop();
+    leftMotor.stop(true);
+    rightMotor.stop(false);
+    //launchMotor.stop();
     leftMotor.setAcceleration(ACCELERATION);
     rightMotor.setAcceleration(ACCELERATION);
 
@@ -68,7 +68,7 @@ public class Navigation {
     leftMotor.setSpeed(FORWARD_SPEED);
     rightMotor.setSpeed(FORWARD_SPEED);
     leftMotor.rotate(convertDistance(distance), true);
-    rightMotor.rotate(convertDistance(distance), true);
+    rightMotor.rotate(convertDistance(distance), false);
   }
 
   /**
@@ -135,6 +135,36 @@ public class Navigation {
    */
   public static void turnTo(double theta) {
     double thetaDegree = theta * 180 / Math.PI;
+    double angle = thetaDegree - odometer.getXYT()[2];
+    leftMotor.stop(true);
+    rightMotor.stop(false);
+    leftMotor.setSpeed(ROTATE_SPEED);
+    rightMotor.setSpeed(ROTATE_SPEED);
+    // remove negative angles
+    if (angle < 0)
+      angle += 360;
+    // minimal angle
+    angle = angle % 360;
+    if (angle > 180) {
+      leftMotor.rotate(-convertAngle(360 - angle), true);
+      rightMotor.rotate(convertAngle(360 - angle), false);
+    } else {
+      leftMotor.rotate(convertAngle(angle), true);
+      rightMotor.rotate(-convertAngle(angle), false);
+    }
+    leftMotor.stop(true);
+    rightMotor.stop(false);
+  }
+  
+  public static void turnTo(double x, double y) {
+    x = x * TILE_SIZE;
+    y = y * TILE_SIZE;
+    // Calculate x & y trajectory
+    double dx = x - odometer.getXYT()[0];
+    double dy = y - odometer.getXYT()[1];
+    // Calculate desired angle to turn to in relation to current angle
+    double theta = Math.atan2(dx, dy);
+    double thetaDegree = Math.toDegrees(theta);
     double angle = thetaDegree - odometer.getXYT()[2];
     leftMotor.setSpeed(ROTATE_SPEED);
     rightMotor.setSpeed(ROTATE_SPEED);
