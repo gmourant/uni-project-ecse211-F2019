@@ -15,7 +15,9 @@ import static ca.mcgill.ecse211.project.Resources.*;
 public class Launcher {
   // setup launching mechanism
   public static void launch() {
-    for (int i = 0; i > 2; i++) {
+    leftMotor.stop(true);
+    rightMotor.stop(false);
+    for (int i = 0; i <= 2; i++) {
       Main.sleepFor(5000);
 
       // launch
@@ -24,7 +26,7 @@ public class Launcher {
       launchMotor.rotate(648);
 
       // stop for reloading
-      // launchMotor.stop();
+      launchMotor.stop();
     }
   }
 }

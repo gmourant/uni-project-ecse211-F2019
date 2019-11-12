@@ -23,7 +23,7 @@ public class UltrasonicLocalizer {
 //  SampleProvider distance;                        
 //  private final EV3UltrasonicSensor us;
   private static int wallDistance = 30;
-  private static int noiseMargin = 1;
+  private static int noiseMargin = 2;
   int filterControl;
   double angle1, angle2, dAngle;
 

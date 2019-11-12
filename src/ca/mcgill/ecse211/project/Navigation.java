@@ -48,7 +48,7 @@ public class Navigation {
     currentY = y;
     leftMotor.stop(true);
     rightMotor.stop(false);
-    //launchMotor.stop();
+    launchMotor.stop();
     leftMotor.setAcceleration(ACCELERATION);
     rightMotor.setAcceleration(ACCELERATION);
 
@@ -69,6 +69,8 @@ public class Navigation {
     rightMotor.setSpeed(FORWARD_SPEED);
     leftMotor.rotate(convertDistance(distance), true);
     rightMotor.rotate(convertDistance(distance), false);
+    leftMotor.stop(true);
+    rightMotor.stop(false);
   }
 
   /**

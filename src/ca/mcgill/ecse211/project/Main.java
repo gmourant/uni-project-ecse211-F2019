@@ -70,7 +70,6 @@ public class Main {
     // start display thread
     new Thread(odometer).start();
     new Thread(new Display()).start(); // TODO Comment out when presenting
-
     // localize
     localize();
     Sound.beep();
@@ -82,10 +81,10 @@ public class Main {
     // navigate to tunnel entrance
     // turn to face tunnel
     // navigate through tunnel
-    Navigation.travelTo(tunnelStartX, tunnelStartY);
+    Navigation.travelTo(tunnelStartX, tunnelStartY-0.5);
     Navigation.turnTo(tunnelTheta);
     localizeForward(tunnelTheta);
-    Navigation.travelTo(tunnelEndX, tunnelEndY);
+    Navigation.travelTo(tunnelEndX, tunnelEndY + 0.5);
     //TODO ODOMETER CORRECT AFTER TUNNEL EXIT!
     Navigation.travelTo(bin.x, bin.y);
     Navigation.turnTo(tnr.ur.x);
@@ -182,8 +181,6 @@ public class Main {
 
       tunnelTheta -= 180;
     }
-    if (horizontalTunnel(tunnel)) tunnelStartX -= 0.5;
-    else tunnelStartY -= 0.5;
   }
 
   /**

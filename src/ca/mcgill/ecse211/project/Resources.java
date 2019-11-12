@@ -85,7 +85,7 @@ public class Resources {
   /**
    * The wheel radius in centimeters.
    */
-  public static final double WHEEL_RAD = 2.0768;
+  public static final double WHEEL_RAD = 2.13;
 
   /**
    * The robot width in centimeters.
@@ -95,7 +95,7 @@ public class Resources {
   
 
   // wheel end to wheel end
-  public static final double TRACK = 13.3;
+  public static final double TRACK = 13.6;
 
   // wheel center to wheel center
   //public static final double TRACK2 = 13.6;

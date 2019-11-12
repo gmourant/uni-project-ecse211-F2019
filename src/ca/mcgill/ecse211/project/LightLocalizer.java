@@ -105,7 +105,7 @@ public class LightLocalizer {
       rightMotor.forward();
     }
     leftMotor.stop(true);
-    rightMotor.stop();
+    rightMotor.stop(false);
 
     correctTheta(0);
 
@@ -117,13 +117,17 @@ public class LightLocalizer {
 
     // Turn To X-axis and correct it
     Navigation.turnTo(Math.toRadians(90));
-
+    leftMotor.stop(true);
+    rightMotor.stop(false);
+    leftMotor.setSpeed(MOTOR_NORMAL);
+    rightMotor.setSpeed(MOTOR_NORMAL);
     // move robot forward until one sensor sees a line
     while (!leftCorrectionTrigger() && !rightCorrectionTrigger()) {
       leftMotor.forward();
       rightMotor.forward();
     }
-
+    leftMotor.stop(true);
+    rightMotor.stop(false);
     correctTheta(90);
     odometer.setX(TILE_SIZE + offSet);
     leftMotor.rotate(convertDistance(-offSet), true);
@@ -178,7 +182,7 @@ public class LightLocalizer {
       rightMotor.stop();
     }
     // if right sensor detects first, move left motor until it catches up
-    else if (!leftDetects && !rightDetects) {
+    else if (!leftDetects && rightDetects) {
       Delay.msDelay(300);
       while (!leftCorrectionTrigger()) {
         leftMotor.forward();
