@@ -87,7 +87,7 @@ public class Main {
     Navigation.travelTo(tunnelEndX, tunnelEndY + 0.5);
     //TODO ODOMETER CORRECT AFTER TUNNEL EXIT!
     Navigation.travelTo(bin.x, bin.y);
-    Navigation.turnTo(tnr.ur.x);
+    Navigation.turnTo(tnr.ll.x);
 
     // TODO: ensure robot stays within island
     // calculate and move to launch point
