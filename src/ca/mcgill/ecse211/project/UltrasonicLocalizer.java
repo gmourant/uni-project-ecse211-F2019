@@ -95,8 +95,6 @@ public class UltrasonicLocalizer {
     }
     //angle at which the sensor sees the wall  
     angle2 = odometer.getXYT()[2];
-    leftMotor.stop(true);
-    rightMotor.stop(false);
   }
 
 }

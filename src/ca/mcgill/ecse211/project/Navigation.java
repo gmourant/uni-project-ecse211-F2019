@@ -69,8 +69,6 @@ public class Navigation {
     rightMotor.setSpeed(FORWARD_SPEED);
     leftMotor.rotate(convertDistance(distance), true);
     rightMotor.rotate(convertDistance(distance), false);
-    leftMotor.stop(true);
-    rightMotor.stop(false);
   }
 
   /**
@@ -85,9 +83,9 @@ public class Navigation {
     // reset and initiliaze motors
     currentX = x;
     currentY = y;
-    leftMotor.stop();
-    rightMotor.stop();
-    launchMotor.stop();
+    leftMotor.stop(true);
+    rightMotor.stop(false);
+    //launchMotor.stop();
     leftMotor.setAcceleration(ACCELERATION);
     rightMotor.setAcceleration(ACCELERATION);
 
@@ -107,7 +105,7 @@ public class Navigation {
     leftMotor.setSpeed(FORWARD_SPEED);
     rightMotor.setSpeed(FORWARD_SPEED);
     leftMotor.rotate(convertDistance(distance - r), true);
-    rightMotor.rotate(convertDistance(distance - r), true);
+    rightMotor.rotate(convertDistance(distance - r), false);
   }
 
    /**
@@ -154,8 +152,7 @@ public class Navigation {
       leftMotor.rotate(convertAngle(angle), true);
       rightMotor.rotate(-convertAngle(angle), false);
     }
-    leftMotor.stop(true);
-    rightMotor.stop(false);
+
   }
   
   public static void turnTo(double x, double y) {

@@ -85,7 +85,7 @@ public class Resources {
   /**
    * The wheel radius in centimeters.
    */
-  public static final double WHEEL_RAD = 2.13;
+  public static final double WHEEL_RAD = 2.16;
 
   /**
    * The robot width in centimeters.
