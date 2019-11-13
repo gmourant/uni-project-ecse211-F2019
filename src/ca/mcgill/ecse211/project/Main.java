@@ -29,7 +29,10 @@ public class Main {
   final static UltrasonicPoller UP = new UltrasonicPoller(distance, sampleUS);
 
   public static void main(String[] args) {
-
+    while(Resources.notGotWifi == true) {
+      Resources.wifiParameters = null;
+      receiveWifiParameters();
+    }
     System.out.println("Map:\n" + wifiParameters);
     LCD.clear();
     // int buttonChoice;

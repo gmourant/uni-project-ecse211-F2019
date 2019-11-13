@@ -33,9 +33,10 @@ public class Resources {
    * The IP address of the server that transmits data to the robot. Set this to the default for the beta demo and
    * competition.
    */
-  public static final String SERVER_IP = "192.168.2.53";
+  public static final String SERVER_IP = "192.168.2.63";
   // 192.168.2.29
   // steven's pc: 192.168.2.45
+  // david's pc: 192.168.2.63
 
   /**
    * Your team number.
@@ -198,6 +199,8 @@ public class Resources {
 
   public static double tunnelTheta;
 
+  public static boolean notGotWifi = false;
+
   //////////////////////////////////////
 
   /**
@@ -283,9 +286,14 @@ public class Resources {
        * message saying an invalid team number was specified and getData() will throw an exception letting you know.
        */
       wifiParameters = conn.getData();
+      
+      notGotWifi = false;
     } catch (Exception e) {
       LCD.clear();
       System.err.println("Error: " + e.getMessage());
+      if(e.getMessage().equals("Bad server status: TEAM NUMBER ERROR")) {
+        notGotWifi = true;
+      }
     }
   }
 
