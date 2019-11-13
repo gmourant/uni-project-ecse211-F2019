@@ -32,13 +32,13 @@ public class Resources {
    * The IP address of the server that transmits data to the robot. Set this to the default for the
    * beta demo and competition.
    */
-  public static final String SERVER_IP = "192.168.2.13";
+  public static final String SERVER_IP = "192.168.2.57";
   //192.168.2.29
 
   /**
    * Your team number.
    */
-  public static final int TEAM_NUMBER = 2;
+  public static final int TEAM_NUMBER = 1;
 
   /**
    * Enables printing of debug info from the WiFi class.
@@ -85,7 +85,7 @@ public class Resources {
   /**
    * The wheel radius in centimeters.
    */
-  public static final double WHEEL_RAD = 2.16;
+  public static final double WHEEL_RAD = 2.08;
 
   /**
    * The robot width in centimeters.
@@ -95,7 +95,7 @@ public class Resources {
   
 
   // wheel end to wheel end
-  public static final double TRACK = 13.6;
+  public static final double TRACK = 13.11;
 
   // wheel center to wheel center
   //public static final double TRACK2 = 13.6;
@@ -188,6 +188,14 @@ public class Resources {
    * The Navigation.
    */
   public static Navigation navigate = Navigation.getNavigation();
+  
+  public static double tunnelStartX; // should be middle of tunnel entry
+  public static double tunnelStartY;
+
+  public static double tunnelEndX;
+  public static double tunnelEndY;
+
+  public static double tunnelTheta;
 
   //////////////////////////////////////
 
@@ -240,8 +248,9 @@ public class Resources {
   /**
    * The red tunnel footprint.
    */
-  public static Region tnr = new Region("TNR_LL_x", "TNR_LL_y", "TNR_UR_x", "TNR_UR_y");
-
+//  public static Region tnr = new Region("TNR_LL_x", "TNR_LL_y", "TNR_UR_x", "TNR_UR_y");
+  public static double targetAngle = Math.max(get("TNR_LL_x"), get("TNR_UR_x"));
+  
   /**
    * The green tunnel footprint.
    */

@@ -28,14 +28,6 @@ public class Main {
   static float[] sampleUS = new float[distance.sampleSize()];
   final static UltrasonicPoller UP = new UltrasonicPoller(distance, sampleUS);
 
-  static double tunnelStartX = 0; // should be middle of tunnel entry
-  static double tunnelStartY = 0;
-
-  static double tunnelEndX = 0;
-  static double tunnelEndY = 0;
-
-  static double tunnelTheta = 0;
-
   public static void main(String[] args) {
 
     System.out.println("Map:\n" + wifiParameters);
@@ -55,16 +47,16 @@ public class Main {
     // } while (buttonChoice != Button.ID_LEFT && buttonChoice != Button.ID_RIGHT);
     // LCD.clear();
 
-    Region tunnel = tnr;
+    Region tunnel = tng;
 
-    if (redTeam == 2) {
-      // RED TEAM
-      tunnel = tnr;
-
-    } else if (greenTeam == 2) {
-      // GREEN TEAM
-      tunnel = tng;
-    }
+//    if (redTeam == 2) {
+//      // RED TEAM
+//      tunnel = tnr;
+//
+//    } else if (greenTeam == 2) {
+//      // GREEN TEAM
+//      tunnel = tng;
+//    }
 
     // start odometer thread
     // start display thread
@@ -72,6 +64,7 @@ public class Main {
     new Thread(new Display()).start(); // TODO Comment out when presenting
     // localize
     localize();
+    
     Sound.beep();
 
     // compute tunnel coordinates
@@ -81,13 +74,17 @@ public class Main {
     // navigate to tunnel entrance
     // turn to face tunnel
     // navigate through tunnel
-    Navigation.travelTo(tunnelStartX, tunnelStartY-0.5);
+    Navigation.travelTo(tunnelStartX, tunnelStartY-0.75);
+    
     Navigation.turnTo(tunnelTheta);
-    localizeForward(tunnelTheta);
+    localizeForward(tunnelTheta, true);
+    
     Navigation.travelTo(tunnelEndX, tunnelEndY + 0.5);
-    //TODO ODOMETER CORRECT AFTER TUNNEL EXIT!
+    
+    localizeForward(tunnelTheta, false);
+    
     Navigation.travelTo(bin.x, bin.y);
-    Navigation.turnTo(tnr.ll.x);
+    Navigation.turnTo(Math.toRadians(targetAngle));
 
     // TODO: ensure robot stays within island
     // calculate and move to launch point
@@ -127,9 +124,9 @@ public class Main {
    * 
    * @param angle
    */
-  public static void localizeForward(double angle) {
+  public static void localizeForward(double angle, boolean backup) {
     LightLocalizer lightLocalize = new LightLocalizer();
-    lightLocalize.localizeForward(angle);
+    lightLocalize.localizeForward(angle,backup);
   }
 
   /**

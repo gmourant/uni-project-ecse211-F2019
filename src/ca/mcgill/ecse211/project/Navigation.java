@@ -1,6 +1,7 @@
 package ca.mcgill.ecse211.project;
 
-import static ca.mcgill.ecse211.project.Resources.*;;
+import static ca.mcgill.ecse211.project.Resources.*;
+import lejos.utility.Delay;;
 
 /**
  * Navigates the robot depending on given coordinates avoids obstacles and resumes navigation
@@ -69,6 +70,7 @@ public class Navigation {
     rightMotor.setSpeed(FORWARD_SPEED);
     leftMotor.rotate(convertDistance(distance), true);
     rightMotor.rotate(convertDistance(distance), false);
+    Delay.msDelay(10);
   }
 
   /**
@@ -152,7 +154,7 @@ public class Navigation {
       leftMotor.rotate(convertAngle(angle), true);
       rightMotor.rotate(-convertAngle(angle), false);
     }
-
+    Delay.msDelay(10);
   }
   
   public static void turnTo(double x, double y) {
@@ -179,6 +181,7 @@ public class Navigation {
       leftMotor.rotate(convertAngle(angle), true);
       rightMotor.rotate(-convertAngle(angle), false);
     }
+    Delay.msDelay(10);
   }
 
 
