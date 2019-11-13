@@ -12,11 +12,11 @@ import java.util.Map;
 
 /**
  * 
- * This class is used to define static resources in one place for easy access and to avoid cluttering
- * the rest of the codebase.
+ * This class is used to define static resources in one place for easy access and to avoid cluttering the rest of the
+ * codebase.
  * 
- * Integrate this carefully with your existing Resources class (See below for where to add your
- * code from your current Resources file). The order in which things are declared matters!
+ * Integrate this carefully with your existing Resources class (See below for where to add your code from your current
+ * Resources file). The order in which things are declared matters!
  *
  * @author Younes Boubekeur
  */
@@ -26,19 +26,21 @@ public class Resources {
   /**
    * The default server IP used by the profs and TA's.
    */
-  public static final String DEFAULT_SERVER_IP = "192.168.2.3";
-//192.168.2.3"
+  public static final String DEFAULT_SERVER_IP =  "192.168.2.3";
+  // 192.168.2.3
+  // 192.168.2.53
   /**
-   * The IP address of the server that transmits data to the robot. Set this to the default for the
-   * beta demo and competition.
+   * The IP address of the server that transmits data to the robot. Set this to the default for the beta demo and
+   * competition.
    */
-  public static final String SERVER_IP = "192.168.2.57";
-  //192.168.2.29
+  public static final String SERVER_IP = "192.168.2.53";
+  // 192.168.2.29
+  // steven's pc: 192.168.2.45
 
   /**
    * Your team number.
    */
-  public static final int TEAM_NUMBER = 1;
+  public static final int TEAM_NUMBER = 2;
 
   /**
    * Enables printing of debug info from the WiFi class.
@@ -91,15 +93,14 @@ public class Resources {
    * The robot width in centimeters.
    */
   // public static final double TRACK = 11.45;
-//  public static final double TRACK = 9.85;
-  
+  // public static final double TRACK = 9.85;
+
 
   // wheel end to wheel end
   public static final double TRACK = 13.11;
 
   // wheel center to wheel center
-  //public static final double TRACK2 = 13.6;
-
+  // public static final double TRACK2 = 13.6;
 
 
 
@@ -127,7 +128,7 @@ public class Resources {
    * The speed at which the robot rotates in degrees per second.
    */
   public static final int ROTATE_SPEED = 125;
-  
+
   public static final int US_ROTATE_SPEED = 200;
 
 
@@ -162,7 +163,7 @@ public class Resources {
    * Motor for ultrasonic sensor sweeping.
    */
   public static final EV3LargeRegulatedMotor usMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("B"));
-  
+
   /**
    * The ultrasonic sensor.
    */
@@ -188,7 +189,7 @@ public class Resources {
    * The Navigation.
    */
   public static Navigation navigate = Navigation.getNavigation();
-  
+
   public static double tunnelStartX; // should be middle of tunnel entry
   public static double tunnelStartY;
 
@@ -242,15 +243,14 @@ public class Resources {
   /**
    * The Island.
    */
-  public static Region island =
-      new Region("Island_LL_x", "Island_LL_y", "Island_UR_x", "Island_UR_y");
+  public static Region island = new Region("Island_LL_x", "Island_LL_y", "Island_UR_x", "Island_UR_y");
 
   /**
    * The red tunnel footprint.
    */
-//  public static Region tnr = new Region("TNR_LL_x", "TNR_LL_y", "TNR_UR_x", "TNR_UR_y");
+  // public static Region tnr = new Region("TNR_LL_x", "TNR_LL_y", "TNR_UR_x", "TNR_UR_y");
   public static double targetAngle = Math.max(get("TNR_LL_x"), get("TNR_UR_x"));
-  
+
   /**
    * The green tunnel footprint.
    */
@@ -272,18 +272,15 @@ public class Resources {
     System.out.println("Waiting to receive Wi-Fi parameters.");
 
     // Connect to server and get the data, catching any errors that might occur
-    try (WifiConnection conn =
-        new WifiConnection(SERVER_IP, TEAM_NUMBER, ENABLE_DEBUG_WIFI_PRINT)) {
+    try (WifiConnection conn = new WifiConnection(SERVER_IP, TEAM_NUMBER, ENABLE_DEBUG_WIFI_PRINT)) {
       /*
-       * getData() will connect to the server and wait until the user/TA presses the "Start" button
-       * in the GUI on their laptop with the data filled in. Once it's waiting, you can kill it by
-       * pressing the upper left hand corner button (back/escape) on the EV3. getData() will throw
-       * exceptions if it can't connect to the server (e.g. wrong IP address, server not running on
-       * laptop, not connected to WiFi router, etc.). It will also throw an exception if it connects
-       * but receives corrupted data or a message from the server saying something went wrong. For
-       * example, if TEAM_NUMBER is set to 1 above but the server expects teams 17 and 5, this robot
-       * will receive a message saying an invalid team number was specified and getData() will throw
-       * an exception letting you know.
+       * getData() will connect to the server and wait until the user/TA presses the "Start" button in the GUI on their
+       * laptop with the data filled in. Once it's waiting, you can kill it by pressing the upper left hand corner
+       * button (back/escape) on the EV3. getData() will throw exceptions if it can't connect to the server (e.g. wrong
+       * IP address, server not running on laptop, not connected to WiFi router, etc.). It will also throw an exception
+       * if it connects but receives corrupted data or a message from the server saying something went wrong. For
+       * example, if TEAM_NUMBER is set to 1 above but the server expects teams 17 and 5, this robot will receive a
+       * message saying an invalid team number was specified and getData() will throw an exception letting you know.
        */
       wifiParameters = conn.getData();
     } catch (Exception e) {
@@ -307,8 +304,7 @@ public class Resources {
   }
 
   /**
-   * Represents a region on the competition map grid, delimited by its lower-left and upper-right
-   * corners (inclusive).
+   * Represents a region on the competition map grid, delimited by its lower-left and upper-right corners (inclusive).
    *
    * @author Younes Boubekeur
    */
@@ -334,14 +330,10 @@ public class Resources {
     /**
      * Helper constructor to make a Region directly from parameter names.
      *
-     * @param llX
-     *     the Wi-Fi parameter key representing the lower left corner of the region x coordinate
-     * @param llY
-     *     the Wi-Fi parameter key representing the lower left corner of the region y coordinate
-     * @param urX
-     *     the Wi-Fi parameter key representing the upper right corner of the region x coordinate
-     * @param urY
-     *     the Wi-Fi parameter key representing the upper right corner of the region y coordinate
+     * @param llX the Wi-Fi parameter key representing the lower left corner of the region x coordinate
+     * @param llY the Wi-Fi parameter key representing the lower left corner of the region y coordinate
+     * @param urX the Wi-Fi parameter key representing the upper right corner of the region x coordinate
+     * @param urY the Wi-Fi parameter key representing the upper right corner of the region y coordinate
      */
     public Region(String llX, String llY, String urX, String urY) {
       this(new Point(get(llX), get(llY)), new Point(get(urX), get(urY)));
@@ -355,8 +347,7 @@ public class Resources {
      */
     private void validateCoordinates(Point lowerLeft, Point upperRight) {
       if (lowerLeft.x > upperRight.x || lowerLeft.y > upperRight.y) {
-        throw new IllegalArgumentException(
-            "Upper right cannot be below or to the left of lower left!");
+        throw new IllegalArgumentException("Upper right cannot be below or to the left of lower left!");
       }
     }
 

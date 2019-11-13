@@ -61,7 +61,7 @@ public class Main {
     // start odometer thread
     // start display thread
     new Thread(odometer).start();
-    new Thread(new Display()).start(); // TODO Comment out when presenting
+   // new Thread(new Display()).start(); // TODO Comment out when presenting
     // localize
     localize();
     
@@ -98,6 +98,7 @@ public class Main {
 
     // launch balls
     Launcher.launch();
+    Sound.beep();
 
     while (Button.waitForAnyPress() != Button.ID_ESCAPE); // do nothing
 

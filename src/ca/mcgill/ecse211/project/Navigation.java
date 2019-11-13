@@ -106,6 +106,7 @@ public class Navigation {
 
     leftMotor.setSpeed(FORWARD_SPEED);
     rightMotor.setSpeed(FORWARD_SPEED);
+    Delay.msDelay(50);
     leftMotor.rotate(convertDistance(distance - r), true);
     rightMotor.rotate(convertDistance(distance - r), false);
   }
@@ -147,6 +148,7 @@ public class Navigation {
       angle += 360;
     // minimal angle
     angle = angle % 360;
+    Delay.msDelay(50);
     if (angle > 180) {
       leftMotor.rotate(-convertAngle(360 - angle), true);
       rightMotor.rotate(convertAngle(360 - angle), false);
@@ -154,7 +156,7 @@ public class Navigation {
       leftMotor.rotate(convertAngle(angle), true);
       rightMotor.rotate(-convertAngle(angle), false);
     }
-    Delay.msDelay(10);
+    Delay.msDelay(50);
   }
   
   public static void turnTo(double x, double y) {
@@ -174,6 +176,7 @@ public class Navigation {
       angle += 360;
     // minimal angle
     angle = angle % 360;
+    Delay.msDelay(50);
     if (angle > 180) {
       leftMotor.rotate(-convertAngle(360 - angle), true);
       rightMotor.rotate(convertAngle(360 - angle), false);
@@ -181,7 +184,7 @@ public class Navigation {
       leftMotor.rotate(convertAngle(angle), true);
       rightMotor.rotate(-convertAngle(angle), false);
     }
-    Delay.msDelay(10);
+    Delay.msDelay(50);
   }
 
 

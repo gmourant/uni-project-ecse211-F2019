@@ -145,9 +145,7 @@ public class LightLocalizer {
     // move robot forward until one sensor sees a line
     leftMotor.forward();
     rightMotor.forward();
-    while (!leftCorrectionTrigger() && !rightCorrectionTrigger()) {
-      Delay.msDelay(10);
-    }
+    while (!leftCorrectionTrigger() && !rightCorrectionTrigger());
     leftMotor.stop(true);
     rightMotor.stop(false);
     correctTheta(angle,backup);
@@ -176,6 +174,8 @@ public class LightLocalizer {
         rightMotor.backward();
         Delay.msDelay(600);
       }
+      leftMotor.stop(true);
+      rightMotor.stop(false);
       rightMotor.forward();
       while (!rightCorrectionTrigger());
       rightMotor.stop();
@@ -187,6 +187,8 @@ public class LightLocalizer {
         leftMotor.backward();
         Delay.msDelay(600);
       }
+      leftMotor.stop(true);
+      rightMotor.stop(false);
       leftMotor.forward();
       while (!leftCorrectionTrigger());
       leftMotor.stop();
