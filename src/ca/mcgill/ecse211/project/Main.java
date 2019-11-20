@@ -29,41 +29,29 @@ public class Main {
   final static UltrasonicPoller UP = new UltrasonicPoller(distance, sampleUS);
 
   public static void main(String[] args) {
+    new Thread(odometer).start();
+    Button.waitForAnyEvent();
     while(Resources.notGotWifi == true) {
       Resources.wifiParameters = null;
       receiveWifiParameters();
     }
     System.out.println("Map:\n" + wifiParameters);
     LCD.clear();
-    // int buttonChoice;
-    // do {
-    // LCD.clear();
-    //
-    // // notify user when to start
-    // LCD.drawString("< Left | Right >", 0, 0);
-    // LCD.drawString(" | ", 0, 1);
-    // LCD.drawString(" Red | Green ", 0, 2);
-    // LCD.drawString(" Team | Team ", 0, 3);
-    // LCD.drawString(" | ", 0, 4);
-    //
-    // buttonChoice = Button.waitForAnyPress();
-    // } while (buttonChoice != Button.ID_LEFT && buttonChoice != Button.ID_RIGHT);
-    // LCD.clear();
 
     Region tunnel = tng;
+    Point bin = greenBin;
 
-//    if (redTeam == 2) {
-//      // RED TEAM
-//      tunnel = tnr;
-//
-//    } else if (greenTeam == 2) {
-//      // GREEN TEAM
-//      tunnel = tng;
-//    }
+    if (redTeam == 2) {
+      // RED TEAM
+      tunnel = tnr;
+      bin = redBin;
 
-    // start odometer thread
-    // start display thread
-    new Thread(odometer).start();
+    } else if (greenTeam == 2) {
+      // GREEN TEAM
+      tunnel = tng;
+      bin = greenBin;
+    }
+
    // new Thread(new Display()).start(); // TODO Comment out when presenting
     // localize
     localize();
@@ -77,24 +65,19 @@ public class Main {
     // navigate to tunnel entrance
     // turn to face tunnel
     // navigate through tunnel
-    Navigation.travelTo(tunnelStartX, tunnelStartY-0.75);
+    Navigation.travelTo(tunnelStartX, tunnelStartY);
     
     Navigation.turnTo(tunnelTheta);
     localizeForward(tunnelTheta, true);
     
-    Navigation.travelTo(tunnelEndX, tunnelEndY + 0.5);
+    Navigation.travelTo(tunnelEndX, tunnelEndY);
     
     localizeForward(tunnelTheta, false);
     
-    Navigation.travelTo(bin.x, bin.y);
-    Navigation.turnTo(Math.toRadians(targetAngle));
 
     // TODO: ensure robot stays within island
     // calculate and move to launch point
-    // Navigation.launchPosition(bin.x, bin.y, RADIUS);
-    // Navigation.travelTo(bin.x, bin.y, RADIUS);
-    // Navigation.travelTo(bin.x, bin.y);
-    // Navigation.turnTo(Math.toRadians(tnr.ur.x));
+    Navigation.travelTo(bin.x, bin.y, RADIUS);
     Sound.beep();
     Sound.beep();
     Sound.beep();
@@ -121,6 +104,14 @@ public class Main {
 
     // Start light localization when ultrasonic localizationi is over
     lightLocalize.localize();
+    if (redTeam == 2) {
+      // RED TEAM
+      odometer.setXYT(TILE_SIZE, TILE_SIZE * 8, 180);
+
+    } else if (greenTeam == 2) {
+      // GREEN TEAM
+      odometer.setXYT(TILE_SIZE * 14, TILE_SIZE, 0);
+    }
   }
 
   /**
@@ -182,6 +173,10 @@ public class Main {
 
       tunnelTheta -= 180;
     }
+    if (horizontalTunnel(tunnel)) {
+      tunnelStartX -= 0.5;
+    }
+    else tunnelStartY -= 0.5;
   }
 
   /**

@@ -70,7 +70,6 @@ public class Navigation {
     rightMotor.setSpeed(FORWARD_SPEED);
     leftMotor.rotate(convertDistance(distance), true);
     rightMotor.rotate(convertDistance(distance), false);
-    Delay.msDelay(10);
   }
 
   /**
@@ -106,9 +105,10 @@ public class Navigation {
 
     leftMotor.setSpeed(FORWARD_SPEED);
     rightMotor.setSpeed(FORWARD_SPEED);
-    Delay.msDelay(50);
+    sleep(50);
     leftMotor.rotate(convertDistance(distance - r), true);
     rightMotor.rotate(convertDistance(distance - r), false);
+    //TODO obstacle avoidance
   }
 
    /**
@@ -148,7 +148,7 @@ public class Navigation {
       angle += 360;
     // minimal angle
     angle = angle % 360;
-    Delay.msDelay(50);
+    sleep(50);
     if (angle > 180) {
       leftMotor.rotate(-convertAngle(360 - angle), true);
       rightMotor.rotate(convertAngle(360 - angle), false);
@@ -156,38 +156,9 @@ public class Navigation {
       leftMotor.rotate(convertAngle(angle), true);
       rightMotor.rotate(-convertAngle(angle), false);
     }
-    Delay.msDelay(50);
+    sleep(50);
   }
   
-  public static void turnTo(double x, double y) {
-    x = x * TILE_SIZE;
-    y = y * TILE_SIZE;
-    // Calculate x & y trajectory
-    double dx = x - odometer.getXYT()[0];
-    double dy = y - odometer.getXYT()[1];
-    // Calculate desired angle to turn to in relation to current angle
-    double theta = Math.atan2(dx, dy);
-    double thetaDegree = Math.toDegrees(theta);
-    double angle = thetaDegree - odometer.getXYT()[2];
-    leftMotor.setSpeed(ROTATE_SPEED);
-    rightMotor.setSpeed(ROTATE_SPEED);
-    // remove negative angles
-    if (angle < 0)
-      angle += 360;
-    // minimal angle
-    angle = angle % 360;
-    Delay.msDelay(50);
-    if (angle > 180) {
-      leftMotor.rotate(-convertAngle(360 - angle), true);
-      rightMotor.rotate(convertAngle(360 - angle), false);
-    } else {
-      leftMotor.rotate(convertAngle(angle), true);
-      rightMotor.rotate(-convertAngle(angle), false);
-    }
-    Delay.msDelay(50);
-  }
-
-
   /**
    * true when no obstacle detected and motors are moving
    *
@@ -231,6 +202,14 @@ public class Navigation {
       nav = new Navigation();
     }
     return nav;
+  }
+  
+  private static void sleep(int time) {
+    try {
+      Thread.sleep(time);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
   }
 
 }

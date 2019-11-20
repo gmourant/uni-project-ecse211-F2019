@@ -138,9 +138,6 @@ public class LightLocalizer {
 
     sleep(100);
 
-    // face NORTH
-    // navigate.travelTo(1,1);
-    Navigation.turnTo(0);
   }
   
   public void localizeForward(double angle) {
