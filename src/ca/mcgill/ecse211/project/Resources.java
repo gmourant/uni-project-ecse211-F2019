@@ -69,7 +69,7 @@ public class Resources {
    * the radius of the circle around target
    */
   public static final double RADIUS = 137.16;
-  //137.16cm around 4.5 tiles
+  //137.16cm around  4.5 tiles
 
   /**
    * Offset from the wall (cm).
