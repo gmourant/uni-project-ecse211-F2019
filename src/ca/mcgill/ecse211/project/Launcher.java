@@ -18,7 +18,7 @@ public class Launcher {
     leftMotor.stop(true);
     rightMotor.stop(false);
     for (int i = 0; i < 2; i++) {
-      Main.sleepFor(2500);
+      Main.sleepFor(2000);
 
       // launch
       launchMotor.setAcceleration(100);

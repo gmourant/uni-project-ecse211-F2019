@@ -30,32 +30,40 @@ public class Main {
 
   public static void main(String[] args) {
     new Thread(odometer).start();
-    Button.waitForAnyEvent();
-    while(Resources.notGotWifi == true) {
+    new Thread(new Display()).start(); // TODO Comment out when presenting
+
+    while (Resources.notGotWifi == true) {
       Resources.wifiParameters = null;
       receiveWifiParameters();
     }
     System.out.println("Map:\n" + wifiParameters);
     LCD.clear();
-
+    new Thread(new Display()).start(); // TODO Comment out when presenting
     Region tunnel = tng;
+    Region startIsland = green;
     Point bin = greenBin;
+    int startingCorner = greenCorner;
 
     if (redTeam == 2) {
       // RED TEAM
       tunnel = tnr;
+      startIsland = red;
       bin = redBin;
+      startingCorner = redCorner;
 
     } else if (greenTeam == 2) {
       // GREEN TEAM
       tunnel = tng;
+      startIsland = green;
       bin = greenBin;
+      startingCorner = greenCorner;
     }
 
-   // new Thread(new Display()).start(); // TODO Comment out when presenting
     // localize
-    localize();
-    
+    localize(startingCorner);
+
+    Sound.beep();
+    Sound.beep();
     Sound.beep();
 
     // compute tunnel coordinates
@@ -66,25 +74,54 @@ public class Main {
     // turn to face tunnel
     // navigate through tunnel
     Navigation.travelTo(tunnelStartX, tunnelStartY);
-    
+
     Navigation.turnTo(tunnelTheta);
     localizeForward(tunnelTheta, true);
-    
+
     Navigation.travelTo(tunnelEndX, tunnelEndY);
-    
+
+    /*
+     * 4.Each machine localizes to the grid. When completed, the machine must stop and issue a sequence of 3 beeps.
+     * 
+     */
+
+    Sound.beep();
+    Sound.beep();
+    Sound.beep();
+
     localizeForward(tunnelTheta, false);
-    
+
 
     // TODO: ensure robot stays within island
     // calculate and move to launch point
     Navigation.travelTo(bin.x, bin.y, RADIUS);
+
+    /*
+     * 5.Each machine navigates to their corresponding tunnel, transits, and then proceeds to their launch point. Upon
+     * arriving, each machine will again stop and issue a sequence of 3 beeps.
+     */
+
     Sound.beep();
     Sound.beep();
     Sound.beep();
 
     // launch balls
     Launcher.launch();
+    computeTunnelCoordinates(tunnel);
+    Navigation.travelTo(tunnelStartX, tunnelStartY);
+    Navigation.turnTo(tunnelTheta);
+    localizeForward(tunnelTheta, true);
+    Navigation.travelTo(startIsland.ll.x, startIsland.ll.y);
+
+    /*
+     * 8.Upon returning to the starting corner, each robot halts and issues a sequence of 5 beeps.
+     */
     Sound.beep();
+    Sound.beep();
+    Sound.beep();
+    Sound.beep();
+    Sound.beep();
+
 
     while (Button.waitForAnyPress() != Button.ID_ESCAPE); // do nothing
 
@@ -95,7 +132,7 @@ public class Main {
    * Method to run the robot localization First, runs ultrasonic localization, then runs the light localization and
    * corrects theta
    */
-  public static void localize() {
+  public static void localize(int startingCorner) {
     LightLocalizer lightLocalize = new LightLocalizer();
     UltrasonicLocalizer localize;
 
@@ -104,13 +141,15 @@ public class Main {
 
     // Start light localization when ultrasonic localizationi is over
     lightLocalize.localize();
-    if (redTeam == 2) {
-      // RED TEAM
-      odometer.setXYT(TILE_SIZE, TILE_SIZE * 8, 180);
-
-    } else if (greenTeam == 2) {
+    if (startingCorner == 1) {
       // GREEN TEAM
       odometer.setXYT(TILE_SIZE * 14, TILE_SIZE, 0);
+    } else if (startingCorner == 2) {
+      // RED TEAM
+      odometer.setXYT(TILE_SIZE * 14, TILE_SIZE * 8, 270);
+    } else if (startingCorner == 3) {
+      // RED TEAM
+      odometer.setXYT(TILE_SIZE, TILE_SIZE * 8, 180);
     }
   }
 
@@ -121,7 +160,7 @@ public class Main {
    */
   public static void localizeForward(double angle, boolean backup) {
     LightLocalizer lightLocalize = new LightLocalizer();
-    lightLocalize.localizeForward(angle,backup);
+    lightLocalize.localizeForward(angle, backup);
   }
 
   /**
@@ -175,8 +214,8 @@ public class Main {
     }
     if (horizontalTunnel(tunnel)) {
       tunnelStartX -= 0.5;
-    }
-    else tunnelStartY -= 0.5;
+    } else
+      tunnelStartY -= 0.5;
   }
 
   /**

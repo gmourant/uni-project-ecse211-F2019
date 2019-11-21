@@ -180,12 +180,12 @@ public class LightLocalizer {
 //    rightMotor.setSpeed(MOTOR_NORMAL);
     leftMotor.setSpeed(MOTOR_LOW);
     rightMotor.setSpeed(MOTOR_LOW);
-    sleep(300);
+    sleep(100);
     if (leftDetects && !rightDetects) {
-      sleep(300);
+      sleep(100);
       if(backup) {
         rightMotor.backward();
-        Delay.msDelay(600);
+        Delay.msDelay(400);
       }
       leftMotor.stop(true);
       rightMotor.stop(false);
@@ -196,10 +196,10 @@ public class LightLocalizer {
     }
     // if right sensor detects first, move left motor until it catches up
     else if (!leftDetects && rightDetects) {
-      sleep(300);
+      sleep(100);
       if(backup) {
         leftMotor.backward();
-        Delay.msDelay(600);
+        Delay.msDelay(400);
       }
       leftMotor.stop(true);
       rightMotor.stop(false);

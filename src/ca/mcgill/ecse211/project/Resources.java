@@ -33,7 +33,7 @@ public class Resources {
    * The IP address of the server that transmits data to the robot. Set this to the default for the beta demo and
    * competition.
    */
-  public static final String SERVER_IP = "192.168.2.63";
+  public static final String SERVER_IP = "192.168.2.7";
   // 192.168.2.29
   // steven's pc: 192.168.2.45
   // david's pc: 192.168.2.63
@@ -99,7 +99,7 @@ public class Resources {
 
 
   // wheel end to wheel end
-  public static final double TRACK = 13.11;
+  public static final double TRACK = 13.75;
 
   // wheel center to wheel center
   // public static final double TRACK2 = 13.6;

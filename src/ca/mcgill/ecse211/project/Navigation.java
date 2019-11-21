@@ -15,16 +15,16 @@ import lejos.utility.Delay;;
 
 public class Navigation {
 
-   /**
-    * tells us whether an obstacle was detected
-    */
+  /**
+   * tells us whether an obstacle was detected
+   */
   public static boolean obstacleDetected = true;
-  
+
   /**
    * the current x position of the robot
    */
   public static double currentX;
-  
+
   /**
    * the current y position of the robot
    */
@@ -86,7 +86,7 @@ public class Navigation {
     currentY = y;
     leftMotor.stop(true);
     rightMotor.stop(false);
-    //launchMotor.stop();
+    // launchMotor.stop();
     leftMotor.setAcceleration(ACCELERATION);
     rightMotor.setAcceleration(ACCELERATION);
 
@@ -99,20 +99,36 @@ public class Navigation {
     // Calculate desired angle to turn to in relation to current angle
     double angle = Math.atan2(dx, dy);
 
-    turnTo(angle);
+
+
     // Calculate absolute trajectory
-    double distance = Math.hypot(dx, dy);
 
     leftMotor.setSpeed(FORWARD_SPEED);
     rightMotor.setSpeed(FORWARD_SPEED);
-    sleep(50);
-    leftMotor.rotate(convertDistance(distance - r), true);
-    rightMotor.rotate(convertDistance(distance - r), false);
-    //TODO obstacle avoidance
+    double distance = Math.hypot(dx, dy);
+    if (distance - r > 0) {
+      turnTo(angle);
+      sleep(50);
+      leftMotor.rotate(convertDistance(distance - r), true);
+      rightMotor.rotate(convertDistance(distance - r), false);
+    }
+    else {
+      turnTo(-angle);
+      sleep(50);
+      leftMotor.rotate(convertDistance(Math.abs(distance - r)), true);
+      rightMotor.rotate(convertDistance(Math.abs(distance -r)), false);
+    }
+
+    dx = x - odometer.getXYT()[0];
+    dy = y - odometer.getXYT()[1];
+    angle = Math.atan2(dx, dy);
+    turnTo(angle);
+    // TODO obstacle avoidance
   }
 
-   /**
+  /**
    * finds the ideal launch position to launch a projectile r distance away from given point
+   * 
    * @param x coordinates of x
    * @param y coordinates of y
    * @param r radius of position
@@ -127,7 +143,7 @@ public class Navigation {
     // Calculate absolute trajectory
     leftMotor.setSpeed(FORWARD_SPEED);
     rightMotor.setSpeed(FORWARD_SPEED);
-    LCD.drawString("PX: " + (odometer.getXYT()[0] - RADIUS * Math.sin(angle)) , 0, 5);
+    LCD.drawString("PX: " + (odometer.getXYT()[0] - RADIUS * Math.sin(angle)), 0, 5);
     LCD.drawString("PY: " + (odometer.getXYT()[1] - RADIUS * Math.cos(angle)), 0, 6);
   }
 
@@ -158,7 +174,7 @@ public class Navigation {
     }
     sleep(50);
   }
-  
+
   /**
    * true when no obstacle detected and motors are moving
    *
@@ -203,7 +219,7 @@ public class Navigation {
     }
     return nav;
   }
-  
+
   private static void sleep(int time) {
     try {
       Thread.sleep(time);
