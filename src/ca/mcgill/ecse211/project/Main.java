@@ -75,9 +75,22 @@ public class Main {
     // navigate through tunnel
     Navigation.travelTo(tunnelStartX, tunnelStartY);
 
-    Navigation.turnTo(tunnelTheta);
-    localizeForward(tunnelTheta, true);
-
+    Navigation.turnTo(Math.toRadians(tunnelTheta));
+    localizeForward(tunnelTheta, true, null);
+    if (!checkOutOfBounds(tunnelTheta + 90, startIsland)) {
+      Navigation.turnTo(Math.toRadians(tunnelTheta + 90));
+      localizeForward(tunnelTheta + 90, true, null);
+      Navigation.goMid(true);
+    } else {
+      Navigation.turnTo(Math.toRadians(tunnelTheta - 90));
+      localizeForward(tunnelTheta - 90, true, null);
+      Navigation.goMid(true);
+    }
+    // Navigation.turnTo(Math.toRadians(tunnelTheta - 90));
+    // localizeForward(tunnelTheta - 90, true, null);
+    // Navigation.goMid();
+    Navigation.turnTo(Math.toRadians(tunnelTheta));
+    odometer.setXYT(tunnelStartX * TILE_SIZE, tunnelStartY * TILE_SIZE, tunnelTheta);
     Navigation.travelTo(tunnelEndX, tunnelEndY);
 
     /*
@@ -89,7 +102,7 @@ public class Main {
     Sound.beep();
     Sound.beep();
 
-    localizeForward(tunnelTheta, false);
+    localizeForward(tunnelTheta, false, island);
 
 
     // TODO: ensure robot stays within island
@@ -109,8 +122,8 @@ public class Main {
     Launcher.launch();
     computeTunnelCoordinates(tunnel);
     Navigation.travelTo(tunnelStartX, tunnelStartY);
-    Navigation.turnTo(tunnelTheta);
-    localizeForward(tunnelTheta, true);
+    Navigation.turnTo(Math.toRadians(tunnelTheta));
+    localizeForward(tunnelTheta, true, island);
     Navigation.travelTo(startIsland.ll.x, startIsland.ll.y);
 
     /*
@@ -158,9 +171,31 @@ public class Main {
    * 
    * @param angle
    */
-  public static void localizeForward(double angle, boolean backup) {
+  public static void localizeForward(double angle, boolean backup, Region region) {
     LightLocalizer lightLocalize = new LightLocalizer();
     lightLocalize.localizeForward(angle, backup);
+  }
+
+  public static boolean checkOutOfBounds(double angle, Region region) {
+    double x = odometer.getXYT()[0];
+    double y = odometer.getXYT()[1];
+    if (angle > 340 && angle < 20) {
+      if (y +TILE_SIZE/2 > region.ur.y * TILE_SIZE)
+        return true;
+    }
+    else if (angle < 110 && angle > 70) {
+      if (x + TILE_SIZE/2 > region.ur.x * TILE_SIZE)
+        return true;
+    }
+    else if (angle < 200 && angle > 160) {
+      if (y - TILE_SIZE/2 > region.ll.y * TILE_SIZE)
+        return true;
+    }
+    else if (angle < 290 && angle > 250) {
+      if (x - TILE_SIZE/2 > region.ll.x * TILE_SIZE)
+        return true;
+    }
+    return false;
   }
 
   /**

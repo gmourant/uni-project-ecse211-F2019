@@ -146,10 +146,10 @@ public class LightLocalizer {
   public void localizeForward(double angle, boolean backup) {
     leftMotor.stop(true);
     rightMotor.stop(false);
-    leftMotor.setSpeed(ROTATE_SPEED);
-    rightMotor.setSpeed(ROTATE_SPEED);
+    leftMotor.setSpeed(MOTOR_NORMAL);
+    rightMotor.setSpeed(MOTOR_NORMAL);
     
-    sleep(300);
+    sleep(100);
     
     // move robot forward until one sensor sees a line
     leftMotor.forward();
@@ -164,6 +164,9 @@ public class LightLocalizer {
     
     leftMotor.setSpeed(MOTOR_NORMAL);
     rightMotor.setSpeed(MOTOR_NORMAL);
+    sleep(100);
+    leftMotor.rotate(convertDistance(-offSet), true);
+    rightMotor.rotate(convertDistance(-offSet), false);
   }
 
   /**

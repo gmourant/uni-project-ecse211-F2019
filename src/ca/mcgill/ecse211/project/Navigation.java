@@ -103,17 +103,20 @@ public class Navigation {
 
     // Calculate absolute trajectory
 
-    leftMotor.setSpeed(FORWARD_SPEED);
-    rightMotor.setSpeed(FORWARD_SPEED);
+
     double distance = Math.hypot(dx, dy);
-    if (distance - r > 0) {
+    if (distance - r >= 0) {
       turnTo(angle);
+      leftMotor.setSpeed(FORWARD_SPEED);
+      rightMotor.setSpeed(FORWARD_SPEED);
       sleep(50);
       leftMotor.rotate(convertDistance(distance - r), true);
       rightMotor.rotate(convertDistance(distance - r), false);
     }
     else {
-      turnTo(-angle);
+      turnTo(angle + Math.toRadians(180));
+      leftMotor.setSpeed(FORWARD_SPEED);
+      rightMotor.setSpeed(FORWARD_SPEED);
       sleep(50);
       leftMotor.rotate(convertDistance(Math.abs(distance - r)), true);
       rightMotor.rotate(convertDistance(Math.abs(distance -r)), false);
@@ -173,6 +176,23 @@ public class Navigation {
       rightMotor.rotate(-convertAngle(angle), false);
     }
     sleep(50);
+  }
+  
+  public static void goMid(boolean back) {
+    leftMotor.stop(true);
+    rightMotor.stop(false);
+    leftMotor.setSpeed(FORWARD_SPEED);
+    rightMotor.setSpeed(FORWARD_SPEED);
+    sleep(100);
+    if (back == true) {
+      leftMotor.rotate(convertDistance(-TILE_SIZE/2),true);
+      rightMotor.rotate(convertDistance(-TILE_SIZE/2),false);
+    }
+    else {
+      leftMotor.rotate(convertDistance(TILE_SIZE/2),true);
+      rightMotor.rotate(convertDistance(TILE_SIZE/2),false);
+    }
+
   }
 
   /**

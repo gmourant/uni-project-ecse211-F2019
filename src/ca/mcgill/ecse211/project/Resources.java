@@ -1,6 +1,7 @@
 package ca.mcgill.ecse211.project;
 
 import ca.mcgill.ecse211.wificlient.WifiConnection;
+
 import lejos.hardware.ev3.LocalEV3;
 import lejos.hardware.lcd.TextLCD;
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
@@ -33,7 +34,7 @@ public class Resources {
    * The IP address of the server that transmits data to the robot. Set this to the default for the beta demo and
    * competition.
    */
-  public static final String SERVER_IP = "192.168.2.7";
+  public static final String SERVER_IP = "192.168.2.17";
   // 192.168.2.29
   // steven's pc: 192.168.2.45
   // david's pc: 192.168.2.63
@@ -89,7 +90,7 @@ public class Resources {
   /**
    * The wheel radius in centimeters.
    */
-  public static final double WHEEL_RAD = 2.08;
+  public static final double WHEEL_RAD = 2.13;
 
   /**
    * The robot width in centimeters.
@@ -99,7 +100,7 @@ public class Resources {
 
 
   // wheel end to wheel end
-  public static final double TRACK = 13.75;
+  public static final double TRACK = 13.35;
 
   // wheel center to wheel center
   // public static final double TRACK2 = 13.6;
@@ -239,7 +240,7 @@ public class Resources {
    */
   public static Region red = new Region("Red_LL_x", "Red_LL_y", "Red_UR_x", "Red_UR_y");
 
-  /**
+  /** 
    * The Green Zone.
    */
   public static Region green = new Region("Green_LL_x", "Green_LL_y", "Green_UR_x", "Green_UR_y");
