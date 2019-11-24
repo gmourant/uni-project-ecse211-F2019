@@ -27,9 +27,8 @@ public class Resources {
   /**
    * The default server IP used by the profs and TA's.
    */
-  public static final String DEFAULT_SERVER_IP =  "192.168.2.3";
-  // 192.168.2.3
-  // 192.168.2.53
+  public static final String DEFAULT_SERVER_IP = "192.168.2.3";
+
   /**
    * The IP address of the server that transmits data to the robot. Set this to the default for the beta demo and
    * competition.
@@ -75,7 +74,7 @@ public class Resources {
   /**
    * Offset from the wall (cm).
    */
-  public static final int BAND_CENTER = 25;
+  public static final int BAND_CENTER = 20;
 
   /**
    * threshold range.
@@ -83,9 +82,19 @@ public class Resources {
   public static final double THRESHOLD_RANGE = 7.5;
 
   /**
+   * theshold after which an obstacle is detected
+   */
+  public static final double THRESHOLD = 25.0;
+
+  /**
+   * the maximum angle the sensor motor can turn in degrees.
+   */
+  public static final double US_MOTOR_LIMIT = 75.0;
+
+  /**
    * Width of dead band (cm).
    */
-  public static final int BAND_WIDTH = 5;
+  public static final int BAND_WIDTH = 10;
 
   /**
    * The wheel radius in centimeters.
@@ -96,14 +105,15 @@ public class Resources {
    * The robot width in centimeters.
    */
   // public static final double TRACK = 11.45;
-  // public static final double TRACK = 9.85;
-
+//  public static final double TRACK = 9.85;
+  
 
   // wheel end to wheel end
   public static final double TRACK = 13.35;
 
   // wheel center to wheel center
-  // public static final double TRACK2 = 13.6;
+  //public static final double TRACK2 = 13.6;
+
 
 
 
@@ -114,7 +124,8 @@ public class Resources {
   /**
    * Speed of slower rotating wheel (deg/sec).
    */
-  public static final int MOTOR_LOW = 75;
+//  public static final int MOTOR_LOW = 75;
+  public static final int MOTOR_LOW = 110;
 
 
   /**
@@ -165,8 +176,8 @@ public class Resources {
   /**
    * Motor for ultrasonic sensor sweeping.
    */
-  public static final EV3LargeRegulatedMotor usMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("B"));
-
+  public static final EV3MediumRegulatedMotor usMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("B"));
+  
   /**
    * The ultrasonic sensor.
    */
@@ -240,7 +251,7 @@ public class Resources {
    */
   public static Region red = new Region("Red_LL_x", "Red_LL_y", "Red_UR_x", "Red_UR_y");
 
-  /** 
+  /**
    * The Green Zone.
    */
   public static Region green = new Region("Green_LL_x", "Green_LL_y", "Green_UR_x", "Green_UR_y");
@@ -261,7 +272,7 @@ public class Resources {
   public static Region tng = new Region("TNG_LL_x", "TNG_LL_y", "TNG_UR_x", "TNG_UR_y");
 
   /**
-   * The location of the red target bin.
+   * The location of the target bin.
    */
   public static Point redBin = new Point(get("Red_BIN_x"), get("Red_BIN_y"));
 
@@ -292,7 +303,7 @@ public class Resources {
        * message saying an invalid team number was specified and getData() will throw an exception letting you know.
        */
       wifiParameters = conn.getData();
-      
+
       notGotWifi = false;
     } catch (Exception e) {
       LCD.clear();

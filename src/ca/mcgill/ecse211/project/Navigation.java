@@ -2,6 +2,8 @@ package ca.mcgill.ecse211.project;
 
 import static ca.mcgill.ecse211.project.Resources.*;
 import lejos.utility.Delay;;
+import static ca.mcgill.ecse211.project.Resources.*;
+import lejos.hardware.Sound;
 
 /**
  * Navigates the robot depending on given coordinates avoids obstacles and resumes navigation
@@ -15,16 +17,16 @@ import lejos.utility.Delay;;
 
 public class Navigation {
 
-  /**
-   * tells us whether an obstacle was detected
-   */
+   /**
+    * tells us whether an obstacle was detected
+    */
   public static boolean obstacleDetected = true;
-
+  
   /**
    * the current x position of the robot
    */
   public static double currentX;
-
+  
   /**
    * the current y position of the robot
    */
@@ -70,6 +72,25 @@ public class Navigation {
     rightMotor.setSpeed(FORWARD_SPEED);
     leftMotor.rotate(convertDistance(distance), true);
     rightMotor.rotate(convertDistance(distance), false);
+
+    // continuously check for obstacles
+    do {
+      if (ObstacleAvoidance.checkForObstacle())
+      {
+        // stop moving
+        leftMotor.stop(true);
+        rightMotor.stop(false);
+        Sound.beepSequenceUp();
+//        obstacleDetected = true;
+      }
+    } while (leftMotor.isMoving() || rightMotor.isMoving());
+
+    if (ObstacleAvoidance.obstacleDetected)
+    {
+      ObstacleAvoidance.avoidObstacle(currentX, currentY);
+      travelTo(currentX, currentY);
+    }
+
   }
 
   /**
@@ -131,7 +152,7 @@ public class Navigation {
 
   /**
    * finds the ideal launch position to launch a projectile r distance away from given point
-   * 
+   *
    * @param x coordinates of x
    * @param y coordinates of y
    * @param r radius of position
@@ -177,7 +198,7 @@ public class Navigation {
     }
     sleep(50);
   }
-  
+
   public static void goMid(boolean back) {
     leftMotor.stop(true);
     rightMotor.stop(false);
