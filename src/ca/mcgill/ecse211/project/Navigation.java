@@ -186,8 +186,8 @@ public class Navigation {
  public static double[] alternateLaunchPosition(Point bin, double r, double[] lp) {
    double theta = odometer.getXYT()[2];
    // move clockwise along the circle
-   double dummy_x = bin.x + DUMMY_DISTANCE*Math.sin(theta);
-   double dummy_y = bin.y + DUMMY_DISTANCE*Math.cos(theta);
+   double dummy_x = bin.x*TILE_SIZE + DUMMY_DISTANCE*Math.sin(Math.toRadians(theta));
+   double dummy_y = bin.y*TILE_SIZE + DUMMY_DISTANCE*Math.cos(Math.toRadians(theta));
 
    lp = launchPosition(bin.x, bin.y, RADIUS, dummy_x, dummy_y);
 

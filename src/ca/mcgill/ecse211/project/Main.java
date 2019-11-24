@@ -65,7 +65,12 @@ public class Main {
     Sound.beep();
     Sound.beep();
     Sound.beep();
+    
+    navigateToLaunchPosition(bin);
 
+    Sound.beep();
+    Sound.beep();
+    Sound.beep();
     // compute tunnel coordinates
     computeTunnelCoordinates(tunnel);
     // Navigation.travelTo(2, 2);
@@ -219,7 +224,7 @@ public class Main {
    * @return true if point lies within the defined region, else false
    */
   public static boolean validPoint(double x, double y, double ll_x, double ll_y, double ur_x, double ur_y) {
-    return (x>ll_x && x<ur_x && y>ll_y && y<ur_y);
+    return (x>ll_x*TILE_SIZE && x<ur_x*TILE_SIZE && y>ll_y*TILE_SIZE && y<ur_y*TILE_SIZE);
   }
 
   public static boolean checkOutOfBounds(double angle, Region region) {
