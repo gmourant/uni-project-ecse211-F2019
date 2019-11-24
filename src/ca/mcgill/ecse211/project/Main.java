@@ -65,12 +65,6 @@ public class Main {
     Sound.beep();
     Sound.beep();
     Sound.beep();
-    
-    navigateToLaunchPosition(bin);
-
-    Sound.beep();
-    Sound.beep();
-    Sound.beep();
     // compute tunnel coordinates
     computeTunnelCoordinates(tunnel);
     // Navigation.travelTo(2, 2);
@@ -194,9 +188,17 @@ public class Main {
     double[] pos = odometer.getXYT();
     double[] lp = Navigation.launchPosition(bin.x, bin.y, RADIUS, pos[0], pos[1]);
     if(!validPoint(lp[0], lp[1], island.ll.x, island.ll.y, island.ur.x, island.ur.y)) {
+    	System.out.println("computing to alternate position now...");
       lp = navigateToAlternateLaunchPosition(lp, bin);
     }
-    Navigation.travelTo(lp[0], lp[1]);
+    System.out.println("*****************");
+    System.out.println("dpm");
+    System.out.println("X_lp:   "+lp[0]);
+    System.out.println("Y_lp:   "+lp[1]);
+
+    Navigation.travelTo(lp[0] / TILE_SIZE, lp[1] / TILE_SIZE);
+    // turn to TODO
+    
   }
 
   /**
@@ -207,6 +209,7 @@ public class Main {
    */
   public static double[] navigateToAlternateLaunchPosition(double[] lp, Point bin) {
     while(!validPoint(lp[0], lp[1], island.ll.x, island.ll.y, island.ur.x, island.ur.y)) {
+      System.out.println("inside loop: " + lp[0] + " " + lp[1]);
       lp = Navigation.alternateLaunchPosition(bin, RADIUS, lp);
     }
     return lp;

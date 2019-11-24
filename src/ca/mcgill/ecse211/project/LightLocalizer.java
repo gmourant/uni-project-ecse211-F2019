@@ -70,7 +70,7 @@ public class LightLocalizer {
   public boolean rightCorrectionTrigger() {
     rightLight.fetchSample(rightLightData, 0);
     rightLightValue = (int) (rightLightData[0] * 1000);
-
+    System.out.println(rightLightValue);
     if (oldRightLightValue - rightLightValue > LIGHTSENSOR_DELTA) {
       leftMotor.stop(true);
       rightMotor.stop(false);

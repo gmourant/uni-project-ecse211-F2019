@@ -157,22 +157,22 @@ public class Navigation {
    * @param r radius of position
    */
   public static double[] launchPosition(double x, double y, double r, double curr_x, double curr_y) {
-    x = x * TILE_SIZE;
-    y = y * TILE_SIZE;
-    double dx = x - curr_x;
-    double dy = y - curr_y;
-    // Calculate desired angle to turn to in relation to current angle
-    double angle = Math.atan2(dx, dy);
-    // Calculate absolute trajectory
-    leftMotor.setSpeed(FORWARD_SPEED);
-    rightMotor.setSpeed(FORWARD_SPEED);
-    double[] pos = new double[2];
-    pos[0] = odometer.getXYT()[0] - RADIUS * Math.sin(angle);
-    pos[1] = odometer.getXYT()[1] - RADIUS * Math.cos(angle);
-    LCD.drawString("PX: " + pos[0] , 0, 5);
-    LCD.drawString("PY: " + pos[1], 0, 6);
-    return pos;
-  }
+	    x = x * TILE_SIZE;
+	    y = y * TILE_SIZE;
+	    double dx = x - curr_x;
+	    double dy = y - curr_y;
+	    // Calculate desired angle to turn to in relation to current angle
+	    double angle = Math.atan2(dx, dy);
+	    // Calculate desired distance to be covered
+	    double distance = Math.hypot(dx, dy) - r;
+	    // Calculate absolute trajectory
+	    leftMotor.setSpeed(FORWARD_SPEED);
+	    rightMotor.setSpeed(FORWARD_SPEED);
+	    double[] pos = new double[2];
+	    pos[0] = curr_x + distance * Math.sin(angle);
+	    pos[1] = curr_y + distance * Math.cos(angle);
+	    return pos;
+	  }
 
   /**
    * finds an alternate launch position to launch a projectile r distance away from given point. This is required
@@ -183,11 +183,20 @@ public class Navigation {
    * @param lp previously computed launch point
    * @return
    */
- public static double[] alternateLaunchPosition(Point bin, double r, double[] lp) {
-   double theta = odometer.getXYT()[2];
+static double dummy_x = odometer.getXYT()[0];
+static double dummy_y = odometer.getXYT()[1];
+ public static double[] alternateLaunchPosition(Point bin, double r, double[] lp) {   
+   double x = bin.x * TILE_SIZE;
+   double y = bin.y * TILE_SIZE;
+   
+   double dx = x - dummy_x;
+   double dy = y - dummy_y;
+   
+   double angle = Math.atan2(dx, dy)+90;
+   
    // move clockwise along the circle
-   double dummy_x = bin.x*TILE_SIZE + DUMMY_DISTANCE*Math.sin(Math.toRadians(theta));
-   double dummy_y = bin.y*TILE_SIZE + DUMMY_DISTANCE*Math.cos(Math.toRadians(theta));
+   dummy_x += DUMMY_DISTANCE*Math.sin(angle);
+   dummy_y += DUMMY_DISTANCE*Math.cos(angle);
 
    lp = launchPosition(bin.x, bin.y, RADIUS, dummy_x, dummy_y);
 
