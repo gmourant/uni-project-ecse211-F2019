@@ -7,7 +7,7 @@ import lejos.hardware.Sound;
 /**
  * 
  * 
- * @author Hassan, Aarkash, Steven
+ * @author Hassan, Aakarsh, Steven
  *
  */
 public class ObstacleAvoidance {
