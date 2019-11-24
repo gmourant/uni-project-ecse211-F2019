@@ -69,7 +69,7 @@ public class Resources {
   /**
    * Offset from the wall (cm).
    */
-  public static final int BAND_CENTER = 25;
+  public static final int BAND_CENTER = 20;
 
   /**
    * threshold range.
@@ -77,9 +77,19 @@ public class Resources {
   public static final double THRESHOLD_RANGE = 7.5;
 
   /**
+   * theshold after which an obstacle is detected
+   */
+  public static final double THRESHOLD = 25.0; 
+  
+  /**
+   * the maximum angle the sensor motor can turn in degrees.
+   */
+  public static final double US_MOTOR_LIMIT = 75.0;
+  
+  /**
    * Width of dead band (cm).
    */
-  public static final int BAND_WIDTH = 5;
+  public static final int BAND_WIDTH = 10;
 
   /**
    * The wheel radius in centimeters.
@@ -109,7 +119,8 @@ public class Resources {
   /**
    * Speed of slower rotating wheel (deg/sec).
    */
-  public static final int MOTOR_LOW = 75;
+//  public static final int MOTOR_LOW = 75;
+  public static final int MOTOR_LOW = 110;
 
 
   /**
@@ -120,7 +131,9 @@ public class Resources {
   /**
    * Speed of the faster rotating wheel (deg/sec).
    */
-  public static final int MOTOR_HIGH = 205;
+//  public static final int MOTOR_HIGH = 205;
+  
+  public static final int MOTOR_HIGH = 160;
 
   /**
    * The speed at which the robot rotates in degrees per second.
@@ -155,12 +168,12 @@ public class Resources {
   /**
    * The launcher motor.
    */
-  public static final EV3LargeRegulatedMotor launchMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("C"));
+//  public static final EV3LargeRegulatedMotor launchMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("C"));
 
   /**
    * Motor for ultrasonic sensor sweeping.
    */
-  public static final EV3LargeRegulatedMotor usMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("B"));
+  public static final EV3LargeRegulatedMotor usMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("C"));
   
   /**
    * The ultrasonic sensor.
@@ -169,8 +182,8 @@ public class Resources {
   /**
    * The color sensor.
    */
-  public static final EV3ColorSensor rightColorSensor = new EV3ColorSensor(SensorPort.S4);
-  public static final EV3ColorSensor leftColorSensor = new EV3ColorSensor(SensorPort.S1);
+//  public static final EV3ColorSensor rightColorSensor = new EV3ColorSensor(SensorPort.S4);
+//  public static final EV3ColorSensor leftColorSensor = new EV3ColorSensor(SensorPort.S1);
 
 
   /**

@@ -1,6 +1,7 @@
 package ca.mcgill.ecse211.project;
 
-import static ca.mcgill.ecse211.project.Resources.*;;
+import static ca.mcgill.ecse211.project.Resources.*;
+import lejos.hardware.Sound;
 
 /**
  * Navigates the robot depending on given coordinates avoids obstacles and resumes navigation
@@ -48,7 +49,7 @@ public class Navigation {
     currentY = y;
     leftMotor.stop();
     rightMotor.stop();
-    launchMotor.stop();
+//    launchMotor.stop();
     leftMotor.setAcceleration(ACCELERATION);
     rightMotor.setAcceleration(ACCELERATION);
 
@@ -69,6 +70,25 @@ public class Navigation {
     rightMotor.setSpeed(FORWARD_SPEED);
     leftMotor.rotate(convertDistance(distance), true);
     rightMotor.rotate(convertDistance(distance), true);
+    
+    // continuously check for obstacles
+    do {
+      if (ObstacleAvoidance.checkForObstacle())
+      {
+        // stop moving
+        leftMotor.stop(true);
+        rightMotor.stop(false);
+        Sound.beepSequenceUp();
+//        obstacleDetected = true;
+      }
+    } while (leftMotor.isMoving() || rightMotor.isMoving());
+    
+    if (ObstacleAvoidance.obstacleDetected)
+    {
+      ObstacleAvoidance.avoidObstacle(currentX, currentY);
+      travelTo(currentX, currentY);
+    }
+    
   }
 
   /**
@@ -85,7 +105,7 @@ public class Navigation {
     currentY = y;
     leftMotor.stop();
     rightMotor.stop();
-    launchMotor.stop();
+//    launchMotor.stop();
     leftMotor.setAcceleration(ACCELERATION);
     rightMotor.setAcceleration(ACCELERATION);
 
