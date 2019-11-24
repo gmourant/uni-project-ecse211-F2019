@@ -192,8 +192,19 @@ public class Main {
     }
 
     Navigation.travelTo(lp[0]/TILE_SIZE, lp[1]/TILE_SIZE);
-    // turn to TODO
-    
+    Navigation.turnTo(findAngle(odometer.getXYT()[0], odometer.getXYT()[1], bin.x, bin.y));    
+  }
+  
+  /**
+   * Computes the angle between any 2 given points
+   * @param curr_x current x position of the robot
+   * @param curr_y current y position of the robot
+   * @param x final x position
+   * @param y final y position
+   * @return angle between the 2 points
+   */
+  public static double findAngle(double curr_x, double curr_y, double x, double y) {
+    return Math.atan2(x-curr_x, y-curr_y);
   }
 
   /**
