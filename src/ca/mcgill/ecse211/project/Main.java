@@ -118,7 +118,7 @@ public class Main {
     // Navigation.travelTo(bin.x, bin.y, RADIUS);
     // Navigation.travelTo(bin.x, bin.y);
     // Navigation.turnTo(Math.toRadians(tnr.ur.x));
-    navigateToLaunchPosition();
+    navigateToLaunchPosition(bin);
 
     Sound.beep();
     Sound.beep();
@@ -185,11 +185,11 @@ public class Main {
   /**
    * Computes launch point for the robot and navigates to it
    */
-  public static void navigateToLaunchPosition() {
+  public static void navigateToLaunchPosition(Point bin) {
     double[] pos = odometer.getXYT();
     double[] lp = Navigation.launchPosition(bin.x, bin.y, RADIUS, pos[0], pos[1]);
     if(!validPoint(lp[0], lp[1], island.ll.x, island.ll.y, island.ur.x, island.ur.y)) {
-      lp = navigateToAlternateLaunchPosition(lp);
+      lp = navigateToAlternateLaunchPosition(lp, bin);
     }
     Navigation.travelTo(lp[0], lp[1]);
   }
@@ -200,9 +200,9 @@ public class Main {
    *
    * @param lp current launch position
    */
-  public static double[] navigateToAlternateLaunchPosition(double[] lp) {
+  public static double[] navigateToAlternateLaunchPosition(double[] lp, Point bin) {
     while(!validPoint(lp[0], lp[1], island.ll.x, island.ll.y, island.ur.x, island.ur.y)) {
-      lp = Navigation.alternateLaunchPosition(bin.x, bin.y, RADIUS, lp);
+      lp = Navigation.alternateLaunchPosition(bin, RADIUS, lp);
     }
     return lp;
   }

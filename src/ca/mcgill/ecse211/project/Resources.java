@@ -5,6 +5,7 @@ import ca.mcgill.ecse211.wificlient.WifiConnection;
 import lejos.hardware.ev3.LocalEV3;
 import lejos.hardware.lcd.TextLCD;
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
+import lejos.hardware.motor.EV3MediumRegulatedMotor;
 import lejos.hardware.port.SensorPort;
 import lejos.hardware.sensor.EV3ColorSensor;
 import lejos.hardware.sensor.EV3UltrasonicSensor;
@@ -181,7 +182,7 @@ public class Resources {
   /**
    * Motor for ultrasonic sensor sweeping.
    */
-  public static final EV3MediumRegulatedMotor usMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("B"));
+  public static final EV3MediumRegulatedMotor usMotor = new EV3MediumRegulatedMotor(LocalEV3.get().getPort("B"));
   
   /**
    * The ultrasonic sensor.

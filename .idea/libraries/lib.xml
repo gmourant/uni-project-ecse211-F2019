@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="lib">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/ev3classes.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/EV3WiFiClient.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/checkstyle-8.24-all.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

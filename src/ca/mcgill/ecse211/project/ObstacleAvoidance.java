@@ -95,20 +95,11 @@ public class ObstacleAvoidance {
 
   }
 
-  // helper method that checks if the path that will be taken is legal.
-  // i.e. does not exit the legal playing ground.
-  // specific for takeRightPath() and takeLeftPath()
-  //  private static boolean isMoveLegal() {
-  //    // check if first travelled point exits
-  //    // check if second point exits
-  //    
-  //    double currentAngle = Math.toRadians(odometer.getXYT()[2]);
-  //    double x1 = odometer.getXYT()[0] + Math.cos(currentAngle + 90)) *  TILE_SIZE;
-  //    double x2 = odometer.getXYT()[0] + Math.sin(currentAngle + 90)) *  TILE_SIZE;
-  //    return false;
-  //  }
-  //  
-  //  
+  /**
+   * 
+   * @param currentX
+   * @param currentY
+   */
   private static void bangbangAvoid(double currentX, double currentY) {
     // set wheels perpendicular from obstacle
     leftMotor.stop();
