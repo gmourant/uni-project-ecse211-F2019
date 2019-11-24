@@ -157,6 +157,11 @@ public class Resources {
   public static final int TIMEOUT_PERIOD = 3000;
 
   public static final int FILTER_OUT = 30;
+  
+  /**
+   * Dummy distance factor to compute alternative launch points
+   */
+  public static final double DUMMY_DISTANCE = 10;
 
   /**
    * The left motor.

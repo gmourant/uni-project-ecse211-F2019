@@ -38,7 +38,7 @@ public class Main {
     }
     System.out.println("Map:\n" + wifiParameters);
     LCD.clear();
-    new Thread(new Display()).start(); // TODO Comment out when presenting
+    //new Thread(new Display()).start(); // TODO Comment out when presenting
     Region tunnel = tng;
     Region startIsland = green;
     Point bin = greenBin;
@@ -95,7 +95,7 @@ public class Main {
 
     /*
      * 4.Each machine localizes to the grid. When completed, the machine must stop and issue a sequence of 3 beeps.
-     * 
+     *
      */
 
     Sound.beep();
@@ -107,12 +107,18 @@ public class Main {
 
     // TODO: ensure robot stays within island
     // calculate and move to launch point
-    Navigation.travelTo(bin.x, bin.y, RADIUS);
+    //Navigation.travelTo(bin.x, bin.y, RADIUS);
 
     /*
      * 5.Each machine navigates to their corresponding tunnel, transits, and then proceeds to their launch point. Upon
      * arriving, each machine will again stop and issue a sequence of 3 beeps.
      */
+
+    // Navigation.launchPosition(bin.x, bin.y, RADIUS);
+    // Navigation.travelTo(bin.x, bin.y, RADIUS);
+    // Navigation.travelTo(bin.x, bin.y);
+    // Navigation.turnTo(Math.toRadians(tnr.ur.x));
+    navigateToLaunchPosition();
 
     Sound.beep();
     Sound.beep();
@@ -174,6 +180,46 @@ public class Main {
   public static void localizeForward(double angle, boolean backup, Region region) {
     LightLocalizer lightLocalize = new LightLocalizer();
     lightLocalize.localizeForward(angle, backup);
+  }
+
+  /**
+   * Computes launch point for the robot and navigates to it
+   */
+  public static void navigateToLaunchPosition() {
+    double[] pos = odometer.getXYT();
+    double[] lp = Navigation.launchPosition(bin.x, bin.y, RADIUS, pos[0], pos[1]);
+    if(!validPoint(lp[0], lp[1], island.ll.x, island.ll.y, island.ur.x, island.ur.y)) {
+      lp = navigateToAlternateLaunchPosition(lp);
+    }
+    Navigation.travelTo(lp[0], lp[1]);
+  }
+
+  /**
+   * In case the original launch position computed is not within the island, we compute alternative
+   * launch positions. We do this by simply moving clockwise on the circle of radius RADIUS around the bin
+   *
+   * @param lp current launch position
+   */
+  public static double[] navigateToAlternateLaunchPosition(double[] lp) {
+    while(!validPoint(lp[0], lp[1], island.ll.x, island.ll.y, island.ur.x, island.ur.y)) {
+      lp = Navigation.alternateLaunchPosition(bin.x, bin.y, RADIUS, lp);
+    }
+    return lp;
+  }
+
+  /**
+   * Computes whether given point (x,y) lies within the defined region
+   *
+   * @param x defines the given point
+   * @param y defines the given point
+   * @param ll_x lower left point for the defined region
+   * @param ll_y lower left point for the defined region
+   * @param ur_x upper right point for the defined region
+   * @param ur_y upper right point for the defined region
+   * @return true if point lies within the defined region, else false
+   */
+  public static boolean validPoint(double x, double y, double ll_x, double ll_y, double ur_x, double ur_y) {
+    return (x>ll_x && x<ur_x && y>ll_y && y<ur_y);
   }
 
   public static boolean checkOutOfBounds(double angle, Region region) {
