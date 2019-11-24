@@ -139,7 +139,8 @@ public class Main {
    * Computes launch point for the robot and navigates to it
    */
   public static void navigateToLaunchPosition() {
-    double[] lp = Navigation.launchPosition(bin.x, bin.y, RADIUS);
+    double[] pos = odometer.getXYT();
+    double[] lp = Navigation.launchPosition(bin.x, bin.y, RADIUS, pos[0], pos[1]);
     if(!validPoint(lp[0], lp[1], island.ll.x, island.ll.y, island.ur.x, island.ur.y)) {
       lp = navigateToAlternateLaunchPosition(lp);
     }

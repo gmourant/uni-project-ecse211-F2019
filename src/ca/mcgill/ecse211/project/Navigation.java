@@ -117,11 +117,11 @@ public class Navigation {
    * @param y coordinates of y
    * @param r radius of position
    */
-  public static double[] launchPosition(double x, double y, double r) {
+  public static double[] launchPosition(double x, double y, double r, double curr_x, double curr_y) {
     x = x * TILE_SIZE;
     y = y * TILE_SIZE;
-    double dx = x - odometer.getXYT()[0];
-    double dy = y - odometer.getXYT()[1];
+    double dx = x - curr_x;
+    double dy = y - curr_y;
     // Calculate desired angle to turn to in relation to current angle
     double angle = Math.atan2(dx, dy);
     // Calculate absolute trajectory
@@ -136,34 +136,12 @@ public class Navigation {
   }
   
   /**
-  * finds the ideal launch position to launch a projectile r distance away from given point
-  * @param x coordinates of x
-  * @param y coordinates of y
-  * @param r radius of position
-  */
- public static double[] launchPosition(double x, double y, double r, double curr_x, double curr_y) {
-   x = x * TILE_SIZE;
-   y = y * TILE_SIZE;
-   double dx = x - curr_x;
-   double dy = y - curr_y;
-   // Calculate desired angle to turn to in relation to current angle
-   double angle = Math.atan2(dx, dy);
-   // Calculate absolute trajectory
-   leftMotor.setSpeed(FORWARD_SPEED);
-   rightMotor.setSpeed(FORWARD_SPEED);
-   double[] pos = new double[2];
-   pos[0] = odometer.getXYT()[0] - RADIUS * Math.sin(angle);
-   pos[1] = odometer.getXYT()[1] - RADIUS * Math.cos(angle);
-   LCD.drawString("PX: " + pos[0] , 0, 5);
-   LCD.drawString("PY: " + pos[1], 0, 6);
-   return pos;
- }
-  
-  /**
-   * 
-   * @param x
-   * @param y
-   * @param r
+   * finds an alternate launch position to launch a projectile r distance away from given point. This is required
+   * in case the previously computed ideal launch point is not on the island.
+   * @param x coordinates of x
+   * @param y coordinates of y
+   * @param r radius of position
+   * @param lp previously computed launch point
    * @return
    */
  public static double[] alternateLaunchPosition(double x, double y, double r, double[] lp) {
