@@ -77,19 +77,18 @@ public class ObstacleAvoidance {
     // TODO: Try deciding to go where there is the smaller angle
     // HARD CODED AVOIDANCE
     // might replace with bangbang control
-    if (rightIsSafe && (Math.abs(rightAngle) < Math.abs(leftAngle))
-        && Main.validPoint(odometer.getXYT()[0] + (TILE_SIZE + TRACK/2)*Math.cos(Math.toRadians(odometer.getXYT()[2]+90)),
-            odometer.getXYT()[1] + (TILE_SIZE + TRACK/2)*Math.sin(Math.toRadians(odometer.getXYT()[2]+90)),
-            Resources.island)) {
-      takeRightPath();
+    double x_left = odometer.getXYT()[0] + (TILE_SIZE + TRACK/2)*Math.cos(Math.toRadians(odometer.getXYT()[2]-90));
+    double y_left = odometer.getXYT()[1] + (TILE_SIZE + TRACK/2)*Math.sin(Math.toRadians(odometer.getXYT()[2]-90));
+    double x_right = odometer.getXYT()[0] + (TILE_SIZE + TRACK/2)*Math.cos(Math.toRadians(odometer.getXYT()[2]+90));
+    double y_right = odometer.getXYT()[1] + (TILE_SIZE + TRACK/2)*Math.sin(Math.toRadians(odometer.getXYT()[2]+90));
+    if(!Main.validPoint(x_right, y_right, Resources.island)) rightIsSafe = false;
+    if(!Main.validPoint(x_left, y_left, Resources.island)) leftIsSafe = false;
+    if (rightIsSafe && (Math.abs(rightAngle) < Math.abs(leftAngle))) {
+      takeRightPath(x_right, y_right);
     }
     
-    else if (leftIsSafe && (Math.abs(leftAngle) < Math.abs(rightAngle))
-        && Main.validPoint(odometer.getXYT()[0] + (TILE_SIZE + TRACK/2)*Math.cos(Math.toRadians(odometer.getXYT()[2]-90)),
-            odometer.getXYT()[1] + (TILE_SIZE + TRACK/2)*Math.sin(Math.toRadians(odometer.getXYT()[2]-90)),
-            Resources.island))
-    {
-      takeLeftPath();
+    else if (leftIsSafe && (Math.abs(leftAngle) < Math.abs(rightAngle))) {
+      takeLeftPath(x_left, y_left);
     }
     else {
       // probs never gonna get there
@@ -225,12 +224,13 @@ public class ObstacleAvoidance {
   }
 
 
-  private static void takeRightPath() {
+  private static void takeRightPath(double x, double y) {
     // make a 90 degree turn to the Right (clockwise)
     Navigation.turnTo(Math.toRadians(odometer.getXYT()[2] + 90));
     // move forward obstacle size
     rightMotor.rotate(Navigation.convertDistance(TILE_SIZE), true);
     leftMotor.rotate(Navigation.convertDistance(TILE_SIZE), false);
+//    Navigation.travelTo(x,y);
     // rotate back to original orientation
     Navigation.turnTo(Math.toRadians(odometer.getXYT()[2] - 90));
 
@@ -239,7 +239,7 @@ public class ObstacleAvoidance {
 
   }
 
-  private static void takeLeftPath() {
+  private static void takeLeftPath(double x, double y) {
     // make a 90 degree turn to the left (counter-clockwise)
     Navigation.turnTo((odometer.getXYT()[2] - 90) * Math.PI / 180);
     // move forward obstacle size
