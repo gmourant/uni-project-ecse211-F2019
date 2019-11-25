@@ -1,7 +1,7 @@
 package ca.mcgill.ecse211.project;
 
 import static ca.mcgill.ecse211.project.Resources.*;
-
+import java.awt.geom.Point2D;
 import lejos.hardware.Sound;
 
 /**
@@ -80,21 +80,23 @@ public class ObstacleAvoidance {
     // TODO: Try deciding to go where there is the smaller angle
     // HARD CODED AVOIDANCE
     // might replace with bangbang control
-    double x_left = odometer.getXYT()[0] + (TILE_SIZE + TRACK/2)*Math.cos(Math.toRadians(odometer.getXYT()[2]-90));
-    double y_left = odometer.getXYT()[1] + (TILE_SIZE + TRACK/2)*Math.sin(Math.toRadians(odometer.getXYT()[2]-90));
-    double x_right = odometer.getXYT()[0] + (TILE_SIZE + TRACK/2)*Math.cos(Math.toRadians(odometer.getXYT()[2]+90));
-    double y_right = odometer.getXYT()[1] + (TILE_SIZE + TRACK/2)*Math.sin(Math.toRadians(odometer.getXYT()[2]+90));
-    if(!Main.validPoint(x_right, y_right, Resources.island)) rightIsSafe = false;
-    if(!Main.validPoint(x_left, y_left, Resources.island)) leftIsSafe = false;
+    Point2D.Double left = calcDisplacementPoint(TILE_SIZE + TRACK/2, -90);
+    Point2D.Double right = calcDisplacementPoint(TILE_SIZE + TRACK/2, 90);
+    if(!Main.validPoint(right.x, right.y, Resources.island)) rightIsSafe = false;
+    if(!Main.validPoint(left.x, left.y, Resources.island)) leftIsSafe = false;
     if (rightIsSafe && (Math.abs(rightAngle) < Math.abs(leftAngle))) {
-      takeRightPath(x_right, y_right);
+      takeRightPath(right);
     }
     
     else if (leftIsSafe && (Math.abs(leftAngle) < Math.abs(rightAngle))) {
-      takeLeftPath(x_left, y_left);
+      takeLeftPath(left);
     }
     else {
-      // probs never gonna get there
+      if(rightIsSafe) {
+        takeRightPath(right);
+      } else if(leftIsSafe) {
+        takeLeftPath(left);
+      }
     }
     
 
@@ -230,19 +232,24 @@ public class ObstacleAvoidance {
     usMotor.rotateTo(0);
   }
 
+<<<<<<< HEAD
   /**
    * 
    * @param x
    * @param y
    */
   private static void takeRightPath(double x, double y) {
+=======
+
+  private static void takeRightPath(Point2D.Double p) {
+>>>>>>> 70c49e7bc14d4289a0420812d1748be1c3f3fbd4
     // make a 90 degree turn to the Right (clockwise)
     Navigation.turnTo(Math.toRadians(odometer.getXYT()[2] + 90));
     // move forward obstacle size
     sleep(50);
     rightMotor.rotate(Navigation.convertDistance(TILE_SIZE), true);
     leftMotor.rotate(Navigation.convertDistance(TILE_SIZE), false);
-//    Navigation.travelTo(x,y);
+//    Navigation.travelTo(p.x,p.y);
     // rotate back to original orientation
     Navigation.turnTo(Math.toRadians(odometer.getXYT()[2] - 90));
     sleep(50);
@@ -251,6 +258,7 @@ public class ObstacleAvoidance {
 
   }
 
+<<<<<<< HEAD
   /**
    * 
    * @param x
@@ -262,6 +270,12 @@ public class ObstacleAvoidance {
     // move forward obstacle size
     // move forward obstacle size
     sleep(50);
+=======
+  private static void takeLeftPath(Point2D.Double p) {
+    // make a 90 degree turn to the left (counter-clockwise)
+    Navigation.turnTo((odometer.getXYT()[2] - 90) * Math.PI / 180);
+    // move forward obstacle size
+>>>>>>> 70c49e7bc14d4289a0420812d1748be1c3f3fbd4
     rightMotor.rotate(Navigation.convertDistance(TILE_SIZE), true);
     leftMotor.rotate(Navigation.convertDistance(TILE_SIZE), false);
     // rotate back to original orientation
@@ -271,6 +285,7 @@ public class ObstacleAvoidance {
     leftMotor.rotate(Navigation.convertDistance(TILE_SIZE + THRESHOLD), false);
   }
   
+<<<<<<< HEAD
   /**
    * Thread sleeps in ms for threads to catch up
    * 
@@ -282,5 +297,11 @@ public class ObstacleAvoidance {
     } catch (InterruptedException e) {
       e.printStackTrace();
     }
+=======
+  private static Point2D.Double calcDisplacementPoint(double displacementDistance, double dispalcementAngle){
+    double x = odometer.getXYT()[0] + (displacementDistance)*Math.cos(Math.toRadians(odometer.getXYT()[2]+dispalcementAngle));
+    double y = odometer.getXYT()[1] + (displacementDistance)*Math.sin(Math.toRadians(odometer.getXYT()[2]+dispalcementAngle));
+    return new Point2D.Double(x, y);
+>>>>>>> 70c49e7bc14d4289a0420812d1748be1c3f3fbd4
   }
 }
