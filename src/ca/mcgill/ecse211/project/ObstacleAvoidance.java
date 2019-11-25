@@ -77,20 +77,26 @@ public class ObstacleAvoidance {
     // TODO: Try deciding to go where there is the smaller angle
     // HARD CODED AVOIDANCE
     // might replace with bangbang control
-    //    if (rightIsSafe && (Math.abs(rightAngle) < Math.abs(leftAngle))) {
-    //      takeRightPath();
-    //    }
-    //    
-    //    else if (leftIsSafe && (Math.abs(leftAngle) < Math.abs(rightAngle)))
-    //    {
-    //      takeLeftPath();
-    //    }
-    //    else {
-    //      // probs never gonna get there
-    //    }
-    //    
+    if (rightIsSafe && (Math.abs(rightAngle) < Math.abs(leftAngle))
+        && Main.validPoint(odometer.getXYT()[0] + (TILE_SIZE + TRACK/2)*Math.cos(Math.toRadians(odometer.getXYT()[2]+90)),
+            odometer.getXYT()[1] + (TILE_SIZE + TRACK/2)*Math.sin(Math.toRadians(odometer.getXYT()[2]+90)),
+            Resources.island)) {
+      takeRightPath();
+    }
+    
+    else if (leftIsSafe && (Math.abs(leftAngle) < Math.abs(rightAngle))
+        && Main.validPoint(odometer.getXYT()[0] + (TILE_SIZE + TRACK/2)*Math.cos(Math.toRadians(odometer.getXYT()[2]-90)),
+            odometer.getXYT()[1] + (TILE_SIZE + TRACK/2)*Math.sin(Math.toRadians(odometer.getXYT()[2]-90)),
+            Resources.island))
+    {
+      takeLeftPath();
+    }
+    else {
+      // probs never gonna get there
+    }
+    
 
-    bangbangAvoid(currentX, currentY);
+//    bangbangAvoid(currentX, currentY);
     obstacleDetected = false;
 
   }
@@ -111,11 +117,11 @@ public class ObstacleAvoidance {
     if (rightIsSafe)
     {
       usMotor.rotateTo(45); 
-      Navigation.turnTo((odometer.getXYT()[2] + 90) * Math.PI / 180);
+      Navigation.turnTo(Math.toRadians(odometer.getXYT()[2] + 90));
       while (true) {
         dx = currentX * TILE_SIZE - odometer.getXYT()[0];
         dy = currentY * TILE_SIZE - odometer.getXYT()[1];
-        angle = (Math.atan2(dx, dy) * 180 / Math.PI);
+        angle = Math.toDegrees(Math.atan2(dx, dy));
         theta = odometer.getXYT()[2];
         // angle correction when atan2 gives a negative number
 //        if (angle < 0) {

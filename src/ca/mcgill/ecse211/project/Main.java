@@ -236,6 +236,10 @@ public class Main {
   public static boolean validPoint(double x, double y, double ll_x, double ll_y, double ur_x, double ur_y) {
     return (x>ll_x*TILE_SIZE && x<ur_x*TILE_SIZE && y>ll_y*TILE_SIZE && y<ur_y*TILE_SIZE);
   }
+  public static boolean validPoint(double x, double y, Region region) {
+    return (x>region.ll.x*TILE_SIZE && x<region.ur.x*TILE_SIZE && y>region.ll.y*TILE_SIZE && y<region.ur.y*TILE_SIZE);
+  }
+
 
   public static boolean checkOutOfBounds(double angle, Region region) {
     double x = odometer.getXYT()[0];

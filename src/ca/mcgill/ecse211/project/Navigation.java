@@ -70,7 +70,7 @@ public class Navigation {
     leftMotor.setSpeed(FORWARD_SPEED);
     rightMotor.setSpeed(FORWARD_SPEED);
     leftMotor.rotate(convertDistance(distance), true);
-    rightMotor.rotate(convertDistance(distance), false);
+    rightMotor.rotate(convertDistance(distance), true);
 
     // continuously check for obstacles
     do {

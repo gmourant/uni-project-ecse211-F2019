@@ -177,7 +177,7 @@ public class LightLocalizer {
     
     sleep(100);
     
-    // move robot forward until one sensor sees a line
+    // move robot backward until one sensor sees a line
     leftMotor.backward();
     rightMotor.backward();
     while (!leftCorrectionTrigger() && !rightCorrectionTrigger());
