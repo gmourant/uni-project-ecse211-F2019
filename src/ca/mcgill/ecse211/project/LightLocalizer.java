@@ -168,6 +168,32 @@ public class LightLocalizer {
     leftMotor.rotate(convertDistance(-offSet), true);
     rightMotor.rotate(convertDistance(-offSet), false);
   }
+  
+  public void localizeBackward(double angle, boolean backup) {
+    leftMotor.stop(true);
+    rightMotor.stop(false);
+    leftMotor.setSpeed(MOTOR_NORMAL);
+    rightMotor.setSpeed(MOTOR_NORMAL);
+    
+    sleep(100);
+    
+    // move robot forward until one sensor sees a line
+    leftMotor.backward();
+    rightMotor.backward();
+    while (!leftCorrectionTrigger() && !rightCorrectionTrigger());
+    leftMotor.stop(true);
+    rightMotor.stop(false);
+
+    sleep(100);
+    
+    correctTheta(angle,backup);
+    
+    leftMotor.setSpeed(MOTOR_NORMAL);
+    rightMotor.setSpeed(MOTOR_NORMAL);
+    sleep(100);
+    leftMotor.rotate(convertDistance(offSet), true);
+    rightMotor.rotate(convertDistance(offSet), false);
+  }
 
   /**
    * corrects the orientation of the robot during light localization if left sensor detects first, move right motor
@@ -176,6 +202,9 @@ public class LightLocalizer {
    * @param angle set in the odometer
    */
   private void correctTheta(double angle, boolean backup) {
+    correctTheta(angle, backup, false);
+  }
+  private void correctTheta(double angle, boolean backup, boolean reverse) {
     // if left sensor detects first, move right motor until it catches up
     leftMotor.stop(true);
     rightMotor.stop(false);
@@ -187,13 +216,23 @@ public class LightLocalizer {
     if (leftDetects && !rightDetects) {
       sleep(100);
       if(backup) {
-        rightMotor.backward();
+        if(reverse) {
+          rightMotor.forward();
+        } else{
+          rightMotor.backward();
+        }
         Delay.msDelay(400);
       }
       leftMotor.stop(true);
       rightMotor.stop(false);
       sleep(100);
-      rightMotor.forward();
+
+      if(reverse) {
+        rightMotor.backward();
+      } else{
+        rightMotor.forward();
+      }
+      
       while (!rightCorrectionTrigger());
       rightMotor.stop();
     }
@@ -201,13 +240,23 @@ public class LightLocalizer {
     else if (!leftDetects && rightDetects) {
       sleep(100);
       if(backup) {
-        leftMotor.backward();
+        if(reverse){
+          leftMotor.forward();
+        } else {
+          leftMotor.backward();
+        }
         Delay.msDelay(400);
       }
       leftMotor.stop(true);
       rightMotor.stop(false);
       sleep(100);
-      leftMotor.forward();
+      
+      if(reverse) {
+        leftMotor.backward();
+      } else{
+        leftMotor.forward();
+      }
+      
       while (!leftCorrectionTrigger());
       leftMotor.stop();
     }
