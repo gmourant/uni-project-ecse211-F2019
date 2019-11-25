@@ -33,6 +33,11 @@ public class ObstacleAvoidance {
     return obstacleDetected;
   }
 
+  /**
+   * 
+   * @param currentX
+   * @param currentY
+   */
   public static void avoidObstacle(double currentX, double currentY) {
     //    leftMotor.stop(true);
     //    rightMotor.stop(false);
@@ -52,12 +57,10 @@ public class ObstacleAvoidance {
     {
       rightIsSafe = true;
     }
-
     // rotate sensor in the opposite direction until obstacle can be seen again 
     while(Main.UP.getDistance() > THRESHOLD){
       usMotor.forward();
     }
-
 
     // Rotate sensor motor to the left until it detects a rising edge
     while ((Main.UP.getDistance() < THRESHOLD) && Math.abs(usMotor.getTachoCount()) <= US_MOTOR_LIMIT) {
@@ -116,6 +119,7 @@ public class ObstacleAvoidance {
     if (rightIsSafe)
     {
       usMotor.rotateTo(45); 
+      sleep(25);
       Navigation.turnTo(Math.toRadians(odometer.getXYT()[2] + 90));
       while (true) {
         dx = currentX * TILE_SIZE - odometer.getXYT()[0];
@@ -146,6 +150,7 @@ public class ObstacleAvoidance {
         Main.distance.fetchSample(Main.sampleUS, 0);
         int distance = (int) (Main.sampleUS[0] * 100.0);
         int error = BAND_CENTER - distance;
+        sleep(25);
         if (Math.abs(error) <= BAND_WIDTH) {
           leftMotor.setSpeed(MOTOR_HIGH);
           rightMotor.setSpeed(MOTOR_HIGH);
@@ -169,6 +174,7 @@ public class ObstacleAvoidance {
     else if (leftIsSafe)
     {
       usMotor.rotateTo(-45); 
+      sleep(50);
       Navigation.turnTo((odometer.getXYT()[2] - 90) * Math.PI / 180);
       while (true) {
         dx = currentX * TILE_SIZE - odometer.getXYT()[0];
@@ -199,6 +205,7 @@ public class ObstacleAvoidance {
         Main.distance.fetchSample(Main.sampleUS, 0);
         int distance = (int) (Main.sampleUS[0] * 100.0);
         int error = BAND_CENTER - distance;
+        sleep(25);
         if (Math.abs(error) <= BAND_WIDTH) {
           leftMotor.setSpeed(MOTOR_HIGH);
           rightMotor.setSpeed(MOTOR_HIGH);
@@ -223,33 +230,57 @@ public class ObstacleAvoidance {
     usMotor.rotateTo(0);
   }
 
-
+  /**
+   * 
+   * @param x
+   * @param y
+   */
   private static void takeRightPath(double x, double y) {
     // make a 90 degree turn to the Right (clockwise)
     Navigation.turnTo(Math.toRadians(odometer.getXYT()[2] + 90));
     // move forward obstacle size
+    sleep(50);
     rightMotor.rotate(Navigation.convertDistance(TILE_SIZE), true);
     leftMotor.rotate(Navigation.convertDistance(TILE_SIZE), false);
 //    Navigation.travelTo(x,y);
     // rotate back to original orientation
     Navigation.turnTo(Math.toRadians(odometer.getXYT()[2] - 90));
-
+    sleep(50);
     rightMotor.rotate(Navigation.convertDistance(TILE_SIZE + THRESHOLD), true);
     leftMotor.rotate(Navigation.convertDistance(TILE_SIZE + THRESHOLD), false);
 
   }
 
+  /**
+   * 
+   * @param x
+   * @param y
+   */
   private static void takeLeftPath(double x, double y) {
     // make a 90 degree turn to the left (counter-clockwise)
     Navigation.turnTo((odometer.getXYT()[2] - 90) * Math.PI / 180);
     // move forward obstacle size
     // move forward obstacle size
+    sleep(50);
     rightMotor.rotate(Navigation.convertDistance(TILE_SIZE), true);
     leftMotor.rotate(Navigation.convertDistance(TILE_SIZE), false);
     // rotate back to original orientation
     Navigation.turnTo((odometer.getXYT()[2] + 90) * Math.PI / 180);
-
+    sleep(50);
     rightMotor.rotate(Navigation.convertDistance(TILE_SIZE + THRESHOLD), true);
     leftMotor.rotate(Navigation.convertDistance(TILE_SIZE + THRESHOLD), false);
+  }
+  
+  /**
+   * Thread sleeps in ms for threads to catch up
+   * 
+   * @param time, time in ms
+   */
+  private static void sleep(int time) {
+    try {
+      Thread.sleep(time);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
   }
 }

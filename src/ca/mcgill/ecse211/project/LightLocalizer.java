@@ -140,9 +140,24 @@ public class LightLocalizer {
 
   }
   
+  /**
+   * Localize Forward without backup adjustments
+   * 
+   * @param angle, angle in degree
+   */
   public void localizeForward(double angle) {
     localizeForward(angle, false);
   }
+  
+  /**
+   * Localization, while the device is moving forward
+   * Device detects line with either sides of the light sensor
+   * Stop one wheel and wait for the other wheel to catch up
+   * The device will be virtually be parallel to the line if both light sensors detect the same line
+   * 
+   * @param angle, angle in degree
+   * @param backup, true if backup adjustments are desired, false else
+   */
   public void localizeForward(double angle, boolean backup) {
     leftMotor.stop(true);
     rightMotor.stop(false);
@@ -169,6 +184,13 @@ public class LightLocalizer {
     rightMotor.rotate(convertDistance(-offSet), false);
   }
   
+  /**
+   * Same as localize forward, but instead of going forward
+   * device goes backward
+   * 
+   * @param angle, angle in degree
+   * @param backup, true if backup desires are desired, else false
+   */
   public void localizeBackward(double angle, boolean backup) {
     leftMotor.stop(true);
     rightMotor.stop(false);
@@ -204,6 +226,13 @@ public class LightLocalizer {
   private void correctTheta(double angle, boolean backup) {
     correctTheta(angle, backup, false);
   }
+  /**
+   * Aligns both light sensors with a line
+   * 
+   * @param angle, angle in degree
+   * @param backup, true if backup adjustment is desired, else false
+   * @param reverse, true if forward adjustment is desired, else false
+   */
   private void correctTheta(double angle, boolean backup, boolean reverse) {
     // if left sensor detects first, move right motor until it catches up
     leftMotor.stop(true);
@@ -291,6 +320,11 @@ public class LightLocalizer {
     return convertDistance(Math.PI * TRACK * angle / 360.0);
   }
   
+  /**
+   * Thread sleeps in ms for threads to catch up
+   * 
+   * @param time, time in ms
+   */
   private static void sleep(int time) {
     try {
       Thread.sleep(time);

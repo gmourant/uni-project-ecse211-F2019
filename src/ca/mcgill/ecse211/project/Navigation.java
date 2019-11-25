@@ -231,13 +231,19 @@ static double dummy_y = odometer.getXYT()[1];
     sleep(50);
   }
 
+  /**
+   * Device travels by half a tile
+   * either by backing up or going forward
+   * 
+   * @param back, if true device goes backward, else forward
+   */
   public static void goMid(boolean back) {
     leftMotor.stop(true);
     rightMotor.stop(false);
     leftMotor.setSpeed(FORWARD_SPEED);
     rightMotor.setSpeed(FORWARD_SPEED);
     sleep(100);
-    if (back == true) {
+    if (back) {
       leftMotor.rotate(convertDistance(-TILE_SIZE/2),true);
       rightMotor.rotate(convertDistance(-TILE_SIZE/2),false);
     }
@@ -292,7 +298,12 @@ static double dummy_y = odometer.getXYT()[1];
     }
     return nav;
   }
-
+  
+  /**
+   * Thread sleeps in ms for threads to catch up
+   * 
+   * @param time, time in ms
+   */
   private static void sleep(int time) {
     try {
       Thread.sleep(time);
