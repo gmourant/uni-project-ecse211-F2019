@@ -12,7 +12,7 @@ import lejos.hardware.sensor.EV3UltrasonicSensor;
  * to face approximately NORTH, and sets the Theta of Odometetry to 0. 
  * @author Steven
  * @author Hassan
- * @author Aarkash
+ * @author Aakarsh
  * @version 1.2.1
  * @since 1.1.1
  */

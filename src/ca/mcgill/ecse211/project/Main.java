@@ -65,7 +65,6 @@ public class Main {
     Sound.beep();
     Sound.beep();
     Sound.beep();
-
     // compute tunnel coordinates
     computeTunnelCoordinates(tunnel);
     // Navigation.travelTo(2, 2);
@@ -130,6 +129,8 @@ public class Main {
     Navigation.travelTo(tunnelStartX, tunnelStartY);
     Navigation.turnTo(Math.toRadians(tunnelTheta));
     localizeForward(tunnelTheta, true, island);
+    odometer.setXYT(tunnelStartX * TILE_SIZE, tunnelStartY * TILE_SIZE, tunnelTheta);
+    Navigation.travelTo(tunnelEndX, tunnelEndY);
     Navigation.travelTo(startIsland.ll.x, startIsland.ll.y);
 
     /*
@@ -191,7 +192,21 @@ public class Main {
     if(!validPoint(lp[0], lp[1], island.ll.x, island.ll.y, island.ur.x, island.ur.y)) {
       lp = navigateToAlternateLaunchPosition(lp, bin);
     }
-    Navigation.travelTo(lp[0], lp[1]);
+
+    Navigation.travelTo(lp[0]/TILE_SIZE, lp[1]/TILE_SIZE);
+    Navigation.turnTo(findAngle(odometer.getXYT()[0], odometer.getXYT()[1], bin.x, bin.y));    
+  }
+  
+  /**
+   * Computes the angle between any 2 given points
+   * @param curr_x current x position of the robot
+   * @param curr_y current y position of the robot
+   * @param x final x position
+   * @param y final y position
+   * @return angle between the 2 points
+   */
+  public static double findAngle(double curr_x, double curr_y, double x, double y) {
+    return Math.atan2(x-curr_x, y-curr_y);
   }
 
   /**
@@ -219,7 +234,7 @@ public class Main {
    * @return true if point lies within the defined region, else false
    */
   public static boolean validPoint(double x, double y, double ll_x, double ll_y, double ur_x, double ur_y) {
-    return (x>ll_x && x<ur_x && y>ll_y && y<ur_y);
+    return (x>ll_x*TILE_SIZE && x<ur_x*TILE_SIZE && y>ll_y*TILE_SIZE && y<ur_y*TILE_SIZE);
   }
 
   public static boolean checkOutOfBounds(double angle, Region region) {

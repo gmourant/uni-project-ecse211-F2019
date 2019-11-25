@@ -34,7 +34,7 @@ public class Resources {
    * The IP address of the server that transmits data to the robot. Set this to the default for the beta demo and
    * competition.
    */
-  public static final String SERVER_IP = "192.168.2.17";
+  public static final String SERVER_IP = "192.168.2.49";
   // 192.168.2.29
   // steven's pc: 192.168.2.45
   // david's pc: 192.168.2.63
@@ -162,7 +162,7 @@ public class Resources {
   /**
    * Dummy distance factor to compute alternative launch points
    */
-  public static final double DUMMY_DISTANCE = 10;
+  public static final double DUMMY_DISTANCE = TILE_SIZE;
 
   /**
    * The left motor.

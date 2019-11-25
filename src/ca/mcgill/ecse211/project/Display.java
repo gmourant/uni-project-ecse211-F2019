@@ -48,10 +48,10 @@ public class Display implements Runnable {
 //      LCD.drawString("Y: " + numberFormat.format(position[1]), 0, 1);
 //      LCD.drawString("T: " + numberFormat.format(position[2]), 0, 2);
       
-      System.out.println("***Position***");
-      System.out.println("X: " + numberFormat.format(position[0]));
-      System.out.println("Y: " + numberFormat.format(position[1]));
-      System.out.println("T: " + numberFormat.format(position[2]) + "\n");
+//      System.out.println("***Position***");
+//      System.out.println("X: " + numberFormat.format(position[0]));
+//      System.out.println("Y: " + numberFormat.format(position[1]));
+//      System.out.println("T: " + numberFormat.format(position[2]) + "\n");
       
       // this ensures that the data is updated only once every period
       updateEnd = System.currentTimeMillis();
