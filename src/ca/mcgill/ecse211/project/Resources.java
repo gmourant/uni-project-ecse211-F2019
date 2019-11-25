@@ -144,7 +144,7 @@ public class Resources {
    */
   public static final int ROTATE_SPEED = 125;
 
-  public static final int US_ROTATE_SPEED = 200;
+  public static final int US_ROTATE_SPEED = 150;
 
 
   /**
