@@ -44,14 +44,14 @@ public class Main {
     Point bin = greenBin;
     int startingCorner = greenCorner;
 
-    if (redTeam == 2) {
+    if (redTeam == TEAM_NUMBER) {
       // RED TEAM
       tunnel = tnr;
       startIsland = red;
       bin = redBin;
       startingCorner = redCorner;
 
-    } else if (greenTeam == 2) {
+    } else if (greenTeam == TEAM_NUMBER) {
       // GREEN TEAM
       tunnel = tng;
       startIsland = green;
