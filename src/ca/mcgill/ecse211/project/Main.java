@@ -129,6 +129,8 @@ public class Main {
     Navigation.travelTo(tunnelStartX, tunnelStartY);
     Navigation.turnTo(Math.toRadians(tunnelTheta));
     localizeForward(tunnelTheta, true, island);
+    odometer.setXYT(tunnelStartX * TILE_SIZE, tunnelStartY * TILE_SIZE, tunnelTheta);
+    Navigation.travelTo(tunnelEndX, tunnelEndY);
     Navigation.travelTo(startIsland.ll.x, startIsland.ll.y);
 
     /*
