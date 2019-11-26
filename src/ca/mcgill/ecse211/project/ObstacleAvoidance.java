@@ -79,10 +79,11 @@ public class ObstacleAvoidance {
     // might replace with bangbang control
     Point left = calcDisplacementPoint(TILE_SIZE + TRACK / 2, -90);
     Point right = calcDisplacementPoint(TILE_SIZE + TRACK / 2, 90);
-    if (!Main.validPoint(right.x, right.y, island)) {
+    if (!Main.validPoint(right.x, right.y, island))
       rightIsSafe = false;
+    if (!Main.validPoint(left.x, left.y, island))
       leftIsSafe = false;
-    }
+
     if (rightIsSafe) {
       takeRightPath(right);
     } else if (leftIsSafe) {
@@ -235,9 +236,9 @@ public class ObstacleAvoidance {
     // rightMotor.rotate(Navigation.convertDistance(TILE_SIZE + THRESHOLD), true);
     // leftMotor.rotate(Navigation.convertDistance(TILE_SIZE + THRESHOLD), false);
 
-    Navigation.travelTo(p.x, p.y, Main.getBin());
+    Navigation.travelTo(p.x / TILE_SIZE, p.y / TILE_SIZE, Main.getBin());
     Point nextPoint = calcDisplacementPoint(TILE_SIZE + THRESHOLD, 90);
-    Navigation.travelTo(nextPoint.x, nextPoint.y, Main.getBin());
+    Navigation.travelTo(nextPoint.x / TILE_SIZE, nextPoint.y / TILE_SIZE, Main.getBin());
 
   }
 
@@ -254,9 +255,9 @@ public class ObstacleAvoidance {
     // rightMotor.rotate(Navigation.convertDistance(TILE_SIZE + THRESHOLD), true);
     // leftMotor.rotate(Navigation.convertDistance(TILE_SIZE + THRESHOLD), false);
 
-    Navigation.travelTo(p.x, p.y, Main.getBin());
+    Navigation.travelTo(p.x / TILE_SIZE, p.y / TILE_SIZE, Main.getBin());
     Point nextPoint = calcDisplacementPoint(TILE_SIZE + THRESHOLD, 90);
-    Navigation.travelTo(nextPoint.x, nextPoint.y, Main.getBin());
+    Navigation.travelTo(nextPoint.x / TILE_SIZE, nextPoint.y / TILE_SIZE, Main.getBin());
   }
 
   /**
@@ -277,6 +278,6 @@ public class ObstacleAvoidance {
         + (displacementDistance) * Math.cos(Math.toRadians(odometer.getXYT()[2] + displacementAngle));
     double y = odometer.getXYT()[1]
         + (displacementDistance) * Math.sin(Math.toRadians(odometer.getXYT()[2] + displacementAngle));
-    return new Point(x / TILE_SIZE, y / TILE_SIZE);
+    return new Point(x, y);
   }
 }

@@ -66,7 +66,7 @@ public class Main {
 
     Sound.beep();
     Sound.beep();
-    Sound.beep();
+    Sound.beep(); 
 
 
     //
