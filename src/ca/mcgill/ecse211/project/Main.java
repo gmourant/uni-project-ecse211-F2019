@@ -59,64 +59,69 @@ public class Main {
       startingCorner = greenCorner;
     }
 
+
+    
     // localize
     localize(startingCorner);
 
     Sound.beep();
     Sound.beep();
     Sound.beep();
-    // compute tunnel coordinates
-    computeTunnelCoordinates(tunnel);
-    // Navigation.travelTo(2, 2);
+    
 
-    // navigate to tunnel entrance
-    // turn to face tunnel
-    // navigate through tunnel
-    Navigation.travelTo(tunnelStartX, tunnelStartY);
-
-    Navigation.turnTo(Math.toRadians(tunnelTheta));
-    localizeForward(tunnelTheta, true, null);
-    if (!checkOutOfBounds(tunnelTheta + 90, startIsland)) {
-      Navigation.turnTo(Math.toRadians(tunnelTheta + 90));
-      localizeForward(tunnelTheta + 90, true, null);
-      Navigation.goMid(true);
-    } else {
-      Navigation.turnTo(Math.toRadians(tunnelTheta - 90));
-      localizeForward(tunnelTheta - 90, true, null);
-      Navigation.goMid(true);
-    }
-    // Navigation.turnTo(Math.toRadians(tunnelTheta - 90));
-    // localizeForward(tunnelTheta - 90, true, null);
-    // Navigation.goMid();
-    Navigation.turnTo(Math.toRadians(tunnelTheta));
-    odometer.setXYT(tunnelStartX * TILE_SIZE, tunnelStartY * TILE_SIZE, tunnelTheta);
-    Navigation.travelTo(tunnelEndX, tunnelEndY);
-
-    /*
-     * 4.Each machine localizes to the grid. When completed, the machine must stop and issue a sequence of 3 beeps.
-     *
-     */
-
-    Sound.beep();
-    Sound.beep();
-    Sound.beep();
-
-    localizeForward(tunnelTheta, false, island);
-
-
-    // TODO: ensure robot stays within island
-    // calculate and move to launch point
-    //Navigation.travelTo(bin.x, bin.y, RADIUS);
-
-    /*
-     * 5.Each machine navigates to their corresponding tunnel, transits, and then proceeds to their launch point. Upon
-     * arriving, each machine will again stop and issue a sequence of 3 beeps.
-     */
-
-    // Navigation.launchPosition(bin.x, bin.y, RADIUS);
-    // Navigation.travelTo(bin.x, bin.y, RADIUS);
-    // Navigation.travelTo(bin.x, bin.y);
-    // Navigation.turnTo(Math.toRadians(tnr.ur.x));
+//
+//    // compute tunnel coordinates
+//    computeTunnelCoordinates(tunnel);
+//    // Navigation.travelTo(2, 2);
+//
+//    // navigate to tunnel entrance
+//    // turn to face tunnel
+//    // navigate through tunnel
+//    Navigation.travelTo(tunnelStartX, tunnelStartY);
+//
+//    Navigation.turnTo(Math.toRadians(tunnelTheta));
+//    localizeForward(tunnelTheta, true, null);
+//    if (!checkOutOfBounds(tunnelTheta + 90, startIsland)) {
+//      Navigation.turnTo(Math.toRadians(tunnelTheta + 90));
+//      localizeForward(tunnelTheta + 90, true, null);
+//      Navigation.goMid(true);
+//    } else {
+//      Navigation.turnTo(Math.toRadians(tunnelTheta - 90));
+//      localizeForward(tunnelTheta - 90, true, null);
+//      Navigation.goMid(true);
+//    }
+//    // Navigation.turnTo(Math.toRadians(tunnelTheta - 90));
+//    // localizeForward(tunnelTheta - 90, true, null);
+//    // Navigation.goMid();
+//    Navigation.turnTo(Math.toRadians(tunnelTheta));
+//    odometer.setXYT(tunnelStartX * TILE_SIZE, tunnelStartY * TILE_SIZE, tunnelTheta);
+//    Navigation.travelTo(tunnelEndX, tunnelEndY);
+//
+//    /*
+//     * 4.Each machine localizes to the grid. When completed, the machine must stop and issue a sequence of 3 beeps.
+//     *
+//     */
+//
+//    Sound.beep();
+//    Sound.beep();
+//    Sound.beep();
+//
+//    localizeForward(tunnelTheta, false, island);
+//
+//
+//    // TODO: ensure robot stays within island
+//    // calculate and move to launch point
+//    //Navigation.travelTo(bin.x, bin.y, RADIUS);
+//
+//    /*
+//     * 5.Each machine navigates to their corresponding tunnel, transits, and then proceeds to their launch point. Upon
+//     * arriving, each machine will again stop and issue a sequence of 3 beeps.
+//     */
+//
+//    // Navigation.launchPosition(bin.x, bin.y, RADIUS);
+//    // Navigation.travelTo(bin.x, bin.y, RADIUS);
+//    // Navigation.travelTo(bin.x, bin.y);
+//    // Navigation.turnTo(Math.toRadians(tnr.ur.x));
     navigateToLaunchPosition(bin);
 
     Sound.beep();
@@ -189,11 +194,11 @@ public class Main {
   public static void navigateToLaunchPosition(Point bin) {
     double[] pos = odometer.getXYT();
     double[] lp = Navigation.launchPosition(bin.x, bin.y, RADIUS, pos[0], pos[1]);
-    if(!validPoint(lp[0], lp[1], island.ll.x, island.ll.y, island.ur.x, island.ur.y)) {
+    if(!validPoint(lp[0], lp[1], island)) {
       lp = navigateToAlternateLaunchPosition(lp, bin);
     }
 
-    Navigation.travelTo(lp[0]/TILE_SIZE, lp[1]/TILE_SIZE);
+    Navigation.travelTo(lp[0]/TILE_SIZE, lp[1]/TILE_SIZE, bin);
     Navigation.turnTo(findAngle(odometer.getXYT()[0], odometer.getXYT()[1], bin.x, bin.y));    
   }
   
@@ -206,7 +211,7 @@ public class Main {
    * @return angle between the 2 points
    */
   public static double findAngle(double curr_x, double curr_y, double x, double y) {
-    return Math.atan2(x-curr_x, y-curr_y);
+    return Math.atan2(x*TILE_SIZE-curr_x, y*TILE_SIZE-curr_y);
   }
 
   /**

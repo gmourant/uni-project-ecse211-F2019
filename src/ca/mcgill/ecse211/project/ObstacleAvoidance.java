@@ -79,8 +79,8 @@ public class ObstacleAvoidance {
     // might replace with bangbang control
     Point2D.Double left = calcDisplacementPoint(TILE_SIZE + TRACK/2, -90);
     Point2D.Double right = calcDisplacementPoint(TILE_SIZE + TRACK/2, 90);
-    if(!Main.validPoint(right.x, right.y, Resources.island)) rightIsSafe = false;
-    if(!Main.validPoint(left.x, left.y, Resources.island)) leftIsSafe = false;
+    if(!Main.validPoint(right.x, right.y, island)) rightIsSafe = false;
+    if(!Main.validPoint(left.x, left.y, island)) leftIsSafe = false;
     if (rightIsSafe && (Math.abs(rightAngle) < Math.abs(leftAngle))) {
       takeRightPath(right);
     }
@@ -227,31 +227,38 @@ public class ObstacleAvoidance {
 
 
   private static void takeRightPath(Point2D.Double p) {
-    // make a 90 degree turn to the Right (clockwise)
-    Navigation.turnTo(Math.toRadians(odometer.getXYT()[2] + 90));
-    // move forward obstacle size
-    rightMotor.rotate(Navigation.convertDistance(TILE_SIZE), true);
-    leftMotor.rotate(Navigation.convertDistance(TILE_SIZE), false);
-//    Navigation.travelTo(p.x,p.y);
-    // rotate back to original orientation
-    Navigation.turnTo(Math.toRadians(odometer.getXYT()[2] - 90));
+//    // make a 90 degree turn to the Right (clockwise)
+//    Navigation.turnTo(Math.toRadians(odometer.getXYT()[2] + 90));
+//    // move forward obstacle size
+//    rightMotor.rotate(Navigation.convertDistance(TILE_SIZE), true);
+//    leftMotor.rotate(Navigation.convertDistance(TILE_SIZE), false);
+//    // rotate back to original orientation
+//    Navigation.turnTo(Math.toRadians(odometer.getXYT()[2] - 90));
+//
+//    rightMotor.rotate(Navigation.convertDistance(TILE_SIZE + THRESHOLD), true);
+//    leftMotor.rotate(Navigation.convertDistance(TILE_SIZE + THRESHOLD), false);
 
-    rightMotor.rotate(Navigation.convertDistance(TILE_SIZE + THRESHOLD), true);
-    leftMotor.rotate(Navigation.convertDistance(TILE_SIZE + THRESHOLD), false);
+    Navigation.travelTo(p.x,p.y);
+    Point2D.Double nextPoint = calcDisplacementPoint(TILE_SIZE + THRESHOLD, 90);
+    Navigation.travelTo(nextPoint.x,nextPoint.y);
 
   }
 
   private static void takeLeftPath(Point2D.Double p) {
-    // make a 90 degree turn to the left (counter-clockwise)
-    Navigation.turnTo((odometer.getXYT()[2] - 90) * Math.PI / 180);
-    // move forward obstacle size
-    rightMotor.rotate(Navigation.convertDistance(TILE_SIZE), true);
-    leftMotor.rotate(Navigation.convertDistance(TILE_SIZE), false);
-    // rotate back to original orientation
-    Navigation.turnTo((odometer.getXYT()[2] + 90) * Math.PI / 180);
+//    // make a 90 degree turn to the left (counter-clockwise)
+//    Navigation.turnTo((odometer.getXYT()[2] - 90) * Math.PI / 180);
+//    // move forward obstacle size
+//    rightMotor.rotate(Navigation.convertDistance(TILE_SIZE), true);
+//    leftMotor.rotate(Navigation.convertDistance(TILE_SIZE), false);
+//    // rotate back to original orientation
+//    Navigation.turnTo((odometer.getXYT()[2] + 90) * Math.PI / 180);
+//
+//    rightMotor.rotate(Navigation.convertDistance(TILE_SIZE + THRESHOLD), true);
+//    leftMotor.rotate(Navigation.convertDistance(TILE_SIZE + THRESHOLD), false);
 
-    rightMotor.rotate(Navigation.convertDistance(TILE_SIZE + THRESHOLD), true);
-    leftMotor.rotate(Navigation.convertDistance(TILE_SIZE + THRESHOLD), false);
+    Navigation.travelTo(p.x,p.y);
+    Point2D.Double nextPoint = calcDisplacementPoint(TILE_SIZE + THRESHOLD, 90);
+    Navigation.travelTo(nextPoint.x,nextPoint.y);
   }
   
   private static Point2D.Double calcDisplacementPoint(double displacementDistance, double dispalcementAngle){
