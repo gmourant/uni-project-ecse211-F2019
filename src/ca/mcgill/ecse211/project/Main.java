@@ -71,52 +71,52 @@ public class Main {
 
     //
     // // compute tunnel coordinates
-    // computeTunnelCoordinates(tunnel); 
-    
-     // navigate to tunnel entrance
-     // turn to face tunnel
-     // navigate through tunnel
-     Navigation.travelTo(tunnelStartX, tunnelStartY);
-    
-     Navigation.turnTo(Math.toRadians(tunnelTheta));
-     localizeForward(tunnelTheta, true, null);
-     if (!checkOutOfBounds(tunnelTheta + 90, startIsland)) {
-     Navigation.turnTo(Math.toRadians(tunnelTheta + 90));
-     localizeForward(tunnelTheta + 90, true, null);
-     Navigation.goMid(true);
-     } else {
-     Navigation.turnTo(Math.toRadians(tunnelTheta - 90));
-     localizeForward(tunnelTheta - 90, true, null);
-     Navigation.goMid(true);
-     }
+    // computeTunnelCoordinates(tunnel);
+
+    // navigate to tunnel entrance
+    // turn to face tunnel
+    // navigate through tunnel
+    Navigation.travelTo(tunnelStartX, tunnelStartY);
+
+    Navigation.turnTo(Math.toRadians(tunnelTheta));
+    localizeForward(tunnelTheta, true, null);
+    if (!checkOutOfBounds(tunnelTheta + 90, startIsland)) {
+      Navigation.turnTo(Math.toRadians(tunnelTheta + 90));
+      localizeForward(tunnelTheta + 90, true, null);
+      Navigation.goMid(true);
+    } else {
+      Navigation.turnTo(Math.toRadians(tunnelTheta - 90));
+      localizeForward(tunnelTheta - 90, true, null);
+      Navigation.goMid(true);
+    }
     // // Navigation.turnTo(Math.toRadians(tunnelTheta - 90));
     // // localizeForward(tunnelTheta - 90, true, null);
     // // Navigation.goMid();
-     Navigation.turnTo(Math.toRadians(tunnelTheta));
-     odometer.setXYT(tunnelStartX * TILE_SIZE, tunnelStartY * TILE_SIZE, tunnelTheta);
-     Navigation.travelTo(tunnelEndX, tunnelEndY);
+    Navigation.turnTo(Math.toRadians(tunnelTheta));
+    odometer.setXYT(tunnelStartX * TILE_SIZE, tunnelStartY * TILE_SIZE, tunnelTheta);
+    Navigation.travelTo(tunnelEndX, tunnelEndY);
+
+    /*
+     * 4.Each machine localizes to the grid. When completed, the machine must stop and issue a sequence of 3 beeps.
+     * 
+     */
+
+    Sound.beep();
+    Sound.beep();
+    Sound.beep();
     //
-    // /*
-    // * 4.Each machine localizes to the grid. When completed, the machine must stop and issue a sequence of 3 beeps.
-    // * 
-    // */
-    //
-    // Sound.beep();
-    // Sound.beep();
-    // Sound.beep();
-    //
-    // localizeForward(tunnelTheta, false, island);
+    localizeForward(tunnelTheta, false, island);
     //
     //
     // // TODO: ensure robot stays within island
     // // calculate and move to launch point
     // //Navigation.travelTo(bin.x, bin.y, RADIUS);
-    //
-    // /*
-    // * 5.Each machine navigates to their corresponding tunnel, transits, and then proceeds to their launch point. Upon
-    // * arriving, each machine will again stop and issue a sequence of 3 beeps.
-    // */
-    //
+
+    /*
+     * 5.Each machine navigates to their corresponding tunnel, transits, and then proceeds to their launch point. Upon
+     * arriving, each machine will again stop and issue a sequence of 3 beeps.
+     */
+
     // // Navigation.launchPosition(bin.x, bin.y, RADIUS);
     // // Navigation.travelTo(bin.x, bin.y, RADIUS);
     // // Navigation.travelTo(bin.x, bin.y);
@@ -353,7 +353,7 @@ public class Main {
   public static boolean horizontalTunnel(Region tunnel) {
     return (Math.abs(tunnel.ur.y - tunnel.ll.y) == 1);
   }
-  
+
   /**
    * Method for device to travel back to its corner
    * 
@@ -364,16 +364,13 @@ public class Main {
     if (corner == 0) {
       x = 0;
       y = 0;
-    }
-    else if (corner == 1) {
+    } else if (corner == 1) {
       x = 15;
       y = 0;
-    }
-    else if (corner == 2) {
+    } else if (corner == 2) {
       x = 15;
       y = 9;
-    }
-    else {
+    } else {
       x = 0;
       y = 9;
     }
@@ -392,7 +389,7 @@ public class Main {
       // There is nothing to be done here
     }
   }
-  
+
   /**
    * Returns of device's bin
    * 
@@ -401,8 +398,8 @@ public class Main {
   public static Point getBin() {
     if (redTeam == TEAM_NUMBER) {
       return redBin;
-    }
-    else return greenBin;
+    } else
+      return greenBin;
   }
 
   /**

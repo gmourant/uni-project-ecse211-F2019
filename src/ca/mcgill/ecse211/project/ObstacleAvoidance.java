@@ -79,29 +79,17 @@ public class ObstacleAvoidance {
     // might replace with bangbang control
     Point left = calcDisplacementPoint(TILE_SIZE + TRACK / 2, -90);
     Point right = calcDisplacementPoint(TILE_SIZE + TRACK / 2, 90);
-    if (!Main.validPoint(right.x, right.y, island))
+    if (!Main.validPoint(right.x, right.y, island)) {
       rightIsSafe = false;
-    if (!Main.validPoint(left.x, left.y, island))
       leftIsSafe = false;
+    }
     if (rightIsSafe) {
       takeRightPath(right);
-    }
-
-    else if (leftIsSafe) {
+    } else if (leftIsSafe) {
       takeLeftPath(left);
     } else {
-
+      bangbangAvoid(currentX, currentY);
     }
-    // } else {
-    // if (rightIsSafe) {
-    // takeRightPath(right);
-    // } else if (leftIsSafe) {
-    // takeLeftPath(left);
-    // }
-    // }
-
-
-    // bangbangAvoid(currentX, currentY);
     obstacleDetected = false;
 
   }
