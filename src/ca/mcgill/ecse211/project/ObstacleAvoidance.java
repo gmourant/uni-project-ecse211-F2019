@@ -1,7 +1,6 @@
 package ca.mcgill.ecse211.project;
 
 import static ca.mcgill.ecse211.project.Resources.*;
-import java.awt.geom.Point2D;
 import lejos.hardware.Sound;
 
 /**
@@ -38,9 +37,9 @@ public class ObstacleAvoidance {
    * @param currentY
    */
   public static void avoidObstacle(double currentX, double currentY) {
-    //    leftMotor.stop(true);
-    //    rightMotor.stop(false);
-    //    
+    leftMotor.stop(true);
+    rightMotor.stop(false);
+    //
     usMotor.setSpeed(40);
 
     // prepare usMotor for sweep
@@ -78,26 +77,31 @@ public class ObstacleAvoidance {
     // TODO: Try deciding to go where there is the smaller angle
     // HARD CODED AVOIDANCE
     // might replace with bangbang control
-    Point2D.Double left = calcDisplacementPoint(TILE_SIZE + TRACK/2, -90);
-    Point2D.Double right = calcDisplacementPoint(TILE_SIZE + TRACK/2, 90);
-    if(!Main.validPoint(right.x, right.y, island)) rightIsSafe = false;
-    if(!Main.validPoint(left.x, left.y, island)) leftIsSafe = false;
-    if (rightIsSafe && (Math.abs(rightAngle) < Math.abs(leftAngle))) {
+    Point left = calcDisplacementPoint(TILE_SIZE + TRACK / 2, -90);
+    Point right = calcDisplacementPoint(TILE_SIZE + TRACK / 2, 90);
+    if (!Main.validPoint(right.x, right.y, island))
+      rightIsSafe = false;
+    if (!Main.validPoint(left.x, left.y, island))
+      leftIsSafe = false;
+    if (rightIsSafe) {
       takeRightPath(right);
     }
-    
-    else if (leftIsSafe && (Math.abs(leftAngle) < Math.abs(rightAngle))) {
+
+    else if (leftIsSafe) {
       takeLeftPath(left);
     } else {
-      if (rightIsSafe) {
-        takeRightPath(right);
-      } else if (leftIsSafe) {
-        takeLeftPath(left);
-      }
-    }
-    
 
-//    bangbangAvoid(currentX, currentY);
+    }
+    // } else {
+    // if (rightIsSafe) {
+    // takeRightPath(right);
+    // } else if (leftIsSafe) {
+    // takeLeftPath(left);
+    // }
+    // }
+
+
+    // bangbangAvoid(currentX, currentY);
     obstacleDetected = false;
 
   }
@@ -113,11 +117,10 @@ public class ObstacleAvoidance {
     rightMotor.stop();
     Sound.twoBeeps();
     double dx, dy, angle, theta;
-    
+
     // Clockwise bang bang
-    if (rightIsSafe)
-    {
-      usMotor.rotateTo(45); 
+    if (rightIsSafe) {
+      usMotor.rotateTo(45);
       Navigation.turnTo(Math.toRadians(odometer.getXYT()[2] + 90));
       while (true) {
         dx = currentX * TILE_SIZE - odometer.getXYT()[0];
@@ -125,21 +128,21 @@ public class ObstacleAvoidance {
         angle = Math.toDegrees(Math.atan2(dx, dy));
         theta = odometer.getXYT()[2];
         // angle correction when atan2 gives a negative number
-//        if (angle < 0) {
-//          // Angle correction when Pointing south
-//          if (angle <= -90) {
-//            angle = (Math.abs(angle - 90)) % 360;
-//          }
-//          // Angle correction when pointing east
-//          else if (angle > -100)
-//            angle = (Math.abs(angle - 270)) % 360;
-//        }
-        
+        // if (angle < 0) {
+        // // Angle correction when Pointing south
+        // if (angle <= -90) {
+        // angle = (Math.abs(angle - 90)) % 360;
+        // }
+        // // Angle correction when pointing east
+        // else if (angle > -100)
+        // angle = (Math.abs(angle - 270)) % 360;
+        // }
+
         if (angle < 0)
           angle += 360;
         // minimal angle
         angle = angle % 360;
-        
+
         // make sure that new angle is within range
         // Exits when robot's internal odometer angle points toward desired coordinate
         if (Math.abs(odometer.getXYT()[2] - angle) < THRESHOLD_RANGE)
@@ -179,21 +182,21 @@ public class ObstacleAvoidance {
         angle = (Math.atan2(dx, dy) * 180 / Math.PI);
         theta = odometer.getXYT()[2];
         // angle correction when atan2 gives a negative number
-//        if (angle < 0) {
-//          // Angle correction when Pointing south
-//          if (angle <= -90) {
-//            angle = (Math.abs(angle - 90)) % 360;
-//          }
-//          // Angle correction when pointing east
-//          else if (angle > -100)
-//            angle = (Math.abs(angle - 270)) % 360;
-//        }
-        
+        // if (angle < 0) {
+        // // Angle correction when Pointing south
+        // if (angle <= -90) {
+        // angle = (Math.abs(angle - 90)) % 360;
+        // }
+        // // Angle correction when pointing east
+        // else if (angle > -100)
+        // angle = (Math.abs(angle - 270)) % 360;
+        // }
+
         if (angle < 0)
           angle += 360;
         // minimal angle
         angle = angle % 360;
-        
+
         // make sure that new angle is within range
         // Exits when robot's internal odometer angle points toward desired coordinate
         if (Math.abs(odometer.getXYT()[2] - angle) < THRESHOLD_RANGE)
@@ -232,40 +235,40 @@ public class ObstacleAvoidance {
    * @param x
    * @param y
    */
-  private static void takeRightPath(Point2D.Double p) {
-//    // make a 90 degree turn to the Right (clockwise)
-//    Navigation.turnTo(Math.toRadians(odometer.getXYT()[2] + 90));
-//    // move forward obstacle size
-//    rightMotor.rotate(Navigation.convertDistance(TILE_SIZE), true);
-//    leftMotor.rotate(Navigation.convertDistance(TILE_SIZE), false);
-//    // rotate back to original orientation
-//    Navigation.turnTo(Math.toRadians(odometer.getXYT()[2] - 90));
-//
-//    rightMotor.rotate(Navigation.convertDistance(TILE_SIZE + THRESHOLD), true);
-//    leftMotor.rotate(Navigation.convertDistance(TILE_SIZE + THRESHOLD), false);
+  private static void takeRightPath(Point p) {
+    // // make a 90 degree turn to the Right (clockwise)
+    // Navigation.turnTo(Math.toRadians(odometer.getXYT()[2] + 90));
+    // // move forward obstacle size
+    // rightMotor.rotate(Navigation.convertDistance(TILE_SIZE), true);
+    // leftMotor.rotate(Navigation.convertDistance(TILE_SIZE), false);
+    // // rotate back to original orientation
+    // Navigation.turnTo(Math.toRadians(odometer.getXYT()[2] - 90));
+    //
+    // rightMotor.rotate(Navigation.convertDistance(TILE_SIZE + THRESHOLD), true);
+    // leftMotor.rotate(Navigation.convertDistance(TILE_SIZE + THRESHOLD), false);
 
-    Navigation.travelTo(p.x,p.y);
-    Point2D.Double nextPoint = calcDisplacementPoint(TILE_SIZE + THRESHOLD, 90);
-    Navigation.travelTo(nextPoint.x,nextPoint.y);
+    Navigation.travelTo(p.x, p.y, Main.getBin());
+    Point nextPoint = calcDisplacementPoint(TILE_SIZE + THRESHOLD, 90);
+    Navigation.travelTo(nextPoint.x, nextPoint.y, Main.getBin());
 
   }
 
 
-  private static void takeLeftPath(Point2D.Double p) {
-//    // make a 90 degree turn to the left (counter-clockwise)
-//    Navigation.turnTo((odometer.getXYT()[2] - 90) * Math.PI / 180);
-//    // move forward obstacle size
-//    rightMotor.rotate(Navigation.convertDistance(TILE_SIZE), true);
-//    leftMotor.rotate(Navigation.convertDistance(TILE_SIZE), false);
-//    // rotate back to original orientation
-//    Navigation.turnTo((odometer.getXYT()[2] + 90) * Math.PI / 180);
-//
-//    rightMotor.rotate(Navigation.convertDistance(TILE_SIZE + THRESHOLD), true);
-//    leftMotor.rotate(Navigation.convertDistance(TILE_SIZE + THRESHOLD), false);
+  private static void takeLeftPath(Point p) {
+    // // make a 90 degree turn to the left (counter-clockwise)
+    // Navigation.turnTo((odometer.getXYT()[2] - 90) * Math.PI / 180);
+    // // move forward obstacle size
+    // rightMotor.rotate(Navigation.convertDistance(TILE_SIZE), true);
+    // leftMotor.rotate(Navigation.convertDistance(TILE_SIZE), false);
+    // // rotate back to original orientation
+    // Navigation.turnTo((odometer.getXYT()[2] + 90) * Math.PI / 180);
+    //
+    // rightMotor.rotate(Navigation.convertDistance(TILE_SIZE + THRESHOLD), true);
+    // leftMotor.rotate(Navigation.convertDistance(TILE_SIZE + THRESHOLD), false);
 
-    Navigation.travelTo(p.x,p.y);
-    Point2D.Double nextPoint = calcDisplacementPoint(TILE_SIZE + THRESHOLD, 90);
-    Navigation.travelTo(nextPoint.x,nextPoint.y);
+    Navigation.travelTo(p.x, p.y, Main.getBin());
+    Point nextPoint = calcDisplacementPoint(TILE_SIZE + THRESHOLD, 90);
+    Navigation.travelTo(nextPoint.x, nextPoint.y, Main.getBin());
   }
 
   /**
@@ -281,11 +284,11 @@ public class ObstacleAvoidance {
     }
   }
 
-  private static Point2D.Double calcDisplacementPoint(double displacementDistance, double dispalcementAngle) {
+  private static Point calcDisplacementPoint(double displacementDistance, double displacementAngle) {
     double x = odometer.getXYT()[0]
-        + (displacementDistance) * Math.cos(Math.toRadians(odometer.getXYT()[2] + dispalcementAngle));
+        + (displacementDistance) * Math.cos(Math.toRadians(odometer.getXYT()[2] + displacementAngle));
     double y = odometer.getXYT()[1]
-        + (displacementDistance) * Math.sin(Math.toRadians(odometer.getXYT()[2] + dispalcementAngle));
-    return new Point2D.Double(x, y);
+        + (displacementDistance) * Math.sin(Math.toRadians(odometer.getXYT()[2] + displacementAngle));
+    return new Point(x / TILE_SIZE, y / TILE_SIZE);
   }
 }

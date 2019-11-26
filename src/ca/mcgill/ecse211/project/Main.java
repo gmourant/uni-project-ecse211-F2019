@@ -71,35 +71,34 @@ public class Main {
 
     //
     // // compute tunnel coordinates
-    // computeTunnelCoordinates(tunnel);
-    // // Navigation.travelTo(2, 2);
-    //
-    // // navigate to tunnel entrance
-    // // turn to face tunnel
-    // // navigate through tunnel
-    // Navigation.travelTo(tunnelStartX, tunnelStartY);
-    //
-    // Navigation.turnTo(Math.toRadians(tunnelTheta));
-    // localizeForward(tunnelTheta, true, null);
-    // if (!checkOutOfBounds(tunnelTheta + 90, startIsland)) {
-    // Navigation.turnTo(Math.toRadians(tunnelTheta + 90));
-    // localizeForward(tunnelTheta + 90, true, null);
-    // Navigation.goMid(true);
-    // } else {
-    // Navigation.turnTo(Math.toRadians(tunnelTheta - 90));
-    // localizeForward(tunnelTheta - 90, true, null);
-    // Navigation.goMid(true);
-    // }
+    // computeTunnelCoordinates(tunnel); 
+    
+     // navigate to tunnel entrance
+     // turn to face tunnel
+     // navigate through tunnel
+     Navigation.travelTo(tunnelStartX, tunnelStartY);
+    
+     Navigation.turnTo(Math.toRadians(tunnelTheta));
+     localizeForward(tunnelTheta, true, null);
+     if (!checkOutOfBounds(tunnelTheta + 90, startIsland)) {
+     Navigation.turnTo(Math.toRadians(tunnelTheta + 90));
+     localizeForward(tunnelTheta + 90, true, null);
+     Navigation.goMid(true);
+     } else {
+     Navigation.turnTo(Math.toRadians(tunnelTheta - 90));
+     localizeForward(tunnelTheta - 90, true, null);
+     Navigation.goMid(true);
+     }
     // // Navigation.turnTo(Math.toRadians(tunnelTheta - 90));
     // // localizeForward(tunnelTheta - 90, true, null);
     // // Navigation.goMid();
-    // Navigation.turnTo(Math.toRadians(tunnelTheta));
-    // odometer.setXYT(tunnelStartX * TILE_SIZE, tunnelStartY * TILE_SIZE, tunnelTheta);
-    // Navigation.travelTo(tunnelEndX, tunnelEndY);
+     Navigation.turnTo(Math.toRadians(tunnelTheta));
+     odometer.setXYT(tunnelStartX * TILE_SIZE, tunnelStartY * TILE_SIZE, tunnelTheta);
+     Navigation.travelTo(tunnelEndX, tunnelEndY);
     //
     // /*
     // * 4.Each machine localizes to the grid. When completed, the machine must stop and issue a sequence of 3 beeps.
-    // *
+    // * 
     // */
     //
     // Sound.beep();
@@ -392,6 +391,18 @@ public class Main {
     } catch (InterruptedException e) {
       // There is nothing to be done here
     }
+  }
+  
+  /**
+   * Returns of device's bin
+   * 
+   * @return Point of bin location of device's team color
+   */
+  public static Point getBin() {
+    if (redTeam == TEAM_NUMBER) {
+      return redBin;
+    }
+    else return greenBin;
   }
 
   /**
