@@ -71,7 +71,7 @@ public class Main {
 
     //
     // // compute tunnel coordinates
-    // computeTunnelCoordinates(tunnel);
+    computeTunnelCoordinates(tunnel);
 
     // navigate to tunnel entrance
     // turn to face tunnel
