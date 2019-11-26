@@ -106,7 +106,7 @@ public class Navigation {
         // stop moving
         leftMotor.stop(true);
         rightMotor.stop(false);
-        Sound.beepSequenceUp();
+       // Sound.beepSequenceUp();
         // obstacleDetected = true;
       }
     } while (leftMotor.isMoving() || rightMotor.isMoving());
@@ -120,7 +120,7 @@ public class Navigation {
     if (!Main.validPoint(lp[0], lp[1], island.ll.x, island.ll.y, island.ur.x, island.ur.y)) {
       lp = Main.navigateToAlternateLaunchPosition(lp, bin);
     }
-    Navigation.travelTo(lp[0] / TILE_SIZE, lp[1] / TILE_SIZE);
+    Navigation.travelTo(lp[0] / TILE_SIZE, lp[1] / TILE_SIZE, bin);
     Navigation.turnTo(Main.findAngle(odometer.getXYT()[0], odometer.getXYT()[1], bin.x, bin.y));
   }
 

@@ -49,7 +49,7 @@ public class ObstacleAvoidance {
       usMotor.backward();
     }
     usMotor.stop(false);
-    Sound.beep();
+    //Sound.beep();
     rightAngle = usMotor.getTachoCount(); // angle at which first rising edge is detected
     if (rightAngle < US_MOTOR_LIMIT) {
       rightIsSafe = true;
@@ -66,7 +66,7 @@ public class ObstacleAvoidance {
     }
     leftAngle = Math.abs(usMotor.getTachoCount());
     usMotor.stop(false);
-    Sound.beep();
+    //Sound.beep();
     if (leftAngle < US_MOTOR_LIMIT) {
       leftIsSafe = true;
     }
@@ -77,13 +77,12 @@ public class ObstacleAvoidance {
     // TODO: Try deciding to go where there is the smaller angle
     // HARD CODED AVOIDANCE
     // might replace with bangbang control
-    Point left = calcDisplacementPoint(TILE_SIZE + TRACK / 2, -90);
-    Point right = calcDisplacementPoint(TILE_SIZE + TRACK / 2, 90);
+    Point left = calcDisplacementPoint(TILE_SIZE + TRACK / 2, 300);
+    Point right = calcDisplacementPoint(TILE_SIZE + TRACK / 2, 60);
     if (!Main.validPoint(right.x, right.y, island))
       rightIsSafe = false;
     if (!Main.validPoint(left.x, left.y, island))
       leftIsSafe = false;
-
     if (rightIsSafe) {
       takeRightPath(right);
     } else if (leftIsSafe) {
@@ -104,7 +103,7 @@ public class ObstacleAvoidance {
     // set wheels perpendicular from obstacle
     leftMotor.stop();
     rightMotor.stop();
-    Sound.twoBeeps();
+    //Sound.twoBeeps();
     double dx, dy, angle, theta;
 
     // Clockwise bang bang
@@ -213,7 +212,7 @@ public class ObstacleAvoidance {
         }
       }
     }
-    Sound.beep();
+    //Sound.beep();
     leftMotor.stop(true);
     rightMotor.stop(false);
     usMotor.rotateTo(0);
@@ -237,8 +236,8 @@ public class ObstacleAvoidance {
     // leftMotor.rotate(Navigation.convertDistance(TILE_SIZE + THRESHOLD), false);
 
     Navigation.travelTo(p.x / TILE_SIZE, p.y / TILE_SIZE, Main.getBin());
-    Point nextPoint = calcDisplacementPoint(TILE_SIZE + THRESHOLD, 90);
-    Navigation.travelTo(nextPoint.x / TILE_SIZE, nextPoint.y / TILE_SIZE, Main.getBin());
+//    Point nextPoint = calcDisplacementPoint(TILE_SIZE + THRESHOLD, 90);
+//    Navigation.travelTo(nextPoint.x / TILE_SIZE, nextPoint.y / TILE_SIZE, Main.getBin());
 
   }
 
@@ -256,8 +255,9 @@ public class ObstacleAvoidance {
     // leftMotor.rotate(Navigation.convertDistance(TILE_SIZE + THRESHOLD), false);
 
     Navigation.travelTo(p.x / TILE_SIZE, p.y / TILE_SIZE, Main.getBin());
-    Point nextPoint = calcDisplacementPoint(TILE_SIZE + THRESHOLD, 90);
-    Navigation.travelTo(nextPoint.x / TILE_SIZE, nextPoint.y / TILE_SIZE, Main.getBin());
+    Navigation.turnTo(Main.findAngle(odometer.getXYT()[0], odometer.getXYT()[1], Main.getBin().x, Main.getBin().y));
+//    Point nextPoint = calcDisplacementPoint(TILE_SIZE + THRESHOLD, 90);
+//    Navigation.travelTo(nextPoint.x / TILE_SIZE, nextPoint.y / TILE_SIZE, Main.getBin());
   }
 
   /**
@@ -275,9 +275,9 @@ public class ObstacleAvoidance {
 
   private static Point calcDisplacementPoint(double displacementDistance, double displacementAngle) {
     double x = odometer.getXYT()[0]
-        + (displacementDistance) * Math.cos(Math.toRadians(odometer.getXYT()[2] + displacementAngle));
+        + (displacementDistance) * Math.cos(Math.toRadians((odometer.getXYT()[2] + displacementAngle)%360));
     double y = odometer.getXYT()[1]
-        + (displacementDistance) * Math.sin(Math.toRadians(odometer.getXYT()[2] + displacementAngle));
+        + (displacementDistance) * Math.sin(Math.toRadians((odometer.getXYT()[2] + displacementAngle)%360));
     return new Point(x, y);
   }
 }
