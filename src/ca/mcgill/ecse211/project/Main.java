@@ -60,7 +60,7 @@ public class Main {
     }
 
 
-
+    Launcher.launch();
     // localize
     localize(startingCorner);
 
@@ -99,7 +99,7 @@ public class Main {
     /*
      * 4.Each machine localizes to the grid. When completed, the machine must stop and issue a sequence of 3 beeps.
      * 
-     */  
+     */
     //
     localizeForward(tunnelTheta, false, island);
     //
@@ -126,9 +126,25 @@ public class Main {
     // launch balls
     Launcher.launch();
     computeTunnelCoordinates(tunnel);
+    if (ObstacleAvoidance.i != 0) {
+      for (int j = ObstacleAvoidance.i; j >= 0; j--) {
+        Navigation.travelTo(ObstacleAvoidance.validPoints[j].x / TILE_SIZE,
+            ObstacleAvoidance.validPoints[j].y / TILE_SIZE);
+      }
+    }
     Navigation.travelTo(tunnelStartX, tunnelStartY);
     Navigation.turnTo(Math.toRadians(tunnelTheta));
     localizeForward(tunnelTheta, true, island);
+    if (!checkOutOfBounds(tunnelTheta + 90, island)) {
+      Navigation.turnTo(Math.toRadians(tunnelTheta + 90));
+      localizeForward(tunnelTheta + 90, true, null);
+      Navigation.goMid(true);
+    } else {
+      Navigation.turnTo(Math.toRadians(tunnelTheta - 90));
+      localizeForward(tunnelTheta - 90, true, null);
+      Navigation.goMid(true);
+    }
+    Navigation.turnTo(Math.toRadians(tunnelTheta));
     odometer.setXYT(tunnelStartX * TILE_SIZE, tunnelStartY * TILE_SIZE, tunnelTheta);
     Navigation.travelTo(tunnelEndX, tunnelEndY);
     navigateToStart(startingCorner);
@@ -240,8 +256,7 @@ public class Main {
    * @return true if point lies within the defined region, else false
    */
   public static boolean validPoint(double x, double y, double ll_x, double ll_y, double ur_x, double ur_y) {
-    return (x > ll_x * TILE_SIZE  && x < ur_x * TILE_SIZE && y > ll_y * TILE_SIZE
-        && y < ur_y * TILE_SIZE);
+    return (x > ll_x * TILE_SIZE && x < ur_x * TILE_SIZE && y > ll_y * TILE_SIZE && y < ur_y * TILE_SIZE);
   }
 
   /**
@@ -253,8 +268,8 @@ public class Main {
    * @return true if point lies within the defined region, else false
    */
   public static boolean validPoint(double x, double y, Region region) {
-    return (x > region.ll.x * TILE_SIZE  && x < region.ur.x  * TILE_SIZE
-        && y > region.ll.y * TILE_SIZE && y < region.ur.y * TILE_SIZE );
+    return (x > region.ll.x * TILE_SIZE && x < region.ur.x * TILE_SIZE && y > region.ll.y * TILE_SIZE
+        && y < region.ur.y * TILE_SIZE);
   }
 
   /**

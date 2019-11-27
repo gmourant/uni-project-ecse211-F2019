@@ -16,6 +16,8 @@ public class ObstacleAvoidance {
   private static double leftAngle;
   private static double rightAngle;
   private static double obstacleDetectionDistance;
+  public static Point validPoints[] = new Point[10];
+  public static int i = 0;
 
   /**
    * checks if there is an obstacle in front of the robot
@@ -264,6 +266,7 @@ public class ObstacleAvoidance {
 
     Navigation.travelTo(p.x / TILE_SIZE, p.y / TILE_SIZE, Main.getBin(), region);
     Navigation.turnTo(Main.findAngle(odometer.getXYT()[0], odometer.getXYT()[1], Main.getBin().x, Main.getBin().y));
+    validPoints[i++] = p;
     // Point nextPoint = calcDisplacementPoint(TILE_SIZE + THRESHOLD, 90);
     // Navigation.travelTo(nextPoint.x / TILE_SIZE, nextPoint.y / TILE_SIZE, Main.getBin());
 
