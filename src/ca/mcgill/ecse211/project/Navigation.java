@@ -72,7 +72,7 @@ public class Navigation {
     rightMotor.rotate(convertDistance(distance), false);
   }
 
-  public static void travelTo(double x, double y, Point bin) {
+  public static void travelTo(double x, double y, Point bin, Region region) {
     // reset and initiliaze motors
     currentX = x;
     currentY = y;
@@ -113,16 +113,15 @@ public class Navigation {
 
     if (ObstacleAvoidance.obstacleDetected) {
       double[] pos = odometer.getXYT();
-      ObstacleAvoidance.avoidObstacle(pos[0], pos[1]);
+      ObstacleAvoidance.avoidObstacle(pos[0], pos[1], region);
       if (!ObstacleAvoidance.obstacleDetected) {
-        Main.navigateToLaunchPosition(bin);
+        if (region == island)
+          Main.navigateToLaunchPosition(bin);
       }
-    } 
-    /*
-    else {
-      Main.navigateToLaunchPosition(bin);
     }
-    */
+    /*
+     * else { Main.navigateToLaunchPosition(bin); }
+     */
     // double[] pos = odometer.getXYT();
     // double[] lp = Navigation.launchPosition(bin.x, bin.y, RADIUS, pos[0], pos[1]);
     // if (!Main.validPoint(lp[0], lp[1], island.ll.x, island.ll.y, island.ur.x, island.ur.y)) {

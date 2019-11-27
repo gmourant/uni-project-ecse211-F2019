@@ -99,11 +99,7 @@ public class Main {
     /*
      * 4.Each machine localizes to the grid. When completed, the machine must stop and issue a sequence of 3 beeps.
      * 
-     */
-
-    Sound.beep();
-    Sound.beep();
-    Sound.beep();
+     */  
     //
     localizeForward(tunnelTheta, false, island);
     //
@@ -202,7 +198,7 @@ public class Main {
       lp = navigateToAlternateLaunchPosition(lp, bin);
     }
 
-    Navigation.travelTo(lp[0] / TILE_SIZE, lp[1] / TILE_SIZE, bin);
+    Navigation.travelTo(lp[0] / TILE_SIZE, lp[1] / TILE_SIZE, bin, island);
     Navigation.turnTo(findAngle(odometer.getXYT()[0], odometer.getXYT()[1], bin.x, bin.y));
   }
 

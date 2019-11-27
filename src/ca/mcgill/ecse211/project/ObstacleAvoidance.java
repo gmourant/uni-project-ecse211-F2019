@@ -36,7 +36,7 @@ public class ObstacleAvoidance {
    * @param currentX
    * @param currentY
    */
-  public static void avoidObstacle(double currentX, double currentY) {
+  public static void avoidObstacle(double currentX, double currentY, Region region) {
     leftMotor.stop(true);
     rightMotor.stop(false);
     //
@@ -63,14 +63,18 @@ public class ObstacleAvoidance {
     // TODO: Try deciding to go where there is the smaller angle
     // HARD CODED AVOIDANCE
     // might replace with bangbang control
-    double leftDistance, rightDistance;
-    usMotor.rotateTo(-90);
-    rightDistance = Main.UP.getDistance();
+    double leftDistance = 0;
+    double rightDistance = 0;
     usMotor.rotateTo(90);
+    rightDistance = Main.UP.getDistance();
+    usMotor.rotateTo(-90);
     leftDistance = Main.UP.getDistance();
+
     usMotor.rotateTo(0);
-    Point left = calcDisplacementPoint(TILE_SIZE / 1.5, 270);
-    Point right = calcDisplacementPoint(TILE_SIZE / 1.5, 90);
+    double leftDisplacement = TILE_SIZE;
+    double rightDisplacement = TILE_SIZE;
+    Point left = calcDisplacementPoint(leftDisplacement, 270);
+    Point right = calcDisplacementPoint(rightDisplacement, 90);
     // Point back = calcDisplacementPoint(TRACK, 180);
     if (leftDistance < THRESHOLD)
       leftIsSafe = false;
@@ -86,17 +90,31 @@ public class ObstacleAvoidance {
     if (!Main.validPoint(left.x, left.y, island))
       leftIsSafe = false;
 
+    while (!(leftIsSafe || rightIsSafe)) {
+      leftDisplacement = leftDisplacement / 1.5;
+      rightDisplacement = rightDisplacement / 1.5;
+      left = calcDisplacementPoint(leftDisplacement, 270);
+      right = calcDisplacementPoint(rightDisplacement, 90);
+      if (!Main.validPoint(right.x, right.y, island))
+        rightIsSafe = false;
+      else rightIsSafe = true;
+      if (!Main.validPoint(left.x, left.y, island))
+        leftIsSafe = false;
+      else leftIsSafe = true;
+    }
+
+    region = island;
     if (leftDistance >= rightDistance) {
       if (rightIsSafe) {
-        takePath(right);
+        takePath(right, region);
       } else if (leftIsSafe) {
-        takePath(left);
+        takePath(left, region);
       }
     } else {
       if (leftIsSafe) {
-        takePath(left);
+        takePath(left, region);
       } else if (rightIsSafe) {
-        takePath(right);
+        takePath(right, region);
       }
     }
     obstacleDetected = false;
@@ -232,7 +250,7 @@ public class ObstacleAvoidance {
    * @param x
    * @param y
    */
-  private static void takePath(Point p) {
+  private static void takePath(Point p, Region region) {
     // // make a 90 degree turn to the Right (clockwise)
     // Navigation.turnTo(Math.toRadians(odometer.getXYT()[2] + 90));
     // // move forward obstacle size
@@ -244,7 +262,7 @@ public class ObstacleAvoidance {
     // rightMotor.rotate(Navigation.convertDistance(TILE_SIZE + THRESHOLD), true);
     // leftMotor.rotate(Navigation.convertDistance(TILE_SIZE + THRESHOLD), false);
 
-    Navigation.travelTo(p.x / TILE_SIZE, p.y / TILE_SIZE, Main.getBin());
+    Navigation.travelTo(p.x / TILE_SIZE, p.y / TILE_SIZE, Main.getBin(), region);
     Navigation.turnTo(Main.findAngle(odometer.getXYT()[0], odometer.getXYT()[1], Main.getBin().x, Main.getBin().y));
     // Point nextPoint = calcDisplacementPoint(TILE_SIZE + THRESHOLD, 90);
     // Navigation.travelTo(nextPoint.x / TILE_SIZE, nextPoint.y / TILE_SIZE, Main.getBin());

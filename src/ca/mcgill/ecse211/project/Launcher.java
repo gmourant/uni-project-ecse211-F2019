@@ -17,16 +17,15 @@ public class Launcher {
   public static void launch() {
     leftMotor.stop(true);
     rightMotor.stop(false);
+    launchMotor.setAcceleration(100);
     for (int i = 0; i < 2; i++) {
       Main.sleepFor(2000);
 
       // launch
-      launchMotor.setAcceleration(100);
-      //ratio of driver gear teeth and driven gear is 5:9 = 360 degree:648 degree
+      // ratio of driver gear teeth and driven gear is 5:9 = 360 degree:648 degree
       launchMotor.rotate(648);
-
-      // stop for reloading
       launchMotor.stop();
+
     }
   }
 }
