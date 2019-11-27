@@ -73,8 +73,8 @@ public class ObstacleAvoidance {
     leftDistance = Main.UP.getDistance();
 
     usMotor.rotateTo(0);
-    double leftDisplacement = TILE_SIZE;
-    double rightDisplacement = TILE_SIZE;
+    double leftDisplacement = TILE_SIZE * 1.3;
+    double rightDisplacement = TILE_SIZE * 1.3;
     Point left = calcDisplacementPoint(leftDisplacement, 270);
     Point right = calcDisplacementPoint(rightDisplacement, 90);
     // Point back = calcDisplacementPoint(TRACK, 180);

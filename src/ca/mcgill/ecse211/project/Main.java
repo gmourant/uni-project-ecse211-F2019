@@ -3,6 +3,7 @@ package ca.mcgill.ecse211.project;
 import static ca.mcgill.ecse211.project.Resources.*;
 import java.util.Map;
 import ca.mcgill.ecse211.project.UltrasonicPoller;
+import ca.mcgill.ecse211.project.Resources.Point;
 import ca.mcgill.ecse211.project.Display;
 import lejos.hardware.Button;
 import lejos.hardware.Sound;
@@ -43,6 +44,9 @@ public class Main {
     Region startIsland = green;
     Point bin = greenBin;
     int startingCorner = greenCorner;
+    
+    // initialize valid point array
+    
 
     if (redTeam == TEAM_NUMBER) {
       // RED TEAM
@@ -100,7 +104,7 @@ public class Main {
      * 
      */
     //
-    localizeBackward(tunnelTheta, true, island);
+    localizeForward(tunnelTheta, true, island);
     //
     //
     // // TODO: ensure robot stays within island
@@ -126,7 +130,7 @@ public class Main {
     Launcher.launch();
     computeTunnelCoordinates(tunnel);
     if (ObstacleAvoidance.i != 0) {
-      for (int j = ObstacleAvoidance.i; j >= 0; j--) {
+      for (int j = ObstacleAvoidance.i - 1; j >= 0; j--) {
         Navigation.travelTo(ObstacleAvoidance.validPoints[j].x / TILE_SIZE,
             ObstacleAvoidance.validPoints[j].y / TILE_SIZE);
       }
@@ -145,10 +149,12 @@ public class Main {
       Navigation.goMid(true);
     }
     Navigation.turnTo(Math.toRadians(tunnelTheta));
-    if(horizontalTunnel(tunnel))
-    odometer.setXYT((tunnelStartX+1) * TILE_SIZE, tunnelStartY * TILE_SIZE, tunnelTheta);
-    else
-      odometer.setXYT(tunnelStartX * TILE_SIZE, (tunnelStartY+1) * TILE_SIZE, tunnelTheta);
+//    if(horizontalTunnel(tunnel))
+//      odometer.setXYT((tunnelStartX+1) * TILE_SIZE, tunnelStartY * TILE_SIZE, tunnelTheta);
+//    else
+//      odometer.setXYT(tunnelStartX * TILE_SIZE, (tunnelStartY+1) * TILE_SIZE, tunnelTheta);
+
+    odometer.setXYT(tunnelStartX * TILE_SIZE, tunnelStartY * TILE_SIZE, tunnelTheta);
 
     Navigation.travelTo(tunnelEndX, tunnelEndY);
     navigateToStart(startingCorner);
