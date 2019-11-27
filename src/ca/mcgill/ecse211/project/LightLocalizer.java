@@ -208,7 +208,7 @@ public class LightLocalizer {
 
     sleep(100);
     
-    correctTheta(angle,backup);
+    correctTheta(angle,backup,true);
     
     leftMotor.setSpeed(MOTOR_NORMAL);
     rightMotor.setSpeed(MOTOR_NORMAL);

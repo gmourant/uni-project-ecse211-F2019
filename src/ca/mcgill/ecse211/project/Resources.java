@@ -69,7 +69,7 @@ public class Resources {
   /**
    * the radius of the circle around target
    */
-  public static final double RADIUS = 137.16;
+  public static final double RADIUS = 128.016;
   //137.16cm around  4.5 tiles
 
   /**

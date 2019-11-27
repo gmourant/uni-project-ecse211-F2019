@@ -60,7 +60,6 @@ public class Main {
     }
 
 
-    Launcher.launch();
     // localize
     localize(startingCorner);
 
@@ -86,7 +85,7 @@ public class Main {
       Navigation.goMid(true);
     } else {
       Navigation.turnTo(Math.toRadians(tunnelTheta - 90));
-      localizeForward(tunnelTheta - 90, true, null);
+      localizeForward(tunnelTheta - 90, true, null); 
       Navigation.goMid(true);
     }
     // // Navigation.turnTo(Math.toRadians(tunnelTheta - 90));
@@ -101,7 +100,7 @@ public class Main {
      * 
      */
     //
-    localizeForward(tunnelTheta, false, island);
+    localizeBackward(tunnelTheta, true, island);
     //
     //
     // // TODO: ensure robot stays within island
@@ -132,6 +131,7 @@ public class Main {
             ObstacleAvoidance.validPoints[j].y / TILE_SIZE);
       }
     }
+    
     Navigation.travelTo(tunnelStartX, tunnelStartY);
     Navigation.turnTo(Math.toRadians(tunnelTheta));
     localizeForward(tunnelTheta, true, island);
@@ -145,7 +145,11 @@ public class Main {
       Navigation.goMid(true);
     }
     Navigation.turnTo(Math.toRadians(tunnelTheta));
-    odometer.setXYT(tunnelStartX * TILE_SIZE, tunnelStartY * TILE_SIZE, tunnelTheta);
+    if(horizontalTunnel(tunnel))
+    odometer.setXYT((tunnelStartX+1) * TILE_SIZE, tunnelStartY * TILE_SIZE, tunnelTheta);
+    else
+      odometer.setXYT(tunnelStartX * TILE_SIZE, (tunnelStartY+1) * TILE_SIZE, tunnelTheta);
+
     Navigation.travelTo(tunnelEndX, tunnelEndY);
     navigateToStart(startingCorner);
 
@@ -200,6 +204,11 @@ public class Main {
   public static void localizeForward(double angle, boolean backup, Region region) {
     LightLocalizer lightLocalize = new LightLocalizer();
     lightLocalize.localizeForward(angle, backup);
+  }
+  
+  public static void localizeBackward(double angle, boolean backup, Region region) {
+    LightLocalizer lightLocalize = new LightLocalizer();
+    lightLocalize.localizeBackward(angle, backup);
   }
 
   /**
@@ -352,7 +361,7 @@ public class Main {
       tunnelEndX = x0;
       tunnelEndY = y0;
 
-      tunnelTheta -= 180;
+      tunnelTheta += 180;
       if (horizontalTunnel(tunnel)) {
         tunnelStartX += 0.5;
       } else
