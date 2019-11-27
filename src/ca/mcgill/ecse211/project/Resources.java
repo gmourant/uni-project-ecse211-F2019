@@ -144,14 +144,14 @@ public class Resources {
    */
   public static final int ROTATE_SPEED = 125;
 
-  public static final int US_ROTATE_SPEED = 150;
+  public static final int US_ROTATE_SPEED = 200;
 
 
   /**
    * The motor acceleration in degrees per second squared.
    */
   public static final int ACCELERATION = 1000;
-
+     
   /**
    * Timeout period in milliseconds.
    */

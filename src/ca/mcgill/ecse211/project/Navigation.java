@@ -106,22 +106,30 @@ public class Navigation {
         // stop moving
         leftMotor.stop(true);
         rightMotor.stop(false);
-       // Sound.beepSequenceUp();
+        // Sound.beepSequenceUp();
         // obstacleDetected = true;
       }
     } while (leftMotor.isMoving() || rightMotor.isMoving());
 
-    while (ObstacleAvoidance.obstacleDetected) {
+    if (ObstacleAvoidance.obstacleDetected) {
       double[] pos = odometer.getXYT();
-      ObstacleAvoidance.avoidObstacle(pos[0], pos[1]);      
+      ObstacleAvoidance.avoidObstacle(pos[0], pos[1]);
+      if (!ObstacleAvoidance.obstacleDetected) {
+        Main.navigateToLaunchPosition(bin);
+      }
+    } 
+    /*
+    else {
+      Main.navigateToLaunchPosition(bin);
     }
-    double[] pos = odometer.getXYT();
-    double[] lp = Navigation.launchPosition(bin.x, bin.y, RADIUS, pos[0], pos[1]);
-    if (!Main.validPoint(lp[0], lp[1], island.ll.x, island.ll.y, island.ur.x, island.ur.y)) {
-      lp = Main.navigateToAlternateLaunchPosition(lp, bin);
-    }
-    Navigation.travelTo(lp[0] / TILE_SIZE, lp[1] / TILE_SIZE, bin);
-    Navigation.turnTo(Main.findAngle(odometer.getXYT()[0], odometer.getXYT()[1], bin.x, bin.y));
+    */
+    // double[] pos = odometer.getXYT();
+    // double[] lp = Navigation.launchPosition(bin.x, bin.y, RADIUS, pos[0], pos[1]);
+    // if (!Main.validPoint(lp[0], lp[1], island.ll.x, island.ll.y, island.ur.x, island.ur.y)) {
+    // lp = Main.navigateToAlternateLaunchPosition(lp, bin);
+    // }
+    // Navigation.turnTo(Main.findAngle(odometer.getXYT()[0], odometer.getXYT()[1], bin.x, bin.y));
+    // Navigation.travelTo(lp[0] / TILE_SIZE, lp[1] / TILE_SIZE, bin);
   }
 
 

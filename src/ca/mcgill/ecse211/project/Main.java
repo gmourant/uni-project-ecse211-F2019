@@ -66,7 +66,7 @@ public class Main {
 
     Sound.beep();
     Sound.beep();
-    Sound.beep(); 
+    Sound.beep();
 
 
     //
@@ -244,7 +244,8 @@ public class Main {
    * @return true if point lies within the defined region, else false
    */
   public static boolean validPoint(double x, double y, double ll_x, double ll_y, double ur_x, double ur_y) {
-    return (x > ll_x * TILE_SIZE && x < ur_x * TILE_SIZE && y > ll_y * TILE_SIZE && y < ur_y * TILE_SIZE);
+    return (x > ll_x * TILE_SIZE  && x < ur_x * TILE_SIZE && y > ll_y * TILE_SIZE
+        && y < ur_y * TILE_SIZE);
   }
 
   /**
@@ -256,8 +257,8 @@ public class Main {
    * @return true if point lies within the defined region, else false
    */
   public static boolean validPoint(double x, double y, Region region) {
-    return (x > region.ll.x * TILE_SIZE && x < region.ur.x * TILE_SIZE && y > region.ll.y * TILE_SIZE
-        && y < region.ur.y * TILE_SIZE);
+    return (x > region.ll.x * TILE_SIZE  && x < region.ur.x  * TILE_SIZE
+        && y > region.ll.y * TILE_SIZE && y < region.ur.y * TILE_SIZE );
   }
 
   /**
@@ -330,6 +331,10 @@ public class Main {
       tunnelStartY = y0;
       tunnelEndX = x1;
       tunnelEndY = y1;
+      if (horizontalTunnel(tunnel)) {
+        tunnelStartX -= 0.5;
+      } else
+        tunnelStartY -= 0.5;
     } else {
       tunnelStartX = x1;
       tunnelStartY = y1;
@@ -337,11 +342,12 @@ public class Main {
       tunnelEndY = y0;
 
       tunnelTheta -= 180;
+      if (horizontalTunnel(tunnel)) {
+        tunnelStartX += 0.5;
+      } else
+        tunnelStartY += 0.5;
     }
-    if (horizontalTunnel(tunnel)) {
-      tunnelStartX -= 0.5;
-    } else
-      tunnelStartY -= 0.5;
+
   }
 
   /**
