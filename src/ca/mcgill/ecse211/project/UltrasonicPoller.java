@@ -31,7 +31,7 @@ public class UltrasonicPoller {
     distance.fetchSample(sampleUS, 0);
     wallDistance = (int) (sampleUS[0] * 100.0); // extract from buffer, convert to cm, cast to int
     try {
-        Thread.sleep(50);
+        Thread.sleep(80);
     } catch (InterruptedException e) {}
     if(sampleUS[0]>255){
         wallDistance = 255;
